@@ -1,0 +1,238 @@
+@if (hayError)
+{
+<h1 class="text-danger">Error</h1>
+}
+<h1 class="text-danger">{{error()}}</h1>
+
+
+<div class="mx-auto mt-2">
+    <div class="login-box">
+        <h2 class="text-center mb-4">Registrarse</h2>
+        <form [formGroup]="formulario">
+
+            <!-- perfil  -->
+            <div class="mb-5">
+                <label for="perfil" class="form-label">Perfil</label>
+                <!-- <input id="especialidad" type="text" class="form-control" [(ngModel)]="especialidad"
+                    formControlName="especialidad" placeholder="nueva especialidad"> -->
+                <select id="perfil" class="form-select" type="text" formControlName="perfil" [(ngModel)]="perfil">
+                    <option value="">-- Seleccionar --</option>
+                    <option value="usuario">Usuario</option>
+                    <option value="especialista">Especialista</option>
+                </select>
+                <div *ngIf='formulario.get("perfil")?.touched && formulario.get("perfil")?.invalid' class="text-danger">
+                    <div *ngIf='formulario.get("perfil")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+                </div>
+
+                <!-- especialidad  -->
+                <div *ngIf='perfil == "especialista"'>
+                    <div class="mt-3 ps-2">
+                        <label for="especialidad" class="form-label">Especialidad</label>
+                        <select id="especialidad" class="form-select" type="text" formControlName="especialidad"
+                            [(ngModel)]="especialidad">
+                            <option value="">-- Seleccionar --</option>
+                            <option value="medico_cabecera">Medico Cabecera</option>
+                            <option value="enfermero">Enfermero</option>
+                            <option value="psiquiatra">Psiquiatra</option>
+                            <option value="otorrino">Otorrinonaringologo</option>
+                            <option value="otra">Otra</option>
+                        </select>
+                        <div *ngIf='formulario.get("especialidad")?.touched && formulario.get("especialidad")?.invalid'
+                            class="text-danger">
+                            <div *ngIf='formulario.get("especialidad")?.errors?.["required"]'>
+                                Valor necesario
+                            </div>
+                            <div *ngIf='formulario.get("especialidad")?.errors?.["minlength"]'>
+                                Mínimo 3 caracteres
+                            </div>
+                            <div *ngIf='formulario.get("especialidad")?.errors?.["maxlength"]'>
+                                Maximo 15 caracteres
+                            </div>
+                        </div>
+
+                        <!-- nueva especialidad -->
+                        <div class="mt-3 ps-3" *ngIf='especialidad == "otra"'>
+
+                            <label for="nuevaEspecialidad" class="form-label">Nueva especialidad: </label>
+                            <input id="nuevaEspecialidad" type="text" class="form-control"
+                                [(ngModel)]="nuevaEspecialidad" formControlName="nuevaEspecialidad"
+                                placeholder="nueva especialidad">
+
+                            <div *ngIf='formulario.get("nuevaEspecialidad")?.touched && formulario.get("nuevaEspecialidad")?.invalid'
+                                class="text-danger">
+                                <div *ngIf='formulario.get("nuevaEspecialidad")?.errors?.["required"]'>
+                                    Valor necesario
+                                </div>
+                                <div *ngIf='formulario.get("nuevaEspecialidad")?.errors?.["minlength"]'>
+                                    Mínimo 3 caracteres
+                                </div>
+                                <div *ngIf='formulario.get("nuevaEspecialidad")?.errors?.["maxlength"]'>
+                                    Maximo 15 caracteres
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <div>
+                                    <button class="btn btn-primary mt-3">Agregar Especialidad</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- mail -->
+            <div class="mb-3">
+                <label for="mail" class="form-label">Correo electrónico</label>
+                <input id="mail" class="form-control" type="email" formControlName="mail" [(ngModel)]="mail"
+                    placeholder="tucorreo@ejemplo.com">
+                <div *ngIf='formulario.get("mail")?.touched && 
+                    formulario.get("mail")?.invalid' class="text-danger">
+                    <div *ngIf='formulario.get("mail")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+                    <div *ngIf='formulario.get("mail")?.errors?.["pattern"]'>
+                        ejemplo {{mailEjemplo}}
+                    </div>
+                </div>
+            </div>
+            <!-- contrasenia -->
+            <div class="mb-3">
+                <label for="contrasenia" class="form-label">Contraseña</label>
+                <input type="password" [(ngModel)]="contrasenia" class="form-control" id="contrasenia"
+                    placeholder="••••••••" formControlName="contrasenia">
+                <div *ngIf='formulario.get("contrasenia")?.touched && 
+                    formulario.get("contrasenia")?.invalid' class="text-danger">
+                    <div *ngIf='formulario.get("contrasenia")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+                    <div *ngIf='formulario.get("contrasenia")?.errors?.["pattern"]'>
+                        Entre 6 y 12 caracteres.Puede contener numeros, letras y/o guion bajo.
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <!-- nombre -->
+                <label for="nombre" class="form-label">Nombre: </label>
+                <input id="nombre" type="text" class="form-control" [(ngModel)]="nombre" formControlName="nombre"
+                    placeholder="Ramiro">
+                <div *ngIf='formulario.get("nombre")?.touched && formulario.get("nombre")?.invalid' class="text-danger">
+
+                    <div *ngIf='formulario.get("nombre")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+
+                    <div *ngIf='formulario.get("nombre")?.errors?.["minlength"]'>
+                        Mínimo 3 caracteres
+                    </div>
+
+                    <div *ngIf='formulario.get("nombre")?.errors?.["maxlength"]'>
+                        Maximo 15 caracteres
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <!-- apellido -->
+                <label for="apellido" class="form-label">Apellido: </label>
+                <input id="apellido" type="text" class="form-control" [(ngModel)]="apellido" formControlName="apellido"
+                    placeholder="Ramiro">
+                <div *ngIf='formulario.get("apellido")?.touched && formulario.get("apellido")?.invalid'
+                    class="text-danger">
+
+                    <div *ngIf='formulario.get("apellido")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+
+                    <div *ngIf='formulario.get("apellido")?.errors?.["minlength"]'>
+                        Mínimo 3 caracteres
+                    </div>
+
+                    <div *ngIf='formulario.get("apellido")?.errors?.["maxlength"]'>
+                        Maximo 15 caracteres
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <!-- dni -->
+                <label for="dni" class="form-label">DNI</label>
+                <input id="dni" type="text" formControlName="dni" [(ngModel)]="dni" class="form-control"
+                    placeholder="00000000">
+                <div *ngIf='formulario.get("dni")?.touched && formulario.get("dni")?.invalid' class="text-danger">
+
+                    <div *ngIf='formulario.get("dni")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+
+                    <div *ngIf='formulario.get("dni")?.errors?.["minlength"]'>
+                        Mínimo 8 caracteres
+                    </div>
+
+                    <div *ngIf='formulario.get("dni")?.errors?.["maxlength"]'>
+                        Maximo 8 caracteres
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <!-- edad -->
+                <label for="edad" class="form-label">Edad</label>
+                <input id="edad" type="text" formControlName="edad" [(ngModel)]="edad" class="form-control"
+                    placeholder="18">
+                <div *ngIf='formulario.get("edad")?.touched && formulario.get("edad")?.invalid' class="text-danger">
+                    <div *ngIf='formulario.get("edad")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+                    <div *ngIf='formulario.get("edad")?.errors?.["pattern"]'>
+                        Solo números
+                    </div>
+                    <div *ngIf='formulario.get("edad")?.errors?.["min"]'>
+                        Debes tener al menos 18 años.
+                    </div>
+                    <div *ngIf='formulario.get("edad")?.errors?.["max"]'>
+                        Debes ser menor de 99 años.
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <!-- obraSocial -->
+                <label for="obraSocial" class="form-label">ObraSocial: </label>
+                <input id="obraSocial" type="text" class="form-control" [(ngModel)]="obraSocial"
+                    formControlName="obraSocial" placeholder="OSDE">
+                <div *ngIf='formulario.get("obraSocial")?.touched && formulario.get("obraSocial")?.invalid'
+                    class="text-danger">
+
+                    <div *ngIf='formulario.get("obraSocial")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+
+                    <div *ngIf='formulario.get("obraSocial")?.errors?.["minlength"]'>
+                        Mínimo 3 caracteres
+                    </div>
+
+                    <div *ngIf='formulario.get("obraSocial")?.errors?.["maxlength"]'>
+                        Maximo 15 caracteres
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="d-grid">
+                <button type="submit" (click)="enviar()" class="btn btn-success">Registrarse</button>
+            </div>
+            <div class="text-center">
+                <a href="#" class="text-light text-decoration-none">¿Olvidaste tu contraseña?</a><br>
+                <a href="#" class="text-light text-decoration-none">Crear una cuenta</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 
+Mail: <input type="text" [(ngModel)]="mail">
+Contraseña: <input type="text" [(ngModel)]="contrasenia">
+
+<button (click)="registrarse()">Registrase</button> -->

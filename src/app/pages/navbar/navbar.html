@@ -1,0 +1,64 @@
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark mt-2">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="javascript:void(0)">Logo</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mynavbar">
+      <ul class="navbar-nav me-auto gap-1">
+        <li class="nav-item">
+          <a routerLink="/home" class="btn btn-success">Home</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/about" class="btn btn-success">About Me</a>
+        </li>
+        @if (auth.usuarioActual === null)
+        {
+        <li class="nav-item">
+          <a routerLink="login" class="btn btn-success">Login</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="registro" class="btn btn-success">Registro</a>
+        </li>
+        } @else {
+        <li class="nav-item">
+          <a (click)="cerrarSesion()" class="btn btn-danger">Cerrar Sesion</a>
+        </li>
+        }
+
+        @if (auth.usuarioActual === null)
+        {
+        } @else {
+        <li class="nav-item">
+          <a class="btn btn-warning ms-auto">Usuario: {{auth.usuarioActual.email}}</a>
+        </li>
+        }
+      </ul>
+      <!-- <form class="d-flex">
+        <input class="form-control me-2" type="text" placeholder="Search">
+        <button class="btn btn-primary" type="button">Search</button>
+      </form> -->
+    </div>
+  </div>
+</nav>
+
+
+<!-- <div class="d-flex gap-1 mb-4">
+  <a routerLink="/" class="btn btn-success">Home</a>
+  <a routerLink="about" class="btn btn-success">About Me</a>
+  <a routerLink="listado" class="btn btn-success">Listado</a>
+
+  @if (auth.usuarioActual === null)
+  {
+  <a routerLink="login" class="btn btn-success">Login</a>
+  <a routerLink="registro" class="btn btn-success">Registro</a>
+  } @else {
+  <a (click)="cerrarSesion()" class="btn btn-danger">Cerrar Sesion</a>
+  }
+
+  @if (auth.usuarioActual === null)
+  {
+  } @else {
+  <h5 class="ms-auto">Usuario: {{auth.usuarioActual.email}}</h5>
+  }
+</div> -->

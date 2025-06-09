@@ -1,0 +1,46 @@
+<body class="bg-dark text-white p-1">
+
+    <div class="container">
+        <h2 class="mb-4">Usuarios Registrados</h2>
+        <!--IF-->
+        <!-- @if (hayUsuarios) {
+        <h1>Hay usuarios!</h1>
+        } @else {
+        <h1>No hay usuarios!</h1>
+        } -->
+
+        <table class="table table-dark table-hover table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            @for (usuario of usuarios(); track usuario){
+            <tbody>
+                <tr>
+                    <td>{{usuario.mail}}</td>
+                    <td class="text-center">
+                        <button (click)="rellenar(usuario.mail, usuario.contrasenia)" class="btn btn-sm btn-primary me-2" >Autocompletar</button>
+                    </td>
+                </tr>
+            </tbody>
+
+            }
+
+
+        </table>
+    </div>
+
+
+</body>
+
+
+<!--For-->
+<!-- @for (usuario of usuarios(); track usuario){ -->
+<!-- <div class="d-flex">
+    <p>{{usuario.mail}} |</p>
+    <p>{{usuario.contrasenia}} |</p>
+    <button (click)="rellenar(usuario.mail, usuario.contrasenia)">CompletarCampos</button>
+</div> -->
+<!-- } -->
