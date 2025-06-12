@@ -20,11 +20,16 @@ export class ListaUsuarios {
     this.inicio();
   }
 
+  cambiarActivo(id_usuario: number, activo: boolean){
+    this.db.deshabilitarUsuario(id_usuario, activo).then(({data , error}) =>{
+      this.inicio();
+    });
+  }
+
   inicio() {
     this.db.traerUsuarios().then((u: Usuario[]) => {
       this.listaUsuarios = u;
       console.log("Usuarios: ", this.listaUsuarios);
     });
-
   }
 }

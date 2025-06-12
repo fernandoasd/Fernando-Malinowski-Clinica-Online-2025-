@@ -6,7 +6,7 @@ import { ListaUsuarios } from "./lista-usuarios/lista-usuarios";
 
 @Component({
   selector: 'app-usuarios',
-  imports: [CommonModule, ListaUsuarios],
+  imports: [CommonModule, ListaUsuarios, RouterLink],
   templateUrl: './usuarios.html',
   styleUrl: './usuarios.css'
 })
