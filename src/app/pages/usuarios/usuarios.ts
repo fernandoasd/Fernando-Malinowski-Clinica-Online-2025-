@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { UsuarioService } from '../../services/UsuarioSercvice';
-import { RouterLink } from '@angular/router';
-import { ListaUsuarios } from "./lista-usuarios/lista-usuarios";
+import { Component} from '@angular/core';
+
+import {RouterOutlet } from '@angular/router';
+
 
 @Component({
   selector: 'app-usuarios',
-  imports: [CommonModule, ListaUsuarios, RouterLink],
+  imports: [CommonModule, RouterOutlet],
   templateUrl: './usuarios.html',
   styleUrl: './usuarios.css'
 })

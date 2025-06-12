@@ -20,7 +20,19 @@ export const routes: Routes = [
     {
         path: "usuarios",
         title: "Usuarios",
-        loadComponent: () => import("./pages/usuarios/usuarios").then((a) => a.Usuarios)
+        loadComponent: () => import("./pages/usuarios/usuarios").then((a) => a.Usuarios),
+        children: [
+            {
+                path: "",
+                title: "Usuario-Home",
+                loadComponent: () => import("./pages/usuarios/usuarios-home/usuarios-home").then(m => m.UsuariosHome)
+            },
+            {
+                path: "registro-admin",
+                title: "Registro Admin",
+                loadComponent: () => import("./pages/usuarios/registro-admin/reegistro-admin").then(m => m.ReegistroAdmin)
+            },
+        ]
     },
     {
         path: "registro",
@@ -41,11 +53,6 @@ export const routes: Routes = [
                 path: "especialista",
                 title: "Registro Especialista",
                 loadComponent: () => import("./pages/registrarse/registro-especialista/reegistro-especialista").then(m => m.ReegistroEspecialista)
-            },
-            {
-                path: "admin",
-                title: "Registro Admin",
-                loadComponent: () => import("./pages/registrarse/registro-admin/reegistro-admin").then(m => m.ReegistroAdmin)
             },
             {
                 path: "**",

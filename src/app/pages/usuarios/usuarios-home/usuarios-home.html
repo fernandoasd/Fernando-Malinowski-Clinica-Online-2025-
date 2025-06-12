@@ -1,0 +1,46 @@
+<div class="container">
+  <app-lista-usuarios></app-lista-usuarios>
+</div>
+
+<div class="container mt-5">
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+
+    <!--  Paciente -->
+    <div class="col">
+      <div class="card h-100 img-paciente">
+        <!-- <img src="assets/img/paciente.jpg" class="card-img-top" alt="Paciente"> -->
+        <div class="card-body text-center">
+          <h5 class="card-title">Registrar Paciente</h5>
+          <p class="card-text">Dar de alta a un nuevo paciente en el sistema.</p>
+          <a routerLink="paciente" class="btn btn-primary">Registrar</a>
+        </div>
+      </div>
+    </div>
+
+    <!--  Especialista -->
+    <div class="col">
+      <div class="card h-100 shadow-sm img-doctor">
+        <!-- <img src="../../../../public/medico/medico_1.jpg" class="card-img-top" alt="Especialista"> -->
+        <div class="card-body text-center">
+          <h5 class="card-title">Registrar Especialista</h5>
+          <p class="card-text">Agregar un nuevo profesional de salud.</p>
+          <a routerLink="especialista" class="btn btn-success">Registrar</a>
+        </div>
+      </div>
+    </div>
+
+    <!--  Admin -->
+    <div class="col">
+      <div class="card h-100 shadow-sm img-admin">
+        <div class="card-body text-center">
+          <img src="assets/medico/medicoUno.png" alt="Paciente" class="img-fluid">
+          <h5 class="card-title">Registrar Admin</h5>
+          <p class="card-text">Agregar un nuevo profesional de salud.</p>
+          <a routerLink="registro-admin" class="btn btn-success">Registrar</a>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>

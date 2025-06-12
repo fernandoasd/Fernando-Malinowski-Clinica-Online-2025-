@@ -1,0 +1,21 @@
+.img-doctor{
+    background-color: rgb(181, 165, 21);
+    /* background-image: url("./medicoDos.jpg");
+    background-position: top left;
+    object-fit: scale-down;
+    background-repeat: no-repeat; */
+}
+
+.img-admin{
+    /* background-color: rgb(91, 62, 240); */
+    background-image: url("./medicoUno.png");
+    background-position: top right;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+}
+
+.img-paciente{
+    background-color: rgb(42, 179, 8);
+
+}
