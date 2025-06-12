@@ -24,12 +24,11 @@ export class AuthService {
         this.router.navigateByUrl("/login");
       } else { //si inicia sesion
         this.usuarioActual = session.user;
-        this.usuarioService.cargarUsuario(this.usuarioActual.email!);
+        // this.usuarioService.cargarUsuarioMail(this.usuarioActual.email!);
         this.router.navigateByUrl("/home");
       }
     });
   }
-
 
   //crear cuenta
   async crearCuenta(correo: string, contraseña: string) {
@@ -44,8 +43,8 @@ export class AuthService {
     } catch (er) {
       return { er };
     }
-
   }
+  
   //iniciar sesión
   async iniciarSesion(correo: string, contraseña: string) {
     const { data, error } = await this.supabaseService.supabase.auth.signInWithPassword({
@@ -61,7 +60,6 @@ export class AuthService {
   async cerrarSesion() {
     const { error } = await this.supabaseService.supabase.auth.signOut()
     console.log("aunth, cerrar sesion:", error);
-    return { error };
   }
 
   async traerUsuarioActual() {

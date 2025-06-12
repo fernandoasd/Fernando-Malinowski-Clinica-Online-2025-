@@ -1,22 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../services/AuthService';
-import { UsuarioService } from '../../services/UsuarioSercvice';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { Especialista, Paciente, Usuario } from '../../interfaces/interfaces';
-import { Perfil } from '../../enums/enums';
-import { RouterModule } from '@angular/router';
-
+import { Perfil } from '../../../enums/enums';
+import { Usuario, Paciente, Especialista } from '../../../interfaces/interfaces';
+import { AuthService } from '../../../services/AuthService';
+import { UsuarioService } from '../../../services/UsuarioSercvice';
 
 @Component({
-  selector: 'app-registrarse',
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, RouterModule],
-  templateUrl: './registrarse.html',
-  styleUrl: './registrarse.css',
+  selector: 'app-reegistro-especialista',
+  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  templateUrl: './reegistro-especialista.html',
+  styleUrl: './reegistro-especialista.css'
 })
-export class Registrarse {
-  auth = inject(AuthService);
+export class ReegistroEspecialista {
+auth = inject(AuthService);
   us = inject(UsuarioService);
   data: any[] | null = null;
   error = signal<string>("");
@@ -27,13 +25,13 @@ export class Registrarse {
   apellido: string = "";
   edad: number = 0;
   dni: string = "";
-  perfil = signal<Perfil>(Perfil.Anonimo);
+  perfil = Perfil.Especialista;
   obra_social: string = "";
   imagen_uno: string = "";
   imagen_dos: string = "";
   especialidad: string = "";
   nuevaEspecialidad: string = "";
-  especialidades: string[] = ["cirujano", "cartonero"];
+  especialidades: string[] = [];
   activo: boolean = true;
   hayError: boolean = false;
   mailEjemplo = "ejemplo@gmail.com";
@@ -56,24 +54,11 @@ export class Registrarse {
         Validators.maxLength(15),
         Validators.required],
     }),
-    obra_social: new FormControl("---", {
-      validators: [
-        Validators.minLength(3),
-        Validators.maxLength(15),
-        Validators.required],
-    }),
     dni: new FormControl("38000000", {
       validators: [
         Validators.minLength(8),
         Validators.maxLength(8),
         Validators.required],
-    }),
-    cuit: new FormControl("20-12345678-4", {
-      validators: [
-        // Validators.required,
-        // Validators.pattern(/^[\d]{2}-?[\d]{8}-?[\d]{1}$/),
-      ]
-
     }),
     mail: new FormControl("", {
       validators: [
@@ -86,11 +71,6 @@ export class Registrarse {
         Validators.pattern(/^\w{6,12}$/)
       ]
     }),
-    perfil: new FormControl(Perfil.Paciente, {
-      validators: [
-        Validators.required,
-      ]
-    }),
     especialidad: new FormControl("---", {
       validators: [
         Validators.required,
@@ -100,9 +80,9 @@ export class Registrarse {
     }),
     nuevaEspecialidad: new FormControl("---", {
       validators: [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(15),
+        // Validators.required,
+        // Validators.minLength(3),
+        // Validators.maxLength(15),
       ]
     }),
     edad: new FormControl("20", {
@@ -134,33 +114,9 @@ export class Registrarse {
     }
   }
 
-  onPerfil(event: Event) {
-    const valor = (event.target as HTMLSelectElement).value;
-    console.log('Perfil:', valor);
-
-    if (valor == "paciente") {
-      this.formulario.get('especialidad')?.clearValidators();
-      this.formulario.get('especialidad')?.updateValueAndValidity();
-
-      this.formulario.get('nuevaEspecialidad')?.clearValidators();
-      this.formulario.get('nuevaEspecialidad')?.updateValueAndValidity();
-
-      console.log("validacion", this.formulario)
-      console.log('Desactivado!');
-    } else if (valor == "especialista"){
-      this.formulario.get('especialidad')?.setValidators([Validators.required, Validators.email]);
-      this.formulario.get('especialidad')?.updateValueAndValidity();
-
-      this.formulario.get('nuevaEspecialidad')?.clearValidators;
-      this.formulario.get('nuevaEspecialidad')?.updateValueAndValidity();
-      console.log('Activado!');
-    }
-  }
-
   agregarEspecialidad(especialidad: string) {
     this.mensajeErrorEspecialidad = "";
     especialidad = especialidad.toLowerCase();
-    this.formulario.get("nuevaEspecialidad")?.markAllAsTouched;
     if (especialidad.length >= 3 && especialidad.length <= 15) {
       if (this.especialidades.includes(especialidad)) {
         this.mensajeErrorEspecialidad = "Ya existe especialidad";
@@ -170,7 +126,6 @@ export class Registrarse {
       }
     } else {
       Swal.fire("Validacion", "especialidad tiene que tener entre 3 y 15 caracteres.", 'question');
-
     }
   }
 
@@ -189,23 +144,33 @@ export class Registrarse {
   }
 
   enviar() {
-    console.log("perfil " , this.perfil());
+    console.log("perfil " , this.perfil);
       if (this.formulario.valid) {
-        console.log("Se puede enviar");
+        if (this.especialidades.length > 0){
 
-        Swal.fire({
-          title: "Crear cuenta??",
-          showDenyButton: true,
-          icon: 'question',
-          confirmButtonText: "Crear",
-          denyButtonText: `Salir`
-        }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
-          if (result.isConfirmed) {
-            this.registrarse(this.perfil());
-          }
+          console.log("Se puede enviar");
+          
+          Swal.fire({
+            title: "Crear cuenta??",
+            showDenyButton: true,
+            icon: 'question',
+            confirmButtonText: "Crear",
+            denyButtonText: `Cancelar`
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+              this.registrarse(this.perfil);
+            }
+          });
+        } else {
+          Swal.fire({
+          icon: 'warning',
+          title: "Error",
+          text: "Debe ingresar al menos una especialidad",
+          draggable: true
         });
-
+        }
+          
       } else {
         this.formulario?.markAllAsTouched();
         console.log("No se puede enviar");

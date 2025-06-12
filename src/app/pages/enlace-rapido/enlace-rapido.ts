@@ -1,6 +1,7 @@
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { UsuarioService } from '../../services/UsuarioSercvice';
-import { Usuario } from '../../models/usuario';
+import { Usuario } from '../../interfaces/interfaces';
+
 
 @Component({
   selector: 'app-enlace-rapido',
@@ -17,7 +18,7 @@ db = inject(UsuarioService);
   hayUsuarios: boolean = false;
 
   ngOnInit() {
-    this.db.listar().then((usuarios: Usuario[]) => {
+    this.db.traerUsuarios().then((usuarios: Usuario[]) => {
       this.usuarios.set(usuarios);
       if (usuarios !== null)
       {

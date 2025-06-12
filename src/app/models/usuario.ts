@@ -30,6 +30,5 @@ export class Usuario {
         this.perfil = perfil;
         this.activo = activo;
         this.especialidad = especialidad;
-        
     }
 }

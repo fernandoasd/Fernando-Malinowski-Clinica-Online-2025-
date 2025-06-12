@@ -1,0 +1,168 @@
+@if (hayError)
+{
+<h1 class="text-danger">Error</h1>
+}
+<h1 class="text-danger">{{error()}}</h1>
+
+
+<div class="mx-auto mt-2">
+    <div class="login-box">
+        <h2 class="text-center mb-4">Registro Paciente</h2>
+        <form [formGroup]="formulario">
+
+            <!-- mail -->
+            <div class="mb-3">
+                <label for="mail" class="form-label">Correo electrónico</label>
+                <input id="mail" class="form-control" type="email" formControlName="mail" [(ngModel)]="mail"
+                    placeholder="tucorreo@ejemplo.com">
+                <div *ngIf='formulario.get("mail")?.touched && 
+                    formulario.get("mail")?.invalid' class="text-danger">
+                    <div *ngIf='formulario.get("mail")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+                    <div *ngIf='formulario.get("mail")?.errors?.["pattern"]'>
+                        ejemplo {{mailEjemplo}}
+                    </div>
+                </div>
+            </div>
+
+            <!-- contrasenia -->
+            <div class="mb-3">
+                <label for="contrasenia" class="form-label">Contraseña</label>
+                <input type="password" [(ngModel)]="contrasenia" class="form-control" id="contrasenia"
+                    placeholder="••••••••" formControlName="contrasenia">
+                <div *ngIf='formulario.get("contrasenia")?.touched && 
+                    formulario.get("contrasenia")?.invalid' class="text-danger">
+                    <div *ngIf='formulario.get("contrasenia")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+                    <div *ngIf='formulario.get("contrasenia")?.errors?.["pattern"]'>
+                        Entre 6 y 12 caracteres.Puede contener numeros, letras y/o guion bajo.
+                    </div>
+                </div>
+            </div>
+
+            <!-- nombre -->
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre: </label>
+                <input id="nombre" type="text" class="form-control" [(ngModel)]="nombre" formControlName="nombre"
+                    placeholder="Ramiro">
+                <div *ngIf='formulario.get("nombre")?.touched && formulario.get("nombre")?.invalid' class="text-danger">
+
+                    <div *ngIf='formulario.get("nombre")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+
+                    <div *ngIf='formulario.get("nombre")?.errors?.["minlength"]'>
+                        Mínimo 3 caracteres
+                    </div>
+
+                    <div *ngIf='formulario.get("nombre")?.errors?.["maxlength"]'>
+                        Maximo 15 caracteres
+                    </div>
+                </div>
+            </div>
+
+            <!-- apellido -->
+            <div class="mb-3">
+                <label for="apellido" class="form-label">Apellido: </label>
+                <input id="apellido" type="text" class="form-control" [(ngModel)]="apellido" formControlName="apellido"
+                    placeholder="Ramiro">
+                <div *ngIf='formulario.get("apellido")?.touched && formulario.get("apellido")?.invalid'
+                    class="text-danger">
+
+                    <div *ngIf='formulario.get("apellido")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+
+                    <div *ngIf='formulario.get("apellido")?.errors?.["minlength"]'>
+                        Mínimo 3 caracteres
+                    </div>
+
+                    <div *ngIf='formulario.get("apellido")?.errors?.["maxlength"]'>
+                        Maximo 15 caracteres
+                    </div>
+                </div>
+            </div>
+
+            <!-- dni -->
+            <div class="mb-3">
+                <label for="dni" class="form-label">DNI</label>
+                <input id="dni" type="text" formControlName="dni" [(ngModel)]="dni" class="form-control"
+                    placeholder="00000000">
+                <div *ngIf='formulario.get("dni")?.touched && formulario.get("dni")?.invalid' class="text-danger">
+
+                    <div *ngIf='formulario.get("dni")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+
+                    <div *ngIf='formulario.get("dni")?.errors?.["minlength"]'>
+                        Mínimo 8 caracteres
+                    </div>
+
+                    <div *ngIf='formulario.get("dni")?.errors?.["maxlength"]'>
+                        Maximo 8 caracteres
+                    </div>
+                </div>
+            </div>
+
+            <!-- edad -->
+            <div class="mb-3">
+                <label for="edad" class="form-label">Edad</label>
+                <input id="edad" type="text" formControlName="edad" [(ngModel)]="edad" class="form-control"
+                    placeholder="18">
+                <div *ngIf='formulario.get("edad")?.touched && formulario.get("edad")?.invalid' class="text-danger">
+                    <div *ngIf='formulario.get("edad")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+                    <div *ngIf='formulario.get("edad")?.errors?.["pattern"]'>
+                        Solo números
+                    </div>
+                    <div *ngIf='formulario.get("edad")?.errors?.["min"]'>
+                        Debes tener al menos 18 años.
+                    </div>
+                    <div *ngIf='formulario.get("edad")?.errors?.["max"]'>
+                        Debes ser menor de 99 años.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- obra_social -->
+            <div class="mb-3">
+                <label for="obra_social" class="form-label">ObraSocial: </label>
+                <input id="obra_social" type="text" class="form-control" [(ngModel)]="obra_social"
+                    formControlName="obra_social" placeholder="OSDE">
+                <div *ngIf='formulario.get("obra_social")?.touched && formulario.get("obra_social")?.invalid'
+                    class="text-danger">
+
+                    <div *ngIf='formulario.get("obra_social")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+
+                    <div *ngIf='formulario.get("obra_social")?.errors?.["minlength"]'>
+                        Mínimo 3 caracteres
+                    </div>
+
+                    <div *ngIf='formulario.get("obra_social")?.errors?.["maxlength"]'>
+                        Maximo 15 caracteres
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="d-grid">
+                <button type="submit" (click)="enviar()" class="btn btn-success">Registrarse</button>
+            </div>
+            <div class="text-center">
+                <a href="#" class="text-light text-decoration-none">¿Olvidaste tu contraseña?</a><br>
+                <a href="#" class="text-light text-decoration-none">Crear una cuenta</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 
+Mail: <input type="text" [(ngModel)]="mail">
+Contraseña: <input type="text" [(ngModel)]="contrasenia">
+
+<button (click)="registrarse()">Registrase</button> -->

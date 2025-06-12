@@ -22,13 +22,7 @@ export class Login {
     this.contrasenia = array[1];
   }
 
-  async loguearse() {
-    await this.auth.iniciarSesion(this.mail, this.contrasenia).then(({ data, error }) => {
-      if (error === null) {
-        this.usuario.cargarUsuario(this.mail);
-      }
-      return { data, error };
-    });
-
+  loguearse() {
+    this.auth.iniciarSesion(this.mail, this.contrasenia);
   }
 }

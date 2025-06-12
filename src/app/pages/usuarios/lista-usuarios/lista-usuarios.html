@@ -1,0 +1,32 @@
+
+<h1> Usuarios</h1>
+<table class="table table-bordered table-striped mt-3" *ngIf="listaUsuarios.length > 0; else cargando">
+  <thead class="table-dark">
+    <tr >
+      <th>CREATED_AT</th>
+      <th>Email</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>DNI</th>
+      <th>Edad</th>
+      <th>Perfil</th>
+      <th>Activo</th>
+    </tr>
+  </thead>
+  <tbody class="table-dark">
+    <tr *ngFor="let c of listaUsuarios">
+      <td>{{ c.created_at| date: 'short' }}</td>
+      <td>{{ c.mail }}</td>
+      <td>{{ c.nombre }}</td>
+      <td>{{ c.apellido }}</td>
+      <td>{{ c.documento }}</td>
+      <td>{{ c.edad }}</td>
+      <td>{{ c.perfil }}</td>
+      <td>{{ c.activo }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #cargando>
+  <p>Cargando datos...</p>
+</ng-template>

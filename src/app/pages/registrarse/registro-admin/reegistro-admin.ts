@@ -1,22 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../services/AuthService';
-import { UsuarioService } from '../../services/UsuarioSercvice';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { Especialista, Paciente, Usuario } from '../../interfaces/interfaces';
-import { Perfil } from '../../enums/enums';
-import { RouterModule } from '@angular/router';
-
+import { Perfil } from '../../../enums/enums';
+import { Usuario, Paciente, Especialista } from '../../../interfaces/interfaces';
+import { AuthService } from '../../../services/AuthService';
+import { UsuarioService } from '../../../services/UsuarioSercvice';
 
 @Component({
-  selector: 'app-registrarse',
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, RouterModule],
-  templateUrl: './registrarse.html',
-  styleUrl: './registrarse.css',
+  selector: 'app-reegistro-admin',
+  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  templateUrl: './reegistro-admin.html',
+  styleUrl: './reegistro-admin.css'
 })
-export class Registrarse {
-  auth = inject(AuthService);
+export class ReegistroAdmin {
+auth = inject(AuthService);
   us = inject(UsuarioService);
   data: any[] | null = null;
   error = signal<string>("");
@@ -198,7 +196,7 @@ export class Registrarse {
           showDenyButton: true,
           icon: 'question',
           confirmButtonText: "Crear",
-          denyButtonText: `Salir`
+          denyButtonText: `Cancelar`
         }).then((result) => {
           /* Read more about isConfirmed, isDenied below */
           if (result.isConfirmed) {
