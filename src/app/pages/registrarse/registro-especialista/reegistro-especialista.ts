@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Perfil } from '../../../enums/enums';
 import { Usuario, Paciente, Especialista } from '../../../interfaces/interfaces';
 import { AuthService } from '../../../services/AuthService';
 import { UsuarioService } from '../../../services/UsuarioSercvice';
+import { async } from 'rxjs';
 
 @Component({
   selector: 'app-reegistro-especialista',
@@ -14,7 +15,7 @@ import { UsuarioService } from '../../../services/UsuarioSercvice';
   styleUrl: './reegistro-especialista.css'
 })
 export class ReegistroEspecialista {
-auth = inject(AuthService);
+  auth = inject(AuthService);
   us = inject(UsuarioService);
   data: any[] | null = null;
   error = signal<string>("");
@@ -40,6 +41,8 @@ auth = inject(AuthService);
   opcionSeleccionada: string = "otro";
   otraOpcion: string = '';
 
+  imagenSeleccionada: File | null = null;
+  imagenPreview: string | ArrayBuffer | null = null;
 
   formulario = new FormGroup({
     nombre: new FormControl("---", {
@@ -143,13 +146,54 @@ auth = inject(AuthService);
     console.log(this.formulario);
   }
 
-  enviar() {
-    console.log("perfil " , this.perfil);
+  validarImagen(control: AbstractControl, maxSizeMB: number = 2): ValidationErrors | null {
+    const file = control.value;
+    console.log("control: ", control);
+    if (!file) return null; // No hay archivo aún
+
+    const extensionesPermitidas = ['jpg', 'jpeg', 'png', 'webp'];
+    const extension = file.split('.').pop()?.toLowerCase();
+
+    // Validar tipo
+    if (!extension || !extensionesPermitidas.includes(extension)) {
+      return { tipoInvalido: true };
+    }
+
+    // if (!file.type.startsWith('image/')) {
+    //   return { tipoInvalido: true };
+    // }
+
+    // Validar tamaño
+    // const maxSizeBytes = maxSizeMB * 1024 * 1024;
+    // if (file.size > maxSizeBytes) {
+    //   return { tamanoExcedido: true };
+    // }
+
+    return null; // válido
+  }
+
+    onFileSelected(event: any) {
+      console.log("event: ", event)
+      const file = event.target.files[0];
+      if (file) {
+        this.imagenSeleccionada = file;
+
+        // Mostrar previsualización
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imagenPreview = reader.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    enviar() {
+      console.log("perfil ", this.perfil);
       if (this.formulario.valid) {
-        if (this.especialidades.length > 0){
+        if (this.especialidades.length > 0) {
 
           console.log("Se puede enviar");
-          
+
           Swal.fire({
             title: "Crear cuenta??",
             showDenyButton: true,
@@ -159,18 +203,20 @@ auth = inject(AuthService);
           }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-              this.registrarse(this.perfil);
+           this.us.db.subirFotoPerfil(this.imagenSeleccionada!).then((retorno) => {
+             this.registrarse(this.perfil, retorno!.linkPublico!.data!.publicUrl || "");
+          });
             }
           });
         } else {
           Swal.fire({
-          icon: 'warning',
-          title: "Error",
-          text: "Debe ingresar al menos una especialidad",
-          draggable: true
-        });
+            icon: 'warning',
+            title: "Error",
+            text: "Debe ingresar al menos una especialidad",
+            draggable: true
+          });
         }
-          
+
       } else {
         this.formulario?.markAllAsTouched();
         console.log("No se puede enviar");
@@ -181,75 +227,76 @@ auth = inject(AuthService);
           draggable: true
         });
       }
-  }
+    }
 
-  async registrarse(perfil: Perfil) {
-    const respuesta = await this.auth.crearCuenta(this.mail, this.contrasenia);
-    if (respuesta.error === null) {
+  async registrarse(perfil: Perfil, linkPublico: string) {
+      const respuesta = await this.auth.crearCuenta(this.mail, this.contrasenia);
+      if (respuesta.error === null) {
 
-      let nuevoUsuario: Usuario = {
-        mail: this.mail.toLowerCase(),
-        contrasenia: this.contrasenia,
-        nombre: this.nombre,
-        apellido: this.apellido,
-        edad: this.edad,
-        documento: this.dni,
-        perfil: perfil,
-        imagen_uno: this.imagen_uno,
-      };
+        let nuevoUsuario: Usuario = {
+          mail: this.mail.toLowerCase(),
+          contrasenia: this.contrasenia,
+          nombre: this.nombre,
+          apellido: this.apellido,
+          edad: this.edad,
+          documento: this.dni,
+          perfil: perfil,
+          imagen_uno: linkPublico,
+        };
 
-      await this.us.cargarUsuario(nuevoUsuario).then(({ data, error }) => {
-        if (error == null) {
-          if (data && data.length > 0) {
-            nuevoUsuario.id_usuario = data[0]!.id_usuario;
-            console.log("nuevoUsuario :", nuevoUsuario);
-            console.log("perfil :", perfil);
+        await this.us.cargarUsuario(nuevoUsuario).then(({ data, error }) => {
+          if (error == null) {
+            if (data && data.length > 0) {
+              nuevoUsuario.id_usuario = data[0]!.id_usuario;
+              console.log("nuevoUsuario :", nuevoUsuario);
+              console.log("perfil :", perfil);
 
-            if (perfil === Perfil.Paciente) {
-              console.log("paciente...");
-              let nuevoPaciente = { ...nuevoUsuario, obra_social: this.obra_social, imagen_dos: this.imagen_dos } as unknown as Paciente;
-              this.us.cargarPaciente(nuevoPaciente);
-            } else if (perfil === Perfil.Especialista) {
-              console.log("especialista...");
-              let nuevoEspecialista = { ...nuevoUsuario, especialidades: this.especialidades } as unknown as Especialista;
-              this.us.cargarEspecialista(nuevoEspecialista);
-            }
-          } else {
-            console.log("registro datos vacios");
-          };
+              if (perfil === Perfil.Paciente) {
+                console.log("paciente...");
+                let nuevoPaciente = { ...nuevoUsuario, obra_social: this.obra_social, imagen_dos: this.imagen_dos } as unknown as Paciente;
+                this.us.cargarPaciente(nuevoPaciente);
+              } else if (perfil === Perfil.Especialista) {
+                console.log("especialista...");
+                let nuevoEspecialista = { ...nuevoUsuario, especialidades: this.especialidades } as unknown as Especialista;
+                this.us.cargarEspecialista(nuevoEspecialista);
+              }
+            } else {
+              console.log("registro datos vacios");
+            };
+          }
+        });
+
+        // if (perfil === Perfil.Paciente) {
+        //   let nuevoPaciente = { ...nuevoUsuario, obra_social: this.obra_social, imagenDos: this.imagen_dos } as unknown as Paciente;
+        //   this.us.cargarPaciente(nuevoPaciente);
+        // }
+
+
+
+
+        Swal.fire("Cuenta creada, bienvenido " + this.nombre, "", 'success');
+      } else {
+
+        // this.error.set(respuesta.error);
+        this.hayError = true;
+        switch (respuesta.error?.status) {
+          case 400:
+            this.error.set("Se requiere una contraseña válida.");
+            break;
+          case 401:
+            this.error.set("Solicitud inválida");
+            break;
+          case 403:
+            this.error.set("Prohibido: No tenés permiso");
+            break;
+          case 422:
+            this.error.set("El usuario ya existe");
+            break;
+          default:
+            this.error.set("🔄 Error desconocido. Error Status: " + respuesta.error?.status);
         }
-      });
-
-      // if (perfil === Perfil.Paciente) {
-      //   let nuevoPaciente = { ...nuevoUsuario, obra_social: this.obra_social, imagenDos: this.imagen_dos } as unknown as Paciente;
-      //   this.us.cargarPaciente(nuevoPaciente);
-      // }
-
-
-
-
-      Swal.fire("Cuenta creada, bienvenido " + this.nombre, "", 'success');
-    } else {
-
-      // this.error.set(respuesta.error);
-      this.hayError = true;
-      switch (respuesta.error?.status) {
-        case 400:
-          this.error.set("Se requiere una contraseña válida.");
-          break;
-        case 401:
-          this.error.set("Solicitud inválida");
-          break;
-        case 403:
-          this.error.set("Prohibido: No tenés permiso");
-          break;
-        case 422:
-          this.error.set("El usuario ya existe");
-          break;
-        default:
-          this.error.set("🔄 Error desconocido. Error Status: " + respuesta.error?.status);
+        Swal.fire("Error", this.error(), 'error');
       }
-      Swal.fire("Error", this.error(), 'error');
     }
   }
-}
+

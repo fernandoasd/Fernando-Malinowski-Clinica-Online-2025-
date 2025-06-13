@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { PageNotFound } from './pages/page-not-found/page-not-found';
+import { logueadoGuard } from './guards/logueado-guard';
+import { adminGuard } from './guards/admin-guard';
 
 export const routes: Routes = [
     {
@@ -18,9 +20,16 @@ export const routes: Routes = [
         loadComponent: () => import("./pages/login/login").then((a) => a.Login)
     },
     {
+        path: "about",
+        title: "About",
+        loadComponent: () => import("./pages/about/about.component").then((a) => a.AboutComponent),
+        canActivate : [logueadoGuard]
+    },
+    {
         path: "usuarios",
         title: "Usuarios",
         loadComponent: () => import("./pages/usuarios/usuarios").then((a) => a.Usuarios),
+        canActivate: [adminGuard],
         children: [
             {
                 path: "",

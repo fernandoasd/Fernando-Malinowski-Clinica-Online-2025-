@@ -1,8 +1,8 @@
-@if (hayError)
+<!-- @if (hayError)
 {
 <h1 class="text-danger">Error</h1>
 }
-<h1 class="text-danger">{{error()}}</h1>
+<h1 class="text-danger">{{error()}}</h1> -->
 
 
 
@@ -127,7 +127,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- obra_social -->
             <div class="mb-3">
                 <label for="obra_social" class="form-label">ObraSocial: </label>
@@ -148,6 +148,50 @@
                         Maximo 15 caracteres
                     </div>
                 </div>
+            </div>
+
+            <!-- imagen 1-->
+            <div class="mb-3">
+                <label for="imagenUno" class="form-label">Seleccionar segunda imagen:</label>
+                <input type="file" class="imagenUno-control" formControlName="imagenUno" id="imagenUno"
+                    (change)="onFileSelected($event)" accept="image/*">
+                <div *ngIf='formulario.get("imagenUno")?.touched && formulario.get("imagenUno")?.invalid'
+                    class="text-danger">
+                    <div *ngIf='formulario.get("imagenUno")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+                    <div *ngIf='formulario.get("imagenUno")?.errors?.["tipoInvalido"]'>
+                        Extensión no permitida. Solo JPG, PNG, Gif
+                    </div>
+                </div>
+            </div>
+
+            <!-- Previsualización -->
+            <div *ngIf="imagenPreview" class="mb-3">
+                <h5> 1° Imagen</h5>
+                <img [src]="imagenPreview" alt="Preview" class="img-thumbnail" width="50%">
+            </div>
+
+            <!-- imagen 2-->
+            <div class="mb-3">
+                <label for="imagenDos" class="form-label">Seleccionar segunda imagen:</label>
+                <input type="file" class="imagenDos-control" formControlName="imagenDos" id="imagenDos"
+                    (change)="onFileSelectedDos($event)" accept="image/*">
+                <div *ngIf='formulario.get("imagenDos")?.touched && formulario.get("imagenDos")?.invalid'
+                    class="text-danger">
+                    <div *ngIf='formulario.get("imagenDos")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+                    <div *ngIf='formulario.get("imagenDos")?.errors?.["tipoInvalido"]'>
+                        Extensión no permitida. Solo JPG, PNG, Gif
+                    </div>
+                </div>
+            </div>
+
+            <!-- Previsualización -->
+            <div *ngIf="imagenPreviewDos" class="mb-3">
+                <h5> 2° Imagen</h5>
+                <img [src]="imagenPreviewDos" alt="PreviewDos" class="img-thumbnail" width="50%">
             </div>
 
 

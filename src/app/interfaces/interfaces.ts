@@ -3,15 +3,15 @@ import { EstadoTurno, Perfil } from "../enums/enums";
 export interface Usuario {
     id_usuario?: number;
     created_at?: Date; 
-    mail: string;
-    nombre: string;
-    apellido: string;
-    documento: string;
-    edad: number;
-    perfil: Perfil;
+    mail?: string;
+    nombre?: string;
+    apellido?: string;
+    documento?: string;
+    edad?: number;
+    perfil?: Perfil;
     imagen_uno?: string;
     activo?: boolean;
-    contrasenia: string;
+    contrasenia?: string;
 }
 
 export interface Especialista extends Usuario {

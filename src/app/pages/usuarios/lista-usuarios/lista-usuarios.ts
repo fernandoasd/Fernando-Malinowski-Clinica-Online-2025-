@@ -10,26 +10,23 @@ import { Usuario } from '../../../interfaces/interfaces';
   styleUrl: './lista-usuarios.css'
 })
 export class ListaUsuarios {
- db = inject(UsuarioService);
+ us = inject(UsuarioService);
 
   listaUsuarios: Usuario[] = [];
 
   ngOnInit() {
-    console.log("Usuarios");
-    
     this.inicio();
+
   }
 
   cambiarActivo(id_usuario: number, activo: boolean){
-    this.db.deshabilitarUsuario(id_usuario, activo).then(({data , error}) =>{
+    this.us.deshabilitarUsuario(id_usuario, activo).then(({data , error}) =>{
       this.inicio();
     });
   }
 
-  inicio() {
-    this.db.traerUsuarios().then((u: Usuario[]) => {
-      this.listaUsuarios = u;
-      console.log("Usuarios: ", this.listaUsuarios);
-    });
+  async inicio() {
+  this.listaUsuarios = await this.us.traerUsuarios();
+  console.log("Usuarios: ", this.listaUsuarios);
   }
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, inject, input, signal } from '@angular/core';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Perfil } from '../../../enums/enums';
 import { Usuario, Paciente, Especialista } from '../../../interfaces/interfaces';
@@ -14,10 +14,11 @@ import { UsuarioService } from '../../../services/UsuarioSercvice';
   styleUrl: './reegistro-admin.css'
 })
 export class ReegistroAdmin {
-auth = inject(AuthService);
+  auth = inject(AuthService);
   us = inject(UsuarioService);
   data: any[] | null = null;
   error = signal<string>("");
+
 
   mail: string = "";
   contrasenia: string = "";
@@ -25,7 +26,7 @@ auth = inject(AuthService);
   apellido: string = "";
   edad: number = 0;
   dni: string = "";
-  perfil = signal<Perfil>(Perfil.Anonimo);
+  perfil = signal<Perfil>(Perfil.Admin);
   obra_social: string = "";
   imagen_uno: string = "";
   imagen_dos: string = "";
@@ -36,6 +37,10 @@ auth = inject(AuthService);
   hayError: boolean = false;
   mailEjemplo = "ejemplo@gmail.com";
   mensajeErrorEspecialidad = "";
+  archivo? = null;
+
+  imagenSeleccionada: File | null = null;
+  imagenPreview: string | ArrayBuffer | null = null;
 
   opcionSeleccionada: string = "otro";
   otraOpcion: string = '';
@@ -110,6 +115,12 @@ auth = inject(AuthService);
         Validators.min(18),
         Validators.max(99)
       ]
+    }),
+    imagenUno: new FormControl(null, {
+      validators: [
+        Validators.required,
+        this.validarImagen
+      ]
     })
   })
 
@@ -123,100 +134,89 @@ auth = inject(AuthService);
     })
   }
 
-  onSeleccionar(event: Event) {
-    const valor = (event.target as HTMLSelectElement).value;
-    console.log('Seleccionaste:', valor);
-    if (valor != "otra") {
-      this.especialidades.push(valor);
-      console.log('especialidades:', this.especialidades);
+  validarImagen(control: AbstractControl, maxSizeMB: number = 2): ValidationErrors | null {
+    const file = control.value;
+    console.log("control: ", control);
+    if (!file) return null; // No hay archivo aún
+
+    const extensionesPermitidas = ['jpg', 'jpeg', 'png', 'webp'];
+    const extension = file.split('.').pop()?.toLowerCase();
+
+    // Validar tipo
+    if (!extension || !extensionesPermitidas.includes(extension)) {
+      return { tipoInvalido: true };
+    }
+
+    // if (!file.type.startsWith('image/')) {
+    //   return { tipoInvalido: true };
+    // }
+
+    // Validar tamaño
+    // const maxSizeBytes = maxSizeMB * 1024 * 1024;
+    // if (file.size > maxSizeBytes) {
+    //   return { tamanoExcedido: true };
+    // }
+
+    return null; // válido
+  }
+
+  onFileSelected(event: any) {
+    console.log("event: ", event)
+    const file = event.target.files[0];
+    if (file) {
+      this.imagenSeleccionada = file;
+
+      // Mostrar previsualización
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagenPreview = reader.result;
+      };
+      reader.readAsDataURL(file);
     }
   }
 
-  onPerfil(event: Event) {
-    const valor = (event.target as HTMLSelectElement).value;
-    console.log('Perfil:', valor);
 
-    if (valor == "paciente") {
-      this.formulario.get('especialidad')?.clearValidators();
-      this.formulario.get('especialidad')?.updateValueAndValidity();
 
-      this.formulario.get('nuevaEspecialidad')?.clearValidators();
-      this.formulario.get('nuevaEspecialidad')?.updateValueAndValidity();
-
-      console.log("validacion", this.formulario)
-      console.log('Desactivado!');
-    } else if (valor == "especialista"){
-      this.formulario.get('especialidad')?.setValidators([Validators.required, Validators.email]);
-      this.formulario.get('especialidad')?.updateValueAndValidity();
-
-      this.formulario.get('nuevaEspecialidad')?.clearValidators;
-      this.formulario.get('nuevaEspecialidad')?.updateValueAndValidity();
-      console.log('Activado!');
-    }
-  }
-
-  agregarEspecialidad(especialidad: string) {
-    this.mensajeErrorEspecialidad = "";
-    especialidad = especialidad.toLowerCase();
-    this.formulario.get("nuevaEspecialidad")?.markAllAsTouched;
-    if (especialidad.length >= 3 && especialidad.length <= 15) {
-      if (this.especialidades.includes(especialidad)) {
-        this.mensajeErrorEspecialidad = "Ya existe especialidad";
-        Swal.fire("Validacion", "Ya existe especialidad", 'question');
-      } else {
-        this.especialidades.push(especialidad);
-      }
-    } else {
-      Swal.fire("Validacion", "especialidad tiene que tener entre 3 y 15 caracteres.", 'question');
-
-    }
-  }
-
-  eliminarEspecificacion(event: Event) {
-    const valor = (event.target as HTMLSelectElement).value;
-    console.log('Eliminar:', valor);
-    const index = this.especialidades.indexOf(valor);
-    if (index !== -1) {
-      this.especialidades.splice(index, 1);
-    }
-  }
 
   revisar() {
     this.formulario?.markAllAsTouched();
     console.log(this.formulario);
   }
 
-  enviar() {
-    console.log("perfil " , this.perfil());
-      if (this.formulario.valid) {
-        console.log("Se puede enviar");
+  async enviar() {
+    console.log("perfil ", this.perfil());
+    if (this.formulario.valid) {
+      console.log("Se puede enviar");
 
-        Swal.fire({
-          title: "Crear cuenta??",
-          showDenyButton: true,
-          icon: 'question',
-          confirmButtonText: "Crear",
-          denyButtonText: `Cancelar`
-        }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
-          if (result.isConfirmed) {
-            this.registrarse(this.perfil());
-          }
-        });
+      Swal.fire({
+        title: "Crear cuenta??",
+        showDenyButton: true,
+        icon: 'question',
+        confirmButtonText: "Crear",
+        denyButtonText: `Cancelar`
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+           this.us.db.subirFotoPerfil(this.imagenSeleccionada!).then((retorno) => {
+             this.registrarse(this.perfil(), retorno!.linkPublico!.data!.publicUrl || "");
+          });
 
-      } else {
-        this.formulario?.markAllAsTouched();
-        console.log("No se puede enviar");
-        Swal.fire({
-          icon: 'warning',
-          title: "Error",
-          text: "compruebe los campos requeridos",
-          draggable: true
-        });
-      }
+        }
+      });
+
+    } else {
+      this.formulario?.markAllAsTouched();
+      console.log("No se puede enviar");
+      Swal.fire({
+        icon: 'warning',
+        title: "Error",
+        text: "compruebe los campos requeridos",
+        draggable: true
+      });
+    }
   }
 
-  async registrarse(perfil: Perfil) {
+  async registrarse(perfil: Perfil, linkPublico: string) {
     const respuesta = await this.auth.crearCuenta(this.mail, this.contrasenia);
     if (respuesta.error === null) {
 
@@ -228,7 +228,7 @@ auth = inject(AuthService);
         edad: this.edad,
         documento: this.dni,
         perfil: perfil,
-        imagen_uno: this.imagen_uno,
+        imagen_uno: linkPublico,
       };
 
       await this.us.cargarUsuario(nuevoUsuario).then(({ data, error }) => {
@@ -252,14 +252,6 @@ auth = inject(AuthService);
           };
         }
       });
-
-      // if (perfil === Perfil.Paciente) {
-      //   let nuevoPaciente = { ...nuevoUsuario, obra_social: this.obra_social, imagenDos: this.imagen_dos } as unknown as Paciente;
-      //   this.us.cargarPaciente(nuevoPaciente);
-      // }
-
-
-
 
       Swal.fire("Cuenta creada, bienvenido " + this.nombre, "", 'success');
     } else {
@@ -286,3 +278,62 @@ auth = inject(AuthService);
     }
   }
 }
+
+
+// onSeleccionar(event: Event) {
+//   const valor = (event.target as HTMLSelectElement).value;
+//   console.log('Seleccionaste:', valor);
+//   if (valor != "otra") {
+//     this.especialidades.push(valor);
+//     console.log('especialidades:', this.especialidades);
+//   }
+// }
+
+// onPerfil(event: Event) {
+//   const valor = (event.target as HTMLSelectElement).value;
+//   console.log('Perfil:', valor);
+
+//   if (valor == "paciente") {
+//     this.formulario.get('especialidad')?.clearValidators();
+//     this.formulario.get('especialidad')?.updateValueAndValidity();
+
+//     this.formulario.get('nuevaEspecialidad')?.clearValidators();
+//     this.formulario.get('nuevaEspecialidad')?.updateValueAndValidity();
+
+//     console.log("validacion", this.formulario)
+//     console.log('Desactivado!');
+//   } else if (valor == "especialista"){
+//     this.formulario.get('especialidad')?.setValidators([Validators.required, Validators.email]);
+//     this.formulario.get('especialidad')?.updateValueAndValidity();
+
+//     this.formulario.get('nuevaEspecialidad')?.clearValidators;
+//     this.formulario.get('nuevaEspecialidad')?.updateValueAndValidity();
+//     console.log('Activado!');
+//   }
+// }
+
+// agregarEspecialidad(especialidad: string) {
+//   this.mensajeErrorEspecialidad = "";
+//   especialidad = especialidad.toLowerCase();
+//   this.formulario.get("nuevaEspecialidad")?.markAllAsTouched;
+//   if (especialidad.length >= 3 && especialidad.length <= 15) {
+//     if (this.especialidades.includes(especialidad)) {
+//       this.mensajeErrorEspecialidad = "Ya existe especialidad";
+//       Swal.fire("Validacion", "Ya existe especialidad", 'question');
+//     } else {
+//       this.especialidades.push(especialidad);
+//     }
+//   } else {
+//     Swal.fire("Validacion", "especialidad tiene que tener entre 3 y 15 caracteres.", 'question');
+
+//   }
+// }
+
+// eliminarEspecificacion(event: Event) {
+//   const valor = (event.target as HTMLSelectElement).value;
+//   console.log('Eliminar:', valor);
+//   const index = this.especialidades.indexOf(valor);
+//   if (index !== -1) {
+//     this.especialidades.splice(index, 1);
+//   }
+// }

@@ -1,0 +1,6 @@
+.image {
+    width: 10vw;
+    background-image: url("./assets/gota-4.png");
+    background-size: cover;
+    background-position: center;
+}

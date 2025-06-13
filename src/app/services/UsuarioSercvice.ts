@@ -8,7 +8,7 @@ import { Especialista, Paciente, Usuario } from '../interfaces/interfaces';
 export class UsuarioService {
   db = inject(SupabaseService);
 
-  usuarioActual: any[] = [];
+  usuarioActual: Usuario | null = null;
 
   constructor() {
   }
@@ -23,7 +23,6 @@ export class UsuarioService {
       } else {
         console.log('Último ID: -1 , error!!!');
       }
-
       console.log('Último ID:', ultimoId);
       return ultimoId;
     });
@@ -57,7 +56,7 @@ export class UsuarioService {
     return await this.db.supabase.from("usuarios").insert(usuario).select("*").then(({ data, error }) => {
       if (error == null) {
         if (data && data.length > 0) {
-          this.usuarioActual = data;
+          this.usuarioActual = data![0];
         }
       } else {
         console.log('cargarUsuario error!!!');
@@ -92,14 +91,14 @@ export class UsuarioService {
 
   async cargarUsuarioContrasenia(mail: string, password: string) {
     const data = await this.buscarUsuarioContrasenia(mail, password);
-    this.usuarioActual = data!;
+    this.usuarioActual = data![0];
     console.log(this.usuarioActual);
   }
 
   async cargarUsuarioMail(mail: string) {
     // this.traerUltimoId();
     const { data, error } = await this.buscarUsuarioMail(mail);
-    this.usuarioActual = data!;
+    this.usuarioActual = data![0];
     console.log("Usuario actual:", this.usuarioActual);
     return data;
   }

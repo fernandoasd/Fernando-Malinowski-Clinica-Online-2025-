@@ -53,6 +53,7 @@ export class AuthService {
     });
     this.nombre = correo.split('@')[0];;
     console.log("aunth, iniciar sesion:", data, error);
+    this.usuarioService.cargarUsuarioMail(data.user?.email!);
     return { data, error };
   }
 

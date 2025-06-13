@@ -1,8 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Perfil } from '../../../enums/enums';
-import { Usuario, Paciente, Especialista } from '../../../interfaces/interfaces';
+import { Usuario, Paciente} from '../../../interfaces/interfaces';
 import { AuthService } from '../../../services/AuthService';
 import { UsuarioService } from '../../../services/UsuarioSercvice';
 import { CommonModule } from '@angular/common';
@@ -38,6 +38,13 @@ export class ReegistroPaciente {
 
   opcionSeleccionada: string = "otro";
   otraOpcion: string = '';
+
+  imagenSeleccionada: File | null = null;
+  imagenPreview: string | ArrayBuffer | null = null;
+
+
+  imagenSeleccionadaDos: File | null = null;
+  imagenPreviewDos: string | ArrayBuffer | null = null;
 
 
   formulario = new FormGroup({
@@ -89,6 +96,18 @@ export class ReegistroPaciente {
         Validators.min(18),
         Validators.max(99)
       ]
+    }),
+    imagenUno: new FormControl(null, {
+      validators: [
+        Validators.required,
+        this.validarImagen
+      ]
+    }),
+    imagenDos: new FormControl(null, {
+      validators: [
+        Validators.required,
+        this.validarImagen
+      ]
     })
   })
 
@@ -102,9 +121,55 @@ export class ReegistroPaciente {
     })
   }
 
+  validarImagen(control: AbstractControl, maxSizeMB: number = 2): ValidationErrors | null {
+    const file = control.value;
+    console.log("control: ", control);
+    if (!file) return null; // No hay archivo aún
+
+    const extensionesPermitidas = ['jpg', 'jpeg', 'png', 'webp'];
+    const extension = file.split('.').pop()?.toLowerCase();
+
+    // Validar tipo
+    if (!extension || !extensionesPermitidas.includes(extension)) {
+      return { tipoInvalido: true };
+    }
+
+    return null; // válido
+  }
+
   revisar() {
     this.formulario?.markAllAsTouched();
     console.log(this.formulario);
+  }
+
+  onFileSelected(event: any) {
+    console.log("event: ", event)
+    const file = event.target.files[0];
+    if (file) {
+      this.imagenSeleccionada = file;
+
+      // Mostrar previsualización
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagenPreview = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onFileSelectedDos(event: any) {
+    console.log("event: ", event)
+    const file = event.target.files[0];
+    if (file) {
+      this.imagenSeleccionadaDos = file;
+
+      // Mostrar previsualización
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagenPreviewDos = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   enviar() {
@@ -120,7 +185,11 @@ export class ReegistroPaciente {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          this.registrarse(this.perfil);
+          this.us.db.subirFotoPerfil(this.imagenSeleccionada!).then((imagenUno) => {
+            this.us.db.subirFotoPerfil(this.imagenSeleccionadaDos!).then((imagenDos) => {
+              this.registrarse(this.perfil, imagenUno!.linkPublico!.data!.publicUrl || "", imagenDos!.linkPublico!.data!.publicUrl || "");
+            })
+          });
         }
       });
 
@@ -136,7 +205,7 @@ export class ReegistroPaciente {
     }
   }
 
-  async registrarse(perfil: Perfil) {
+  async registrarse(perfil: Perfil, linkPublico: string, linkPublicoDos: string) {
     const respuesta = await this.auth.crearCuenta(this.mail, this.contrasenia);
     if (respuesta.error === null) {
 
@@ -148,7 +217,7 @@ export class ReegistroPaciente {
         edad: this.edad,
         documento: this.dni,
         perfil: perfil,
-        imagen_uno: this.imagen_uno,
+        imagen_uno: linkPublico,
       };
 
       await this.us.cargarUsuario(nuevoUsuario).then(({ data, error }) => {
@@ -160,9 +229,9 @@ export class ReegistroPaciente {
 
             if (perfil === Perfil.Paciente) {
               console.log("paciente...");
-              let nuevoPaciente = { ...nuevoUsuario, obra_social: this.obra_social, imagen_dos: this.imagen_dos } as unknown as Paciente;
+              let nuevoPaciente = { ...nuevoUsuario, obra_social: this.obra_social, imagen_dos: linkPublicoDos } as unknown as Paciente;
               this.us.cargarPaciente(nuevoPaciente);
-            } 
+            }
           } else {
             console.log("registro datos vacios");
           };
@@ -171,7 +240,7 @@ export class ReegistroPaciente {
 
       Swal.fire("Cuenta creada, bienvenido " + this.nombre, "", 'success');
     } else {
-      
+
       this.hayError = true;
       switch (respuesta.error?.status) {
         case 400:

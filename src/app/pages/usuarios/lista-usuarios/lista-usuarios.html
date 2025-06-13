@@ -22,7 +22,7 @@
       <td>{{ c.documento }}</td>
       <td>{{ c.edad }}</td>
       <td>{{ c.perfil }}</td>
-      <td><button class="btn btn-sm btn-info" (click)="cambiarActivo(c.id_usuario!, c.activo!)">{{ c.activo }}</button></td>
+      <td><button class="btn btn-sm btn-info" *ngIf="c.perfil == 'especialista'" (click)="cambiarActivo(c.id_usuario!, c.activo!)">{{ c.activo }}</button></td>
     </tr>
   </tbody>
 </table>

@@ -42,6 +42,9 @@ export class Registrarse {
   opcionSeleccionada: string = "otro";
   otraOpcion: string = '';
 
+  imagenSeleccionada: File | null = null;
+  imagenPreview: string | ArrayBuffer | null = null;
+
 
   formulario = new FormGroup({
     nombre: new FormControl("---", {
@@ -147,7 +150,7 @@ export class Registrarse {
 
       console.log("validacion", this.formulario)
       console.log('Desactivado!');
-    } else if (valor == "especialista"){
+    } else if (valor == "especialista") {
       this.formulario.get('especialidad')?.setValidators([Validators.required, Validators.email]);
       this.formulario.get('especialidad')?.updateValueAndValidity();
 
@@ -189,33 +192,33 @@ export class Registrarse {
   }
 
   enviar() {
-    console.log("perfil " , this.perfil());
-      if (this.formulario.valid) {
-        console.log("Se puede enviar");
+    console.log("perfil ", this.perfil());
+    if (this.formulario.valid) {
+      console.log("Se puede enviar");
 
-        Swal.fire({
-          title: "Crear cuenta??",
-          showDenyButton: true,
-          icon: 'question',
-          confirmButtonText: "Crear",
-          denyButtonText: `Salir`
-        }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
-          if (result.isConfirmed) {
-            this.registrarse(this.perfil());
-          }
-        });
+      Swal.fire({
+        title: "Crear cuenta??",
+        showDenyButton: true,
+        icon: 'question',
+        confirmButtonText: "Crear",
+        denyButtonText: `Salir`
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          this.registrarse(this.perfil());
+        }
+      });
 
-      } else {
-        this.formulario?.markAllAsTouched();
-        console.log("No se puede enviar");
-        Swal.fire({
-          icon: 'warning',
-          title: "Error",
-          text: "compruebe los campos requeridos",
-          draggable: true
-        });
-      }
+    } else {
+      this.formulario?.markAllAsTouched();
+      console.log("No se puede enviar");
+      Swal.fire({
+        icon: 'warning',
+        title: "Error",
+        text: "compruebe los campos requeridos",
+        draggable: true
+      });
+    }
   }
 
   async registrarse(perfil: Perfil) {
