@@ -28,6 +28,18 @@ export const routes: Routes = [
                 loadComponent: () => import("./pages/usuarios/usuarios-home/usuarios-home").then(m => m.UsuariosHome)
             },
             {
+                path: "registro-paciente",
+                title: "Registro Admin",
+                loadComponent: () => import("./pages/registrarse/registro-paciente/reegistro-paciente").then(m => m.ReegistroPaciente)
+
+            },
+            {
+                path: "registro-especialista",
+                title: "Registro Admin",
+                loadComponent: () => import("./pages/registrarse/registro-especialista/reegistro-especialista").then(m => m.ReegistroEspecialista)
+
+            },
+            {
                 path: "registro-admin",
                 title: "Registro Admin",
                 loadComponent: () => import("./pages/usuarios/registro-admin/reegistro-admin").then(m => m.ReegistroAdmin)

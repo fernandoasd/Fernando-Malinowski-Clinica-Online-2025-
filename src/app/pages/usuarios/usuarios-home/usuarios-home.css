@@ -7,10 +7,12 @@
 }
 
 .img-admin{
-    /* background-color: rgb(91, 62, 240); */
-    background-image: url("./medicoUno.png");
-    background-position: top right;
-    background-size: cover;
+    background-color: rgb(91, 62, 240);
+    /* background-image: url("./medicoUno.png"); */
+    /* width: 100%;
+    height: 100%; */
+    background-position: right top;
+    /* background-size: contain; */
     background-repeat: no-repeat;
 
 }
