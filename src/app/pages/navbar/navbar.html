@@ -21,10 +21,12 @@
           <a routerLink="registro" class="btn btn-success">Registro</a>
         </li>
         } @else {
+
+
         <li class="nav-item">
           <a class="btn btn-warning ms-auto">Usuario: {{auth.usuarioActual.email}}</a>
         </li>
-        
+
         <li class="nav-item">
           <a (click)="cerrarSesion()" class="btn btn-danger">Cerrar Sesion</a>
         </li>
@@ -36,6 +38,10 @@
         } @else {
         <li class="nav-item">
           <a routerLink="/usuarios" class="btn btn-success">Usuarios</a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/solicitar-turno" class="btn btn-success">Solicitar Turno</a>
         </li>
 
 

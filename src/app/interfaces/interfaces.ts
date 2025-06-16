@@ -1,8 +1,8 @@
-import { EstadoTurno, Perfil } from "../enums/enums";
+import { DiaSemana, EstadoTurno, Perfil } from "../enums/enums";
 
 export interface Usuario {
     id_usuario?: number;
-    created_at?: Date; 
+    created_at?: Date;
     mail?: string;
     nombre?: string;
     apellido?: string;
@@ -15,34 +15,38 @@ export interface Usuario {
 }
 
 export interface Especialista extends Usuario {
-    especialidades: string[];
+    id_especialista?: number;
+    especialidades?: string[];
+    disponibilidad?: Disponibilidad[];
 }
 
-export interface Paciente extends Usuario{
+export interface Paciente extends Usuario {
+    id_paciente?: number;
     obra_social?: string;
     imagen_dos?: string;
 }
 
 export interface Disponibilidad {
-    especialista: string;
-    especialidad: string;
-    fecha: string;
-    horaInicio: string;
-    horaFin: string;
-    duracionTurnos: number;
+    id_especialista?: number;
+    especialidad?: string;
+    duracion_turno?: number;
+    horarios?: Array<{
+        dia_semana?: DiaSemana;
+        horario_inicio?: string;
+        horario_fin?: string;
+    }>;
 }
 
 export interface Turno {
-    medico: string;
-    medicoNombreCompleto: string | null;
-    pacienteNombreCompleto: string | null;
-    fecha: string;
-    horario: string;
+    id_especialista: number | null;
+    id_paciente: number | null;
+    fechaTurno: string;
+    horarioTurno: string;
     especialidad: string;
-    paciente: string;
     estado: EstadoTurno;
+    info_estado: string;
     resenia?: { resenia: string, diagnostico: string };
-    encuesta?: { consejo: string, instalaciones: number, recomendacion: string };
+    encuesta?: { consejo: string, recomendacion: string };
     calificacion?: string;
     altura?: number | null;
     peso?: number | null;
@@ -51,3 +55,5 @@ export interface Turno {
     datosDinamicos?: Array<{ clave: string; valor: string }>;
     fechaSolicitud?: Date | null;
 }
+
+

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
-import { UsuarioService } from '../../services/UsuarioSercvice';
+import { UsuarioService } from '../../services/UsuarioService';
 import { Usuario } from '../../interfaces/interfaces';
 
 

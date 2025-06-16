@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from '@supabase/supabase-js';
-import { UsuarioService } from './UsuarioSercvice';
+import { UsuarioService } from './UsuarioService';
 import { SupabaseService } from './SupabaseService';
 
 @Injectable({
@@ -24,7 +24,7 @@ export class AuthService {
         this.router.navigateByUrl("/login");
       } else { //si inicia sesion
         this.usuarioActual = session.user;
-        // this.usuarioService.cargarUsuarioMail(this.usuarioActual.email!);
+        this.usuarioService.cargarUsuarioMail(this.usuarioActual.email!);
         this.router.navigateByUrl("/home");
       }
     });

@@ -29,12 +29,12 @@ export class UsuarioService {
   }
 
   async traerUsuarios() {
-    return await this.db.supabase.from("usuarios").select("*").then(({data, error}) => {
-    console.log("data", data);
+    return await this.db.supabase.from("usuarios").select("*").then(({ data, error }) => {
+      console.log("data", data);
 
-    const usuarios = data as Usuario[]; //de esta forma data va a ser un array de usuarios
-    console.log("listar", usuarios, error);
-    return usuarios;
+      const usuarios = data as Usuario[]; //de esta forma data va a ser un array de usuarios
+      console.log("listar", usuarios, error);
+      return usuarios;
     });
 
   }
@@ -103,7 +103,33 @@ export class UsuarioService {
     return data;
   }
 
-  async deshabilitarUsuario(id_usuario: number, activo: boolean){
-    return await this.db.supabase.from("usuarios").update({activo: !activo}).eq("id_usuario", id_usuario);
+  async deshabilitarUsuario(id_usuario: number, activo: boolean) {
+    return await this.db.supabase.from("usuarios").update({ activo: !activo }).eq("id_usuario", id_usuario);
+  }
+
+  async traerDisponibilidad(id_especialista: number,especialidad: string) {
+    const { data, error } = await this.db.supabase.from("disponibilidad").select("*").eq("id_especialista", id_especialista).eq("especialidad", especialidad);
+    return { data, error };
+  }
+
+  async traerEspecialistas() {
+    const { data, error } = await this.db.supabase.from("especialistas").select("*, usuarios(*)");
+    const especialistas = data!.map(item => ({
+      ...item,
+      ...item.usuarios
+    }));
+    especialistas.forEach(obj=>  delete ( obj as any).usuarios);
+    return { especialistas, error };
+  }
+
+    async traerEspecialistaId(id_especialista : number) {
+    const { data, error } = await this.db.supabase.from("especialistas")
+    .select("*, usuarios(*)").eq("id_especialista", id_especialista);
+    const especialista = data!.map(item => ({
+      ...item,
+      ...item.usuarios
+    }));
+    especialista.forEach(obj=>  delete ( obj as any).usuarios);
+    return { especialista, error };
   }
 }

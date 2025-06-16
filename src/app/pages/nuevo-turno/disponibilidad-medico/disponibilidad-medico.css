@@ -1,0 +1,10 @@
+.card {
+  min-height: 300px;
+  min-width: 10vw;
+  max-width: 10vw;
+
+}
+
+.card-header {
+  font-size: 1.1rem;
+}

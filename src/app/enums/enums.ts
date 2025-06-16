@@ -20,3 +20,13 @@ export enum Informe {
     TurnosSolicitadosPorMedicoEnTiempo = 3,
     TurnosFinalizadosPorMedicoEnTiempo = 4
 }
+
+export enum DiaSemana {
+    domingo = "domingo",
+    Lunes = "lunes",
+    Martes = "martes",
+    Miercoles = "miercoles",
+    Jueves = "jueves",
+    Viernes = "viernes",
+    Sabado = "sabado"
+}

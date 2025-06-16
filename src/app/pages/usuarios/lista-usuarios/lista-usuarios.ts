@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { UsuarioService } from '../../../services/UsuarioSercvice';
+import { UsuarioService } from '../../../services/UsuarioService';
 import { Usuario } from '../../../interfaces/interfaces';
 
 @Component({

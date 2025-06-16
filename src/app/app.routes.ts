@@ -2,6 +2,9 @@ import { Routes } from '@angular/router';
 import { PageNotFound } from './pages/page-not-found/page-not-found';
 import { logueadoGuard } from './guards/logueado-guard';
 import { adminGuard } from './guards/admin-guard';
+import { NuevoTurno } from './pages/nuevo-turno/nuevo-turno';
+import { DisponibilidadMedico } from './pages/nuevo-turno/disponibilidad-medico/disponibilidad-medico';
+import { ListaMedicos } from './pages/nuevo-turno/lista-medicos/lista-medicos';
 
 export const routes: Routes = [
     {
@@ -23,7 +26,7 @@ export const routes: Routes = [
         path: "about",
         title: "About",
         loadComponent: () => import("./pages/about/about.component").then((a) => a.AboutComponent),
-        canActivate : [logueadoGuard]
+        canActivate: [logueadoGuard]
     },
     {
         path: "usuarios",
@@ -83,8 +86,14 @@ export const routes: Routes = [
         ]
     },
     {
+        path: "solicitar-turno",
+        title: "solicitar-turno",
+        loadChildren: () => 
+            import("./pages/nuevo-turno/nuevo-turno.routes").then(m => m.nuevo_turno)
+    },
+    {
         path: "**",
         title: "Page Not Found",
         component: PageNotFound
     }
-];
+]; 

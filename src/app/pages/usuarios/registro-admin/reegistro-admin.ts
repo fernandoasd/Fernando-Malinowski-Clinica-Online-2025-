@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import { Perfil } from '../../../enums/enums';
 import { Usuario, Paciente, Especialista } from '../../../interfaces/interfaces';
 import { AuthService } from '../../../services/AuthService';
-import { UsuarioService } from '../../../services/UsuarioSercvice';
+import { UsuarioService } from '../../../services/UsuarioService';
 
 @Component({
   selector: 'app-reegistro-admin',

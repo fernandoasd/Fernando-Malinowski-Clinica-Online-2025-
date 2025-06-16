@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/AuthService';
-import { UsuarioService } from '../../services/UsuarioSercvice';
+import { UsuarioService } from '../../services/UsuarioService';
 import Swal from 'sweetalert2';
 import { Especialista, Paciente, Usuario } from '../../interfaces/interfaces';
 import { Perfil } from '../../enums/enums';

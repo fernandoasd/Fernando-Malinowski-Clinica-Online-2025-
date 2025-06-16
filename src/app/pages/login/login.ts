@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { UsuarioService } from '../../services/UsuarioSercvice';
+import { UsuarioService } from '../../services/UsuarioService';
 import { AuthService } from '../../services/AuthService';
 import { CommonModule } from '@angular/common';
 import { EnlaceRapido } from '../enlace-rapido/enlace-rapido';
