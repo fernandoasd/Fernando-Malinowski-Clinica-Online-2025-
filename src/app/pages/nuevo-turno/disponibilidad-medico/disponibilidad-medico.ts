@@ -2,8 +2,9 @@ import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UsuarioService } from '../../../services/UsuarioService';
 import { CommonModule } from '@angular/common';
-import { Disponibilidad, Especialista } from '../../../interfaces/interfaces';
-import { DiaSemana } from '../../../enums/enums';
+import { Disponibilidad, Especialista, Paciente, Turno } from '../../../interfaces/interfaces';
+import { DiaSemana, EstadoTurno } from '../../../enums/enums';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-disponibilidad-medico',
@@ -13,7 +14,8 @@ import { DiaSemana } from '../../../enums/enums';
 })
 export class DisponibilidadMedico {
   us = inject(UsuarioService);
-  id_medico = 0;
+  id_medico = -1;
+  pacienteActual: Paciente | null= null;
   especialidad = "";
   especialista: Especialista = {}
   fechasDisponibles: string[] = [];
@@ -44,13 +46,17 @@ export class DisponibilidadMedico {
     console.log("on init...");
     console.log("id: ", this.id_medico);
     console.log("this.especialidad: ", this.especialidad);
-
+    this.us.traerPacienteUsuarioId(this.us.usuarioActual?.id_usuario!).then(({ data, error }) => {
+      if (error == null) {
+        this.pacienteActual = data![0];
+      }
+    });
     console.log("especialidades: ", this.especialista.especialidades);
     this.disponibilidadMedico = await this.traerDisponibilidad(this.id_medico, this.especialidad);
     this.diasDisponiblesEspecialidad = this.extraerDias(this.disponibilidadMedico);
     this.FechasDisponiblesEspecialidad = this.obtenerFechasDisponibles(this.diasDisponiblesEspecialidad);
     this.diasSemana = this.obtenerFechasDisponiblesDos(this.disponibilidadMedico);
-    console.log("this.diasSemana: ",this.diasSemana);
+    console.log("this.diasSemana: ", this.diasSemana);
     console.log("this.diasDisponiblesEspecialidad", this.diasDisponiblesEspecialidad);
     setTimeout(() => {
       console.log("id: ", this.id_medico);
@@ -59,7 +65,7 @@ export class DisponibilidadMedico {
     },)
   }
 
-  
+
   obtenerFechasDisponiblesDos(disponibilidades: Disponibilidad[], cantidad: number = 10) {
     const diasSemana = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
     const fechas = [];
@@ -75,14 +81,14 @@ export class DisponibilidadMedico {
       if (horarioActual) {
         // Formatear fecha a ISO (podés cambiarlo según tu necesidad)
         const intervalos = this.generarIntervalos(horarioActual?.horario_inicio!, horarioActual?.horario_fin!, disponibilidad.duracion_turno!);
-        fechas.push({nombre: diaNombre, fecha: fechaActual.toISOString().split('T')[0], horarios: intervalos});
+        fechas.push({ nombre: diaNombre, fecha: fechaActual.toISOString().split('T')[0], horarios: intervalos });
       }
       // Pasar al día siguiente
       fechaActual.setDate(fechaActual.getDate() + 1);
     }
     return fechas;
   }
-  
+
 
   obtenerFechasDisponibles(dias: string[], cantidad: number = 10) {
     const diasSemana = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
@@ -152,34 +158,52 @@ export class DisponibilidadMedico {
   //   // ... Miércoles, Jueves, Viernes
   // ];
 
+
   seleccionarTurno(dia: string, fecha: string, hora: string) {
-  console.log(`Turno seleccionado: ${dia} ${fecha} a las ${hora}`);
-  
-  // acá podrías navegar a una vista de confirmación o guardar el turno en Supabase
-}
+    console.log(`Turno seleccionado: ${dia} ${fecha} a las ${hora}`);
+    if (this.pacienteActual == null) {
+      console.log("Paciente actual no inicializado!");
+    } else {
+      let nuevoTurno: Turno = {
+        id_especialista: this.id_medico, id_paciente: this.pacienteActual.id_paciente!,
+        fecha_turno: fecha, horario_turno: hora, especialidad: this.especialidad, estado: EstadoTurno.Pendiente
+      };
+      nuevoTurno.id_especialista = this.id_medico;
 
-generarIntervalos(horaInicio: string, horaFin: string, duracionMinutos: number): string[] {
-  const intervalos: string[] = [];
+      this.us.cargarTurno(nuevoTurno).then(({ data, error }) => {
+        console.log("Error ", error);
+        if (error == null) {
+          Swal.fire("Exito", "Nuevo turno agendado: \p " + { dia } + " " + { fecha } + " a las " + { hora }, 'success');
+        } else {
+          Swal.fire("Error", "Su turno no se guardó: ${error}", 'warning');
+        }
+      });
+    }
 
-  // Convertir a objetos Date
-  const [hInicio, mInicio] = horaInicio.split(':').map(Number);
-  const [hFin, mFin] = horaFin.split(':').map(Number);
-
-  const inicio = new Date();
-  inicio.setHours(hInicio, mInicio, 0, 0);
-
-  const fin = new Date();
-  fin.setHours(hFin, mFin, 0, 0);
-
-  // Iterar y generar los intervalos
-  const actual = new Date(inicio);
-  while (actual < fin) {
-    const hora = actual.toTimeString().slice(0, 5); // "HH:mm"
-    intervalos.push(hora);
-    actual.setMinutes(actual.getMinutes() + duracionMinutos);
   }
 
-  return intervalos;
-}
+  generarIntervalos(horaInicio: string, horaFin: string, duracionMinutos: number): string[] {
+    const intervalos: string[] = [];
+
+    // Convertir a objetos Date
+    const [hInicio, mInicio] = horaInicio.split(':').map(Number);
+    const [hFin, mFin] = horaFin.split(':').map(Number);
+
+    const inicio = new Date();
+    inicio.setHours(hInicio, mInicio, 0, 0);
+
+    const fin = new Date();
+    fin.setHours(hFin, mFin, 0, 0);
+
+    // Iterar y generar los intervalos
+    const actual = new Date(inicio);
+    while (actual < fin) {
+      const hora = actual.toTimeString().slice(0, 5); // "HH:mm"
+      intervalos.push(hora);
+      actual.setMinutes(actual.getMinutes() + duracionMinutos);
+    }
+
+    return intervalos;
+  }
 
 }

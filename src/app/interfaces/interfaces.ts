@@ -40,11 +40,11 @@ export interface Disponibilidad {
 export interface Turno {
     id_especialista: number | null;
     id_paciente: number | null;
-    fechaTurno: string;
-    horarioTurno: string;
+    fecha_turno: string;
+    horario_turno: string;
     especialidad: string;
     estado: EstadoTurno;
-    info_estado: string;
+    info_estado?: string;
     resenia?: { resenia: string, diagnostico: string };
     encuesta?: { consejo: string, recomendacion: string };
     calificacion?: string;
@@ -52,7 +52,7 @@ export interface Turno {
     peso?: number | null;
     temperatura?: number | null;
     presion?: string | null;
-    datosDinamicos?: Array<{ clave: string; valor: string }>;
+    datos_dinamicos?: Array<{ clave: string; valor: string }>;
     fechaSolicitud?: Date | null;
 }
 

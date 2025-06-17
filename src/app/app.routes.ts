@@ -2,16 +2,10 @@ import { Routes } from '@angular/router';
 import { PageNotFound } from './pages/page-not-found/page-not-found';
 import { logueadoGuard } from './guards/logueado-guard';
 import { adminGuard } from './guards/admin-guard';
-import { NuevoTurno } from './pages/nuevo-turno/nuevo-turno';
-import { DisponibilidadMedico } from './pages/nuevo-turno/disponibilidad-medico/disponibilidad-medico';
-import { ListaMedicos } from './pages/nuevo-turno/lista-medicos/lista-medicos';
+import { pacienteGuard } from './guards/paciente-guard';
+import { especialistaGuard } from './guards/especialista-guard';
 
 export const routes: Routes = [
-    {
-        path: "",
-        redirectTo: "home",
-        pathMatch: 'full',
-    },
     {
         path: "home",
         title: "Home",
@@ -89,7 +83,20 @@ export const routes: Routes = [
         path: "solicitar-turno",
         title: "solicitar-turno",
         loadChildren: () => 
-            import("./pages/nuevo-turno/nuevo-turno.routes").then(m => m.nuevo_turno)
+            import("./pages/nuevo-turno/nuevo-turno.routes").then(m => m.nuevo_turno),
+        canActivate: [pacienteGuard]
+    },
+    {
+        path: "mis-turnos",
+        title: "Mis turnos",
+        loadChildren: () => 
+            import("./pages/mis-turnos/mis-turnos.routes").then(m => m.mis_turnos),
+        canActivate: []
+    },
+    {
+        path: "",
+        redirectTo: "home",
+        pathMatch: 'full',
     },
     {
         path: "**",

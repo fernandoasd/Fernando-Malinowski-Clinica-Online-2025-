@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { SupabaseService } from './SupabaseService';
-import { Especialista, Paciente, Usuario } from '../interfaces/interfaces';
+import { Especialista, Paciente, Turno, Usuario } from '../interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -98,6 +98,9 @@ export class UsuarioService {
   async cargarUsuarioMail(mail: string) {
     // this.traerUltimoId();
     const { data, error } = await this.buscarUsuarioMail(mail);
+    if (error) {
+      console.log(error)
+    }
     this.usuarioActual = data![0];
     console.log("Usuario actual:", this.usuarioActual);
     return data;
@@ -107,29 +110,79 @@ export class UsuarioService {
     return await this.db.supabase.from("usuarios").update({ activo: !activo }).eq("id_usuario", id_usuario);
   }
 
-  async traerDisponibilidad(id_especialista: number,especialidad: string) {
+  async traerDisponibilidad(id_especialista: number, especialidad: string) {
     const { data, error } = await this.db.supabase.from("disponibilidad").select("*").eq("id_especialista", id_especialista).eq("especialidad", especialidad);
+    if (error) {
+      console.log(error)
+    }
     return { data, error };
   }
 
   async traerEspecialistas() {
     const { data, error } = await this.db.supabase.from("especialistas").select("*, usuarios(*)");
+    if (error) {
+      console.log(error)
+    }
     const especialistas = data!.map(item => ({
       ...item,
       ...item.usuarios
     }));
-    especialistas.forEach(obj=>  delete ( obj as any).usuarios);
+    especialistas.forEach(obj => delete (obj as any).usuarios);
     return { especialistas, error };
   }
 
-    async traerEspecialistaId(id_especialista : number) {
+  async traerEspecialistaId(id_especialista: number) {
     const { data, error } = await this.db.supabase.from("especialistas")
-    .select("*, usuarios(*)").eq("id_especialista", id_especialista);
+      .select("*, usuarios(*)").eq("id_especialista", id_especialista);
+    if (error) {
+      console.log(error)
+    }
     const especialista = data!.map(item => ({
       ...item,
       ...item.usuarios
     }));
-    especialista.forEach(obj=>  delete ( obj as any).usuarios);
+    especialista.forEach(obj => delete (obj as any).usuarios);
     return { especialista, error };
   }
+
+  async traerPacienteUsuarioId(id_usuario: number) {
+    const { data, error } = await this.db.supabase.from("pacientes").select("*, usuarios(*)").eq("id_usuario", id_usuario);
+    if (error) {
+      console.log(error)
+    }
+    return { data, error };
+  }
+
+  async traerEspecialistaUsuarioId(id_usuario: number) {
+    const { data, error } = await this.db.supabase.from("especialistas").select("*, usuarios(*)").eq("id_usuario", id_usuario);
+    if (error) {
+      console.log(error)
+    }
+    return { data, error };
+  }
+
+  async cargarTurno(nuevoTurno: Turno) {
+    const { data, error } = await this.db.supabase.from("turnos").insert(nuevoTurno);
+    if (error) {
+      console.log(error)
+    }
+    return { data, error };
+  }
+
+  async traerTurnosPaciente(id_paciente: number) {
+    const { data, error } = await this.db.supabase.from("turnos").select("*, pacientes(*)").eq("id_paciente", id_paciente);
+    if (error) {
+      console.log(error)
+    }
+    return { data, error };
+  }
+
+  async traerTurnosEspecialista(id_especialista: number) {
+    const { data, error } = await this.db.supabase.from("turnos").select("*, especialistas(*)").eq("id_especialista", id_especialista);
+    if (error) {
+      console.log(error)
+    }
+    return { data, error };
+  }
+
 }

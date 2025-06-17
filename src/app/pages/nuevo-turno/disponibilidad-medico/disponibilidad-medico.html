@@ -1,5 +1,3 @@
-<p>disponibilidad-medico works!</p>
-
 <h1> ID: {{id_medico}}</h1>
 <h1> esp: {{especialidad}}</h1>
 <h1>dias disponibles: {{diasDisponiblesEspecialidad}}</h1>
@@ -12,8 +10,8 @@
 <div class="container text-center mt-4">
   <h3>Seleccione día y hora de su turno</h3>
   <p class="text-success">- SOLO SE MUESTRAN TURNOS DISPONIBLES -</p>
-  <div class="row mt-4">
-    <div class="col mt-2" *ngFor="let dia of diasSemana">
+  <div class="d-flex flex-wrap mt-1">
+    <div class="m-1" *ngFor="let dia of diasSemana">
       <div class="card">
         <div class="card-header bg-light fw-bold">
           {{ dia.nombre }}<br />

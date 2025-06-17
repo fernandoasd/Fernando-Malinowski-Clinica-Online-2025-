@@ -5,9 +5,11 @@ import { UsuarioService } from '../services/UsuarioService';
 
 export const adminGuard: CanActivateFn = (route, state) => {
   const us = inject(UsuarioService);
-  
-    if (us.usuarioActual && us.usuarioActual!.perfil === Perfil.Admin){
-      return true;
-    }
-    return false;
+
+  if (us.usuarioActual && us.usuarioActual!.perfil === Perfil.Admin) {
+    console.log("Admin si");
+    return true;
+  }
+  console.log("Admin no");
+  return false;
 };

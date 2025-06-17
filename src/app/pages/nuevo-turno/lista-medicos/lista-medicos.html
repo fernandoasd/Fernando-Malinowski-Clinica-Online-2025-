@@ -1,15 +1,14 @@
-<h1>Solicitud turno</h1>
 
-<h2>Elija a su medico:</h2>
+<h2>Porfavor, elija a un especialista:</h2>
 
 <div class="container m-1" *ngFor="let e of especialistas">
     <div class="card" style="width:30vw">
         <img class="card-img-top" src={{e.imagen_uno}} alt="Card image" style="width:100%">
         <div class="card-body">
             <h4 class="card-title">{{e.nombre}} {{e.apellido}}</h4>
-            <p class="card-text" > Por favor, elija una espcialidad: </p>
-            <div class="container text-center gap-2">
-                <button class="btn btn-primary text-center"*ngFor="let esp of e.especialidades" 
+            <p class="card-text" > Especialidad/es: </p>
+            <div class="container text-center">
+                <button class="btn btn-primary me-2"*ngFor="let esp of e.especialidades"
                  (click)="seleccionarMedico(e.id_especialista!, esp)"> {{esp}} </button>
             </div>
         </div>

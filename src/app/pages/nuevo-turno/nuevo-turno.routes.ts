@@ -1,7 +1,6 @@
 import { Routes } from "@angular/router";
-import { DisponibilidadMedico } from "./disponibilidad-medico/disponibilidad-medico";
 import { NuevoTurno } from "./nuevo-turno";
-import { ListaMedicos } from "./lista-medicos/lista-medicos";
+
 
 export const nuevo_turno: Routes = [
     {
@@ -10,11 +9,11 @@ export const nuevo_turno: Routes = [
         children: [
             {
                 path: "",
-                component: ListaMedicos,
+                loadComponent: () => import("./lista-medicos/lista-medicos").then((a) => a.ListaMedicos),
             },
             {
                 path: "disponibilidad",
-                component: DisponibilidadMedico
+                loadComponent: () => import("./disponibilidad-medico/disponibilidad-medico").then((a) => a.DisponibilidadMedico),
             }
         ]
     }
