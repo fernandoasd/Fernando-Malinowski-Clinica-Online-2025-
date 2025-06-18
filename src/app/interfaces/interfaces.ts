@@ -38,12 +38,13 @@ export interface Disponibilidad {
 }
 
 export interface Turno {
-    id_especialista: number | null;
-    id_paciente: number | null;
-    fecha_turno: string;
-    horario_turno: string;
-    especialidad: string;
-    estado: EstadoTurno;
+    id?: number;
+    id_especialista?: number | null;
+    id_paciente?: number | null;
+    fecha_turno?: string;
+    horario_turno?: string;
+    especialidad?: string;
+    estado?: EstadoTurno;
     info_estado?: string;
     resenia?: { resenia: string, diagnostico: string };
     encuesta?: { consejo: string, recomendacion: string };

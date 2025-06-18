@@ -12,14 +12,18 @@
         <table class="table table-dark table-hover table-bordered align-middle">
             <thead>
                 <tr>
-                    <th>Email</th>
+                    <th>Imagen</th>
+                    <th>Nombre</th>
+                    <th>Perfil</th>
                     <th class="text-center">Acciones</th>
                 </tr>
             </thead>
             @for (usuario of usuarios(); track usuario){
             <tbody>
                 <tr>
-                    <td>{{usuario.mail}}</td>
+                    <td class="td-img"><img class="foto-perfil" [src]="usuario.imagen_uno" alt=""></td>
+                    <td>{{usuario.nombre}} {{usuario.apellido}}</td>
+                    <td>{{usuario.perfil}}</td>
                     <td class="text-center">
                         <button (click)="rellenar(usuario.mail!, usuario.contrasenia!)" class="btn btn-sm btn-primary me-2" >Autocompletar</button>
                     </td>

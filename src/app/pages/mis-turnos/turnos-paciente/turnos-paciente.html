@@ -1,1 +1,79 @@
-<p>turnos-paciente works!</p>
+<h1> Turnos para el paciente {{this.paciente.nombre}} {{this.paciente.apellido}}.</h1>
+<div class="tabla">
+    <div class="tabla-scroll">
+        <table class="table table table-striped">
+            <thead>
+                <tr>
+                    <th>Medico</th>
+                    <th>Especialidad</th>
+                    <th>Fecha</th>
+                    <th>Horario</th>
+                    <th>Estado</th>
+                    <th>Cancelar</th>
+                    <th>Ver Reseña</th>
+                    <th>Completar Encuesta</th>
+                    <th>Calificar Atencion</th>
+                </tr>
+            </thead>
+            <tbody>
+
+
+                <tr *ngFor="let turno of turnosDisponibles">
+                    <td>{{ turno.especialistas.nombre}} {{ turno.especialistas.apellido}}</td>
+                    <td>{{ turno.especialidad }}</td>
+                    <td>{{ turno.fecha_turno }}</td>
+                    <td>{{ turno.horario_turno }}</td>
+                    <td>{{ turno.estado }}</td>
+
+                    @if(turno.estado == "Cancelado") {
+                    <td >Ya cancelado</td>
+                    }
+                    @else if (turno.estado == "Pendiente" || turno.estado == "Aceptado") {
+                    <td>
+                        <button class="btn btn-lg btn-danger bi bi-x-circle" (click)="cancelarTurno(turno)"></button>
+                    </td>
+                    }
+                    @else {
+                    <td>No disponible</td>
+                    }
+
+                    @if (turno.resenia) {
+                    <td>
+                        <button class="btn btn-lg btn-info bi bi-book" ></button>
+                        <i class="bi bi-book bg-info" (click)="leerResenia(turno)"></i>
+                    </td>
+                    }
+                    @else {
+                    <td >No disponible</td>
+                    }
+
+                    @if(turno.encuesta)
+                    {
+                    <td >Ya completada</td>
+                    }
+                    @else if (turno.estado == "Finalizado" && turno.resenia) {
+                    <td>
+                        <i class="bi bi-bookmark-check" (click)="completarEncuesta(turno)"></i>
+                    </td>
+                    }
+                    @else {
+                    <td >No disponible</td>
+                    }
+
+                    @if(turno.calificacion)
+                    {
+                    <td >Ya calificado</td>
+                    }
+                    @else if (turno.estado == "Finalizado") {
+                    <td >
+                        <i class="bi bi-building-fill-up" (click)="calificarAtencion(turno)"></i>
+                    </td>
+                    }
+                    @else {
+                    <td >No disponible</td>
+                    }
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
