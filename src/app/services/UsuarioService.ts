@@ -146,7 +146,7 @@ export class UsuarioService {
   }
 
   async traerPacienteUsuarioId(id_usuario: number) {
-    const { data, error } = await this.db.supabase.from("pacientes").select("*, usuarios(*)").eq("id_usuario", id_usuario);
+    const { data, error } = await this.db.supabase.from("pacientes").select("*, ...usuarios(*)").eq("id_usuario", id_usuario);
     if (error) {
       console.log(error)
     }

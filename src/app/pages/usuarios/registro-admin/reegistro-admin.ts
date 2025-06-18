@@ -6,6 +6,7 @@ import { Perfil } from '../../../enums/enums';
 import { Usuario, Paciente, Especialista } from '../../../interfaces/interfaces';
 import { AuthService } from '../../../services/AuthService';
 import { UsuarioService } from '../../../services/UsuarioService';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reegistro-admin',
@@ -44,6 +45,9 @@ export class ReegistroAdmin {
 
   opcionSeleccionada: string = "otro";
   otraOpcion: string = '';
+
+
+  constructor(private router: Router) { }
 
 
   formulario = new FormGroup({
@@ -197,10 +201,18 @@ export class ReegistroAdmin {
       }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-           this.us.db.subirFotoPerfil(this.imagenSeleccionada!).then((retorno) => {
-             this.registrarse(this.perfil(), retorno!.linkPublico!.data!.publicUrl || "");
-          });
 
+          this.us.buscarUsuarioMail(this.mail).then((respuesta) => {
+
+            //Verifico que el mail no existe en la tabla usuarios, si es asi creo una nueva cuenta
+            if (respuesta.data?.length! == 0) {
+              this.us.db.subirFotoPerfil(this.imagenSeleccionada!).then((retorno) => {
+                this.registrarse(this.perfil(), retorno!.linkPublico!.data!.publicUrl || "");
+              });
+            } else {
+              Swal.fire("Error", "El mail ya esta siendo usado", 'warning');
+            }
+          })
         }
       });
 

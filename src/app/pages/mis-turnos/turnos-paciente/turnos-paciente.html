@@ -1,4 +1,4 @@
-<h1> Turnos para el paciente {{this.paciente.nombre}} {{this.paciente.apellido}}.</h1>
+<h3> Turnos para el paciente <strong> {{this.paciente.nombre}} {{this.paciente.apellido}}</strong>.</h3>
 <div class="tabla">
     <div class="tabla-scroll">
         <table class="table table table-striped">
@@ -10,7 +10,7 @@
                     <th>Horario</th>
                     <th>Estado</th>
                     <th>Cancelar</th>
-                    <th>Ver Reseña</th>
+                    <th>Reseña</th>
                     <th>Completar Encuesta</th>
                     <th>Calificar Atencion</th>
                 </tr>
@@ -39,8 +39,7 @@
 
                     @if (turno.resenia) {
                     <td>
-                        <button class="btn btn-lg btn-info bi bi-book" ></button>
-                        <i class="bi bi-book bg-info" (click)="leerResenia(turno)"></i>
+                        <button class="btn btn-lg btn-primary bi bi-book" (click)="leerResenia(turno)"></button>
                     </td>
                     }
                     @else {
@@ -53,7 +52,7 @@
                     }
                     @else if (turno.estado == "Finalizado" && turno.resenia) {
                     <td>
-                        <i class="bi bi-bookmark-check" (click)="completarEncuesta(turno)"></i>
+                        <button class="btn btn-lg btn-primary bi bi-bookmark-check" (click)="completarEncuesta(turno)"></button>
                     </td>
                     }
                     @else {
@@ -66,7 +65,7 @@
                     }
                     @else if (turno.estado == "Finalizado") {
                     <td >
-                        <i class="bi bi-building-fill-up" (click)="calificarAtencion(turno)"></i>
+                        <button class="btn btn-lg btn-success bi bi-building-fill-up" (click)="calificarAtencion(turno)"></button>
                     </td>
                     }
                     @else {

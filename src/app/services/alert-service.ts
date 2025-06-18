@@ -11,12 +11,17 @@ export class AlertService {
 
   async enviarResenia() {
     return Swal.fire({
-      title: 'Completar información',
+      title: 'Finalizar Turno.',
       html:
-        '<input id="input-resena" class="swal2-input" placeholder="Reseña">' +
-        '<input id="input-diagnostico" class="swal2-input" placeholder="Diagnóstico">',
+        `
+        <div class="text-center">
+        <p"><strong><u>Diagnóstico: </u></strong></p> <p><input id="input-diagnostico" class="swal2-input border border-dark" placeholder="Diagnóstico"></p>
+        <p><strong><u>Reseña: </u></strong></p> <p><input id="input-resena" class="swal2-input border border-dark" placeholder="Reseña"></p>
+        </div">
+        `,
       focusConfirm: false,
       showCancelButton: true,
+      draggable: true,
       confirmButtonText: 'Guardar',
       preConfirm: () => {
         const resenia = (document.getElementById('input-resena') as HTMLInputElement).value;
@@ -35,9 +40,22 @@ export class AlertService {
         console.log('Diagnóstico:', result.value.diagnostico);
 
         // podés guardar los datos o usarlos como necesites
-        return [result.value.resenia, result.value.diagnostico] ;
+        return [result.value.resenia, result.value.diagnostico];
       }
-      return [] ;
+      return [];
+    });
+  }
+
+  leerResenia(resenia: string, diagnostico: string) {
+    Swal.fire({
+      title: "Reseña del turno.",
+      draggable: true,
+      html: `
+        <div class="text-center">
+            <p><b><u>Diagnóstico:</u></b> ${diagnostico}.</p>
+            <p><b><u>Resenia:</u></b> ${resenia}.</p> 
+        </div>
+      `,
     });
   }
 }

@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { Especialista, Paciente, Usuario } from '../../interfaces/interfaces';
 import { Perfil } from '../../enums/enums';
 import { RouterModule } from '@angular/router';
+import { AuthError } from '@supabase/supabase-js';
 
 
 @Component({
@@ -269,25 +270,25 @@ export class Registrarse {
       Swal.fire("Cuenta creada, bienvenido " + this.nombre, "", 'success');
     } else {
 
-      // this.error.set(respuesta.error);
+      console.log("----Error: ", respuesta);
       this.hayError = true;
-      switch (respuesta.error?.status) {
-        case 400:
-          this.error.set("Se requiere una contraseña válida.");
-          break;
-        case 401:
-          this.error.set("Solicitud inválida");
-          break;
-        case 403:
-          this.error.set("Prohibido: No tenés permiso");
-          break;
-        case 422:
-          this.error.set("El usuario ya existe");
-          break;
-        default:
-          this.error.set("🔄 Error desconocido. Error Status: " + respuesta.error?.status);
-      }
-      Swal.fire("Error", this.error(), 'error');
+      // switch (respuesta.er?.status) {
+      //   case 400:
+      //     this.error.set("Se requiere una contraseña válida.");
+      //     break;
+      //   case 401:
+      //     this.error.set("Solicitud inválida");
+      //     break;
+      //   case 403:
+      //     this.error.set("Prohibido: No tenés permiso");
+      //     break;
+      //   case 422:
+      //     this.error.set("El usuario ya existe");
+      //     break;
+      //   default:
+      //     this.error.set("🔄 Error desconocido. Error Status: " + respuesta.error?.status);
+      // }
+      // Swal.fire("Error", this.error(), 'error');
     }
   }
 }

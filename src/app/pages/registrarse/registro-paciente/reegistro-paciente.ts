@@ -2,10 +2,12 @@ import { Component, inject, signal } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Perfil } from '../../../enums/enums';
-import { Usuario, Paciente} from '../../../interfaces/interfaces';
+import { Usuario, Paciente } from '../../../interfaces/interfaces';
 import { AuthService } from '../../../services/AuthService';
 import { UsuarioService } from '../../../services/UsuarioService';
 import { CommonModule } from '@angular/common';
+import { AuthError } from '@supabase/supabase-js';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reegistro-paciente',
@@ -46,6 +48,9 @@ export class ReegistroPaciente {
   imagenSeleccionadaDos: File | null = null;
   imagenPreviewDos: string | ArrayBuffer | null = null;
 
+  constructor(private router: Router) {
+
+  }
 
   formulario = new FormGroup({
     nombre: new FormControl("---", {
@@ -183,13 +188,22 @@ export class ReegistroPaciente {
         confirmButtonText: "Crear",
         denyButtonText: `Cancelar`
       }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
+
         if (result.isConfirmed) {
-          this.us.db.subirFotoPerfil(this.imagenSeleccionada!).then((imagenUno) => {
-            this.us.db.subirFotoPerfil(this.imagenSeleccionadaDos!).then((imagenDos) => {
-              this.registrarse(this.perfil, imagenUno!.linkPublico!.data!.publicUrl || "", imagenDos!.linkPublico!.data!.publicUrl || "");
-            })
-          });
+          this.us.buscarUsuarioMail(this.mail).then((respuesta) => {
+
+            //Verifico que el mail no existe en la tabla usuarios, si es asi creo una nueva cuenta
+            if (respuesta.data?.length! == 0) {
+              this.us.db.subirFotoPerfil(this.imagenSeleccionada!).then((imagenUno) => {
+                this.us.db.subirFotoPerfil(this.imagenSeleccionadaDos!).then((imagenDos) => {
+                  this.registrarse(this.perfil, imagenUno!.linkPublico!.data!.publicUrl || "", imagenDos!.linkPublico!.data!.publicUrl || "");
+                })
+              });
+            } else {
+              Swal.fire("Error", "El mail ya esta siendo usado", 'warning');
+            }
+          })
+
         }
       });
 
@@ -207,6 +221,7 @@ export class ReegistroPaciente {
 
   async registrarse(perfil: Perfil, linkPublico: string, linkPublicoDos: string) {
     const respuesta = await this.auth.crearCuenta(this.mail, this.contrasenia);
+    console.log("registrO::", respuesta);
     if (respuesta.error === null) {
 
       let nuevoUsuario: Usuario = {
@@ -238,11 +253,15 @@ export class ReegistroPaciente {
         }
       });
 
-      Swal.fire("Cuenta creada, bienvenido " + this.nombre, "", 'success');
+      this.formulario.reset();
+      Swal.fire("Cuenta creada. Por favor, confirme su mail para poder activar su cuenta.", 'success').then((respuesta) => {
+        console.log("Respuesta ", respuesta);
+        if (respuesta.isConfirmed)
+          this.router.navigate(['/login']);
+      });
     } else {
-
       this.hayError = true;
-      switch (respuesta.error?.status) {
+      switch (respuesta.error.status) {
         case 400:
           this.error.set("Se requiere una contraseña válida.");
           break;

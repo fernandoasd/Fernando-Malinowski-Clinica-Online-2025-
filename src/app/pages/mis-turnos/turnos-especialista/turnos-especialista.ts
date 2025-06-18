@@ -4,6 +4,7 @@ import { UsuarioService } from '../../../services/UsuarioService';
 import { Especialista, Paciente, Turno } from '../../../interfaces/interfaces';
 import { EstadoTurno } from '../../../enums/enums';
 import { AlertService } from '../../../services/alert-service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-turnos-especialista',
@@ -42,22 +43,6 @@ export class TurnosEspecialista {
 
   }
 
-  completarEncuesta(turno: any) {
-    console.log("completarEncuesta ", turno)
-  }
-
-  cancelarTurno(turno: any) {
-    console.log("cancelarTurno ", turno)
-  }
-
-  leerResenia(turno: any) {
-    console.log("leerResenia ", turno)
-  }
-
-  calificarAtencion(turno: any) {
-    console.log("calificarAtencion ", turno)
-  }
-
   aceptarTurno(turno: any) {
     let nuevoTurno = structuredClone(turno);
     nuevoTurno.estado = EstadoTurno.Aceptado;
@@ -74,8 +59,28 @@ export class TurnosEspecialista {
     })
   }
 
+  cancelarTurno(turno: any) {
+    let nuevoTurno = structuredClone(turno);
+    nuevoTurno.estado = EstadoTurno.Cancelado;
+    delete nuevoTurno.especialistas, nuevoTurno.pacientes;
+
+    this.us.actualizarTurno(nuevoTurno).then(({ data, error }) => {
+      if (error == null) {
+        turno.estado = EstadoTurno.Cancelado;
+      }
+    })
+  }
+
   rechazarTurno(turno: any) {
-    console.log("rechazarTurno ", turno)
+    let nuevoTurno = structuredClone(turno);
+    nuevoTurno.estado = EstadoTurno.Rechazado;
+    delete nuevoTurno.especialistas, nuevoTurno.pacientes;
+
+    this.us.actualizarTurno(nuevoTurno).then(({ data, error }) => {
+      if (error == null) {
+        turno.estado = EstadoTurno.Rechazado;
+      }
+    })
   }
 
   finalizarTurno(turno: any) {
@@ -91,6 +96,7 @@ export class TurnosEspecialista {
         this.us.actualizarTurno(nuevoTurno).then(({ data, error }) => {
           if (error == null) {
             turno.estado = EstadoTurno.Finalizado;
+            turno.resenia = nuevoTurno.resenia;
             console.log("resenia enviada: ", turno)
           }
         })
@@ -99,5 +105,8 @@ export class TurnosEspecialista {
     });
   }
 
+  leerResenia(turno: any) {
+    this.alert.leerResenia(turno.resenia.resenia, turno.resenia.diagnostico);
+  }
 
 }
