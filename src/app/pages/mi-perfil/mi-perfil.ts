@@ -23,10 +23,9 @@ export class MiPerfil implements OnInit {
   espSelect = "";
   especialidades = ['Medico', 'Traumatologo', 'Cardiologo'];
   miDisponibilidad: Disponibilidad[] = [];
-
- 
-
+  disponibilidadFiltrada: Disponibilidad= {};
   diasSemana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
+
   disponibilidad = [
     { especialidad: 'Medico', dia_semana: 'lunes', horario_inicio: '08:00', horario_fin: '12:00' },
     { especialidad: 'Medico', dia_semana: 'martes', horario_inicio: '10:00', horario_fin: '14:00' },
@@ -57,7 +56,6 @@ export class MiPerfil implements OnInit {
     ]
   };
 
-  disponibilidadFiltrada: Disponibilidad= {};
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
@@ -185,7 +183,16 @@ export class MiPerfil implements OnInit {
     }
 
     console.log('Días válidos:', diasActivos);
+    
     // guardar en Supabase aquí
+  }
+
+  actualizarDisponibilidad(){
+    
+  }
+
+  guardarDispBBDD(horarios: any, id_especialista: number, especialidad: string, duracion_turno: number){
+
   }
 
   cargarDisponibilidad(especialidad: string) {
@@ -221,6 +228,8 @@ export class MiPerfil implements OnInit {
     this.form.addControl('especialidad', this.fb.control(especialidad));
     this.form.addControl('duracion_turno', this.fb.control(disponibilidadFiltrada.duracion_turno));
   }
+
+
 
 
 

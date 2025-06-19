@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { SupabaseService } from './SupabaseService';
-import { Especialista, Paciente, Turno, Usuario } from '../interfaces/interfaces';
+import { Disponibilidad, Especialista, Paciente, Turno, Usuario } from '../interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -123,9 +123,11 @@ export class UsuarioService {
         console.log(error)
       }
       return { data, error };
-
     }
+  }
 
+  async cargarDisponibilidad(disp: Disponibilidad){
+    const { data, error } = await this.db.supabase.from("disponibilidad").insert(disp);
   }
 
   async traerEspecialistas() {

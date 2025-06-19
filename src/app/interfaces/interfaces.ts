@@ -27,6 +27,7 @@ export interface Paciente extends Usuario {
 }
 
 export interface Disponibilidad {
+    id_disponibilidad?: number;
     id_especialista?: number;
     especialidad?: string;
     duracion_turno?: number;
