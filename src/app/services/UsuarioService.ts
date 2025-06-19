@@ -29,7 +29,7 @@ export class UsuarioService {
   }
 
   async traerUsuarios() {
-    return await this.db.supabase.from("usuarios").select("*").order("perfil", {ascending: false}).then(({ data, error }) => {
+    return await this.db.supabase.from("usuarios").select("*").order("perfil", { ascending: false }).then(({ data, error }) => {
       console.log("data", data);
 
       const usuarios = data as Usuario[]; //de esta forma data va a ser un array de usuarios
@@ -110,12 +110,22 @@ export class UsuarioService {
     return await this.db.supabase.from("usuarios").update({ activo: !activo }).eq("id_usuario", id_usuario);
   }
 
-  async traerDisponibilidad(id_especialista: number, especialidad: string) {
-    const { data, error } = await this.db.supabase.from("disponibilidad").select("*").eq("id_especialista", id_especialista).eq("especialidad", especialidad);
-    if (error) {
-      console.log(error)
+  async traerDisponibilidad(id_especialista: number, especialidad: string = "") {
+    if (especialidad == "") {
+      const { data, error } = await this.db.supabase.from("disponibilidad").select("*").eq("id_especialista", id_especialista);
+      if (error) {
+        console.log(error)
+      }
+      return { data, error };
+    } else {
+      const { data, error } = await this.db.supabase.from("disponibilidad").select("*").eq("id_especialista", id_especialista).eq("especialidad", especialidad);
+      if (error) {
+        console.log(error)
+      }
+      return { data, error };
+
     }
-    return { data, error };
+
   }
 
   async traerEspecialistas() {
@@ -154,7 +164,7 @@ export class UsuarioService {
   }
 
   async traerEspecialistaUsuarioId(id_usuario: number) {
-    const { data, error } = await this.db.supabase.from("especialistas").select("*, usuarios(*)").eq("id_usuario", id_usuario);
+    const { data, error } = await this.db.supabase.from("especialistas").select("*, ...usuarios(*)").eq("id_usuario", id_usuario);
     if (error) {
       console.log(error)
     }
@@ -185,16 +195,15 @@ export class UsuarioService {
     return { data, error };
   }
 
-  async actualizarTurno(Turno: Turno)
-  {
-    const {data, error} = await this.db.supabase.from("turnos").update(Turno).eq("id", Turno.id);
-        if (error) {
+  async actualizarTurno(Turno: Turno) {
+    const { data, error } = await this.db.supabase.from("turnos").update(Turno).eq("id", Turno.id);
+    if (error) {
       console.log(error)
     }
     return { data, error };
   }
 
-  async enviarResenia(resenia: { resenia: string, diagnostico: string }){
+  async enviarResenia(resenia: { resenia: string, diagnostico: string }) {
 
   }
 

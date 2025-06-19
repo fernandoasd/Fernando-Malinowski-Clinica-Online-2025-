@@ -3,9 +3,13 @@ import { PageNotFound } from './pages/page-not-found/page-not-found';
 import { logueadoGuard } from './guards/logueado-guard';
 import { adminGuard } from './guards/admin-guard';
 import { pacienteGuard } from './guards/paciente-guard';
-import { especialistaGuard } from './guards/especialista-guard';
 
 export const routes: Routes = [
+    {
+        path: "",
+        redirectTo: "home",
+        pathMatch: 'full',
+    },
     {
         path: "home",
         title: "Home",
@@ -75,32 +79,31 @@ export const routes: Routes = [
             {
                 path: "**",
                 title: "Page Not Found",
-                component: PageNotFound
+                loadComponent: () => import("./pages/page-not-found/page-not-found").then(m => m.PageNotFound),
+
             }
         ]
     },
     {
         path: "solicitar-turno",
         title: "solicitar-turno",
-        loadChildren: () => 
-            import("./pages/nuevo-turno/nuevo-turno.routes").then(m => m.nuevo_turno),
+        loadChildren: () => import("./pages/nuevo-turno/nuevo-turno.routes").then(m => m.nuevo_turno),
         canActivate: [pacienteGuard]
     },
     {
         path: "mis-turnos",
         title: "Mis turnos",
-        loadChildren: () => 
-            import("./pages/mis-turnos/mis-turnos.routes").then(m => m.mis_turnos),
+        loadChildren: () => import("./pages/mis-turnos/mis-turnos.routes").then(m => m.mis_turnos),
         canActivate: []
     },
     {
-        path: "",
-        redirectTo: "home",
-        pathMatch: 'full',
+        path: "mi-perfil",
+        title: "Mi perfil",
+        loadComponent: () => import("./pages/mi-perfil/mi-perfil").then(m => m.MiPerfil),
     },
     {
         path: "**",
         title: "Page Not Found",
-        component: PageNotFound
+        loadComponent: () => import("./pages/page-not-found/page-not-found").then(m => m.PageNotFound),
     }
 ]; 

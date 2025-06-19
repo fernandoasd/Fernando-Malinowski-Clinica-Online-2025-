@@ -15,14 +15,14 @@ import Swal from 'sweetalert2';
 export class DisponibilidadMedico {
   us = inject(UsuarioService);
   id_medico = -1;
-  pacienteActual: Paciente | null= null;
+  pacienteActual: Paciente | null = null;
   especialidad = "";
   especialista: Especialista = {}
   fechasDisponibles: string[] = [];
   disponibilidadMedico: Disponibilidad[] = [];
   diasDisponiblesEspecialidad: string[] = [];
   FechasDisponiblesEspecialidad: string[] = [];
-  diasSemana: any;
+  diasSemana: any = [];
 
 
   datosDinamicos?: Array<{
@@ -53,9 +53,12 @@ export class DisponibilidadMedico {
     });
     console.log("especialidades: ", this.especialista.especialidades);
     this.disponibilidadMedico = await this.traerDisponibilidad(this.id_medico, this.especialidad);
-    this.diasDisponiblesEspecialidad = this.extraerDias(this.disponibilidadMedico);
-    this.FechasDisponiblesEspecialidad = this.obtenerFechasDisponibles(this.diasDisponiblesEspecialidad);
-    this.diasSemana = this.obtenerFechasDisponiblesDos(this.disponibilidadMedico);
+    if (this.disponibilidadMedico.length > 0) {
+      this.diasDisponiblesEspecialidad = this.extraerDias(this.disponibilidadMedico);
+      this.FechasDisponiblesEspecialidad = this.obtenerFechasDisponibles(this.diasDisponiblesEspecialidad);
+      this.diasSemana = this.obtenerFechasDisponiblesDos(this.disponibilidadMedico);
+    }
+
     console.log("this.diasSemana: ", this.diasSemana);
     console.log("this.diasDisponiblesEspecialidad", this.diasDisponiblesEspecialidad);
     setTimeout(() => {

@@ -1,0 +1,63 @@
+<div class="d-flex flex-column">
+    <div class="container mt-5 mb-5" *ngIf="usuario != null; else sinUsuario">
+        <div class="card shadow rounded-4 border-0 mx-auto" style="max-width: 500px;">
+            <div class="card-body text-center">
+                <p class="mb-1"><strong>Perfil: {{usuario!.perfil}}</strong></p>
+                <img [src]="usuario!.imagen_uno" class="rounded-circle mb-3" width="120" height="120"
+                    alt="Foto de perfil" />
+                <h4 class="card-title mb-1"> {{ usuario!.nombre }} {{ usuario!.apellido }}</h4>
+                @if ( usuario!.perfil == "especialista"){
+                <span class="btn badge badge-lg bg-primary m-2" *ngFor="let item of usuario!.especialidades"
+                    (click)="modificarEspecialidad($event)">{{ item
+                    }}</span>
+
+                }
+                <p class="mb-1"><strong>Email:</strong> {{ usuario!.mail }}</p>
+                <p class="mb-1"><strong>Edad:</strong> {{ usuario!.edad }}</p>
+                <p class="mb-1"><strong>Documento:</strong> {{ usuario!.documento }}</p>
+            </div>
+        </div>
+    </div>
+    <ng-template #sinUsuario>
+        <p class="text-center">Cargando...</p>
+    </ng-template>
+
+
+
+    <div class="container" *ngIf="espSelect != ''">
+        <h3>Editar especialidad: <strong>{{espSelect}}</strong></h3>
+        <!-- <div class="container mt-4" *ngIf="usuario.perfil == 'especialista'"> -->
+        <form [formGroup]="form" (ngSubmit)="guardarDisponibilidad()">
+            <div class="mb-2">
+                <label class="form-label">duracion_turno</label>
+                <input type="number" class="form-control" formControlName="duracion_turno" />
+            </div>
+
+            <div formArrayName="dias">
+                <div *ngFor="let grupo of dias.controls; let i = index" [formGroupName]="i"
+                    class="border p-3 mb-3 rounded">
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" [formControlName]="'activo'"
+                            (change)="toggleDia(i)" />
+                        <label class="form-check-label">
+                            {{ nombreDia(i)}}
+                        </label>
+                    </div>
+
+                    <div class="row" *ngIf="grupo.get('activo')?.value">
+                        <div class="col-md-6">
+                            <label class="form-label">Inicio</label>
+                            <input type="time" class="form-control" formControlName="horario_inicio" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fin</label>
+                            <input type="time" class="form-control" formControlName="horario_fin" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Guardar disponibilidad</button>
+        </form>
+    </div>
+

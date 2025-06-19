@@ -18,6 +18,7 @@ export class Login {
   mail: string = "";
   contrasenia: string = "";
   error = signal<string>("");
+  
 
   rellenar(array: string[]) {
     this.mail = array[0];

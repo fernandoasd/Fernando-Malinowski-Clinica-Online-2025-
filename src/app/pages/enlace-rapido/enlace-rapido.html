@@ -21,7 +21,7 @@
             @for (usuario of usuarios(); track usuario){
             <tbody>
                 <tr>
-                    <td class="td-img"><img class="foto-perfil" [src]="usuario.imagen_uno" alt=""></td>
+                    <td class="td-img"><img class="foto-perfil rounded-circle mb-3" [src]="usuario.imagen_uno" width="120" height="120" alt="Foto de perfil"></td>
                     <td>{{usuario.nombre}} {{usuario.apellido}}</td>
                     <td>{{usuario.perfil}}</td>
                     <td class="text-center">

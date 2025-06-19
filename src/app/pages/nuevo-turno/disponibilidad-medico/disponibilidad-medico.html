@@ -3,14 +3,14 @@
 <h1>dias disponibles: {{diasDisponiblesEspecialidad}}</h1>
 
 
-<div class="container">
+<!-- <div class="container">
     <button class="btn btn-primary m-1"*ngFor="let fecha of FechasDisponiblesEspecialidad"> {{fecha}}</button>
-</div>
+</div> -->
 
 <div class="container text-center mt-4">
   <h3>Seleccione día y hora de su turno</h3>
   <p class="text-success">- SOLO SE MUESTRAN TURNOS DISPONIBLES -</p>
-  <div class="d-flex flex-wrap mt-1">
+  <div class="d-flex flex-wrap mt-1" *ngIf="diasSemana.lenght > 0; else sinDisponibilidad">
     <div class="m-1" *ngFor="let dia of diasSemana">
       <div class="card">
         <div class="card-header bg-light fw-bold">
@@ -29,4 +29,7 @@
       </div>
     </div>
   </div>
+  <ng-template #sinDisponibilidad>
+  <p>No hay turnos disponibles.</p>
+</ng-template>
 </div>
