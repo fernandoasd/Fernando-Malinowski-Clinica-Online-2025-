@@ -28,7 +28,17 @@
         <form [formGroup]="form" (ngSubmit)="guardarDisponibilidad()">
             <div class="mb-2">
                 <label class="form-label">duracion_turno</label>
-                <input type="number" class="form-control" formControlName="duracion_turno" />
+                <input id="duracion_turno" type="number" class="form-control" formControlName="duracion_turno" />
+
+                <div *ngIf='form.get("duracion_turno")?.touched && 
+                    form.get("duracion_turno")?.invalid' class="text-danger">
+                    <div *ngIf='form.get("duracion_turno")?.errors?.["required"]'>
+                        Valor necesario
+                    </div>
+                    <div *ngIf='form.get("duracion_turno")?.errors?.["min"]'>
+                       La duracion del turno debe ser de 30 minutos como mínimo.
+                    </div>
+                </div>
             </div>
 
             <div formArrayName="dias">

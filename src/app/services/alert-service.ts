@@ -58,4 +58,20 @@ export class AlertService {
       `,
     });
   }
+
+  async confirmarYEnviar(mensaje: any) {
+    const result = await Swal.fire({
+      title: '¿Confirmás la carga de datos?',
+      html: `
+        <p><strong>${mensaje}</strong></p>
+      `,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, enviar',
+      cancelButtonText: 'Cancelar'
+    });
+    return result;
+  }
+
+  
 }

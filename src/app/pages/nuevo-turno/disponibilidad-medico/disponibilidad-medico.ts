@@ -22,7 +22,8 @@ export class DisponibilidadMedico {
   disponibilidadMedico: Disponibilidad[] = [];
   diasDisponiblesEspecialidad: string[] = [];
   FechasDisponiblesEspecialidad: string[] = [];
-  diasSemana: any = [];
+  diasSemana: any[] = [];
+  turnosPorEspecialista: Turno[] = []
 
 
   datosDinamicos?: Array<{
@@ -49,7 +50,17 @@ export class DisponibilidadMedico {
     this.us.traerPacienteUsuarioId(this.us.usuarioActual?.id_usuario!).then(({ data, error }) => {
       if (error == null) {
         this.pacienteActual = data![0];
+        this.us.traerTurnosEspecialista(this.id_medico).then(({ data, error }) => {
+          if (error == null) {
+            this.turnosPorEspecialista = data!;
+            console.log("turnosPorEspecialista:", this.turnosPorEspecialista);
+          }
+
+
+        })
       }
+      console.log("turnosPorEspecialista:", this.turnosPorEspecialista);
+
     });
     console.log("especialidades: ", this.especialista.especialidades);
     this.disponibilidadMedico = await this.traerDisponibilidad(this.id_medico, this.especialidad);
@@ -69,15 +80,15 @@ export class DisponibilidadMedico {
   }
 
 
-  obtenerFechasDisponiblesDos(disponibilidades: Disponibilidad[], cantidad: number = 10) {
+  obtenerFechasDisponiblesDos(disponibilidades: Disponibilidad[], cantidad: number = 14) {
     const diasSemana = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
     const fechas = [];
     const hoy = new Date();
     const disponibilidad = disponibilidades[0];
-
-    hoy.setDate(hoy.getDate() + 1); // empezar desde mañana
+    let days = 1;
+    hoy.setDate(hoy.getDate() + days); // empezar desde mañana
     let fechaActual = new Date(hoy);
-    while (fechas.length < cantidad) {
+    while (days <= cantidad) {
       const diaNombre = diasSemana[fechaActual.getDay()];
       //Date.getDay(): domingo = 0 ... sabado = 6
       const horarioActual = disponibilidades[0].horarios!.find(d => d.dia_semana === diaNombre);
@@ -86,6 +97,8 @@ export class DisponibilidadMedico {
         const intervalos = this.generarIntervalos(horarioActual?.horario_inicio!, horarioActual?.horario_fin!, disponibilidad.duracion_turno!);
         fechas.push({ nombre: diaNombre, fecha: fechaActual.toISOString().split('T')[0], horarios: intervalos });
       }
+      days += 1;
+      console.log("days: ", days + " " + fechaActual.toISOString().split('T')[0]);
       // Pasar al día siguiente
       fechaActual.setDate(fechaActual.getDate() + 1);
     }
@@ -93,13 +106,14 @@ export class DisponibilidadMedico {
   }
 
 
-  obtenerFechasDisponibles(dias: string[], cantidad: number = 10) {
+  obtenerFechasDisponibles(dias: string[], cantidad: number = 14) {
     const diasSemana = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
     const fechas: string[] = [];
     const hoy = new Date();
+    let days = 1;
     hoy.setDate(hoy.getDate() + 1); // empezar desde mañana
     let fechaActual = new Date(hoy);
-    while (fechas.length < cantidad) {
+    while (days <= cantidad) {
       const diaNombre = diasSemana[fechaActual.getDay()];
       //Date.getDay(): domingo = 0 ... sabado = 6
       if (dias.includes(diaNombre)) {
@@ -107,6 +121,8 @@ export class DisponibilidadMedico {
         fechas.push(fechaActual.toISOString().split('T')[0]);
       }
       // Pasar al día siguiente
+      // console.log("days: ", days + " " + fechaActual.toISOString().split('T')[0]);
+      days += 1;
       fechaActual.setDate(fechaActual.getDate() + 1);
     }
     return fechas;
@@ -176,7 +192,8 @@ export class DisponibilidadMedico {
       this.us.cargarTurno(nuevoTurno).then(({ data, error }) => {
         console.log("Error ", error);
         if (error == null) {
-          Swal.fire("Exito", "Nuevo turno agendado: \p " + { dia } + " " + { fecha } + " a las " + { hora }, 'success');
+          Swal.fire("Exito", "Nuevo turno agendado: " + dia + " " + fecha + " a las " + hora, 'success');
+          this.turnosPorEspecialista.push({fecha_turno: fecha, horario_turno: hora})
         } else {
           Swal.fire("Error", "Su turno no se guardó: ${error}", 'warning');
         }
@@ -207,6 +224,18 @@ export class DisponibilidadMedico {
     }
 
     return intervalos;
+  }
+
+
+  comprobarTurnoTomado(fecha_turno: string, horario_turno: string): Boolean {
+    return this.turnosPorEspecialista.some((t) => {
+      if (t.fecha_turno == fecha_turno && t.horario_turno == horario_turno 
+        && t.estado != EstadoTurno.Cancelado && t.estado != EstadoTurno.Rechazado) {
+        return true;
+      } else {
+        return false;
+      }
+    })
   }
 
 }

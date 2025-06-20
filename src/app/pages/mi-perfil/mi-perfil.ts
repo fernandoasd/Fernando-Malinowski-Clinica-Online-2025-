@@ -3,10 +3,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { UsuarioService } from '../../services/UsuarioService';
 import { Disponibilidad, Especialista, Paciente, Usuario } from '../../interfaces/interfaces';
 import { DiaSemana, Perfil } from '../../enums/enums';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
-
-
+import { AlertService } from '../../services/alert-service';
 
 
 @Component({
@@ -17,47 +16,49 @@ import Swal from 'sweetalert2';
 })
 export class MiPerfil implements OnInit {
   us = inject(UsuarioService);
+  alert = inject(AlertService);
   usuario: any;
   especialista: Especialista = {}
   form!: FormGroup;
   espSelect = "";
   especialidades = ['Medico', 'Traumatologo', 'Cardiologo'];
   miDisponibilidad: Disponibilidad[] = [];
-  disponibilidadFiltrada: Disponibilidad= {};
+  disponibilidadFiltrada: Disponibilidad = {};
   diasSemana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
 
-  disponibilidad = [
-    { especialidad: 'Medico', dia_semana: 'lunes', horario_inicio: '08:00', horario_fin: '12:00' },
-    { especialidad: 'Medico', dia_semana: 'martes', horario_inicio: '10:00', horario_fin: '14:00' },
-    { especialidad: 'Traumatologo', dia_semana: 'miércoles', horario_inicio: '09:00', horario_fin: '13:00' },
-    { especialidad: 'Cardiologo', dia_semana: 'viernes', horario_inicio: '15:00', horario_fin: '18:00' },
-  ];
+  // disponibilidad = [
+  //   { especialidad: 'Medico', dia_semana: 'lunes', horario_inicio: '08:00', horario_fin: '12:00' },
+  //   { especialidad: 'Medico', dia_semana: 'martes', horario_inicio: '10:00', horario_fin: '14:00' },
+  //   { especialidad: 'Traumatologo', dia_semana: 'miércoles', horario_inicio: '09:00', horario_fin: '13:00' },
+  //   { especialidad: 'Cardiologo', dia_semana: 'viernes', horario_inicio: '15:00', horario_fin: '18:00' },
+  // ];
 
-  disp: Disponibilidad = {
-    id_especialista: 5,
-    especialidad: "cardiología",
-    duracion_turno: 30,
-    horarios: [
-      {
-        dia_semana: DiaSemana.Lunes,
-        horario_inicio: "08:00",
-        horario_fin: "12:00"
-      },
-      {
-        dia_semana: DiaSemana.Miercoles,
-        horario_inicio: "14:00",
-        horario_fin: "18:00"
-      },
-      {
-        dia_semana: DiaSemana.Viernes,
-        horario_inicio: "10:00",
-        horario_fin: "13:00"
-      }
-    ]
-  };
+  // disp: Disponibilidad = {
+  //   id_especialista: 5,
+  //   especialidad: "cardiología",
+  //   duracion_turno: 30,
+  //   horarios: [
+  //     {
+  //       dia_semana: DiaSemana.Lunes,
+  //       horario_inicio: "08:00",
+  //       horario_fin: "12:00"
+  //     },
+  //     {
+  //       dia_semana: DiaSemana.Miercoles,
+  //       horario_inicio: "14:00",
+  //       horario_fin: "18:00"
+  //     },
+  //     {
+  //       dia_semana: DiaSemana.Viernes,
+  //       horario_inicio: "10:00",
+  //       horario_fin: "13:00"
+  //     }
+  //   ]
+  // };
 
 
   constructor(private fb: FormBuilder) {
+    console.log("disp", Object.keys(this.disponibilidadFiltrada).length === 0);
     this.form = this.fb.group({
       especialidad: ['']
     });
@@ -121,6 +122,19 @@ export class MiPerfil implements OnInit {
     return { usuarioRetorno, disponibilidadRetorno };
   }
 
+    cargarFormulario(especialidad: string, disponibilidadFiltrada: Disponibilidad) {
+    this.form = this.fb.group({
+      dias: this.fb.array(this.diasSemana.map((dia) => this.fb.group({
+        dia_semana: [dia],
+        activo: [disponibilidadFiltrada.horarios?.some(horario => horario.dia_semana === dia) || ""],
+        horario_inicio: [disponibilidadFiltrada.horarios?.find((horario) => horario.dia_semana == dia)?.horario_inicio || ""],
+        horario_fin: [disponibilidadFiltrada.horarios?.find((horario) => horario.dia_semana == dia)?.horario_fin || ""]
+      })))
+    });
+
+    this.form.addControl('especialidad', this.fb.control(especialidad));
+    this.form.addControl('duracion_turno', this.fb.control(disponibilidadFiltrada?.duracion_turno || 30, [Validators.required, Validators.min(30)]));
+  }
 
 
   get dias(): FormArray {
@@ -138,7 +152,45 @@ export class MiPerfil implements OnInit {
     }
   }
 
-  guardarDisponibilidad() {
+  
+
+
+  //si disponibilidadFiltrada esta vacia, le tiene que cargar los datos para subir a  la BBDD
+  actualizarDisponibilidad(horarios: any, duracion_turno: number) {
+    console.log("disponiblidad ",  this.disponibilidadFiltrada)
+    this.disponibilidadFiltrada.especialidad = this.espSelect;
+    this.disponibilidadFiltrada.id_especialista = this.usuario.id_especialista;
+    this.disponibilidadFiltrada.horarios = horarios;
+    this.disponibilidadFiltrada.duracion_turno = duracion_turno;
+  }
+
+  async guardarDispBBDD(nuevaDisponibilidad: Disponibilidad) {
+    return await this.us.cargarDisponibilidad(nuevaDisponibilidad);
+  }
+
+  cargarDisponibilidad(especialidad: string) {
+    let disponibilidadFiltrada = this.miDisponibilidad.filter(d => d.especialidad === especialidad);
+    console.log("this.disponibilidadFiltrada ", disponibilidadFiltrada);
+    return disponibilidadFiltrada[0];
+  }
+
+  modificarEspecialidad(event: Event) {
+    if (this.espSelect == "") {
+      const valor = (event.target as HTMLSelectElement).textContent;
+      this.espSelect = valor!;
+      this.form.get('especialidad')?.setValue(valor);
+      console.log('Seleccionar:', this.espSelect);
+      this.disponibilidadFiltrada = this.cargarDisponibilidad(this.espSelect) || {} as Disponibilidad;
+      this.cargarFormulario(this.espSelect, this.disponibilidadFiltrada);
+      console.log('this.form: ', this.form.controls);
+    } else {
+      this.espSelect = "";
+    }
+  }
+
+guardarDisponibilidad() {
+  if (this.form.valid){
+
     const diasActivos = this.form.value.dias
       .map((d: any, i: number) => ({
         dia_semana: this.diasSemana[i],
@@ -147,14 +199,14 @@ export class MiPerfil implements OnInit {
         activo: d.activo
       }))
       .filter((d: any) => d.activo)
-      .map((d: any)=> ({
+      .map((d: any) => ({
         dia_semana: d.dia_semana,
         horario_inicio: d.horario_inicio,
         horario_fin: d.horario_fin,
       }));
 
     const errores: string[] = [];
-    console.log("this.form.value.dias ",this.form.value.dias);
+    console.log("this.form.value.dias ", this.form.value.dias);
     for (let dia of diasActivos) {
       console.log("dia: ", dia);
       const inicio = dia.horario_inicio;
@@ -180,60 +232,41 @@ export class MiPerfil implements OnInit {
     if (errores.length > 0) {
       Swal.fire("Error", "Errores:\n" + errores.join('\n'), "error")
       return;
-    }
-
-    console.log('Días válidos:', diasActivos);
-    
-    // guardar en Supabase aquí
-  }
-
-  actualizarDisponibilidad(){
-    
-  }
-
-  guardarDispBBDD(horarios: any, id_especialista: number, especialidad: string, duracion_turno: number){
-
-  }
-
-  cargarDisponibilidad(especialidad: string) {
-    let disponibilidadFiltrada = this.miDisponibilidad.filter(d => d.especialidad === especialidad);
-    console.log("this.disponibilidadFiltrada ", disponibilidadFiltrada);
-    return disponibilidadFiltrada[0];
-  }
-
-  modificarEspecialidad(event: Event) {
-    if (this.espSelect == "") {
-      const valor = (event.target as HTMLSelectElement).textContent;
-      this.espSelect = valor!;
-      this.form.get('especialidad')?.setValue(valor);
-      console.log('Seleccionar:', this.espSelect);
-      this.disponibilidadFiltrada = this.cargarDisponibilidad(this.espSelect)
-      this.cargarFormulario(this.espSelect, this.disponibilidadFiltrada);
-      console.log('this.form: ', this.form.controls);
     } else {
-      this.espSelect = "";
+      this.alert.confirmarYEnviar("Desea guardar la disponibilidad?").then((result) => {
+        try {
+          if (result.isConfirmed) {
+            // Llamás al servicio para guardar
+            this.actualizarDisponibilidad(diasActivos, this.form.get('duracion_turno')?.value);
+            console.log("disponibilidadFiltrada ", this.disponibilidadFiltrada);
+            this.guardarDispBBDD(this.disponibilidadFiltrada).then(({data, error}) =>{
+              if (error == null)
+              {
+                this.disponibilidadFiltrada = data as Disponibilidad;
+                Swal.fire('Enviado', 'La información se cargó correctamente.', 'success');
+              } else {
+                Swal.fire('Enviado', 'Error en la BBDD: ' + error.message, 'error');
+              }
+            });
+          }
+        } catch (error: any) {
+          Swal.fire('Error', 'No se pudo guardar.' + error, 'error');
+          throw error;
+        }
+      })
     }
+    console.log('Días válidos:', diasActivos);
+  }else{
+    Swal.fire('Error', "Validaciones no aprobadas.", 'error');
+
   }
 
-  cargarFormulario(especialidad: string, disponibilidadFiltrada: Disponibilidad){
-        this.form = this.fb.group({
-      dias: this.fb.array(this.diasSemana.map((dia) => this.fb.group({
-        dia_semana: [dia],
-        activo: [disponibilidadFiltrada.horarios?.some(horario => horario.dia_semana === dia)],
-        horario_inicio: [disponibilidadFiltrada.horarios?.find((horario) => horario.dia_semana == dia)?.horario_inicio || ""],
-        horario_fin: [disponibilidadFiltrada.horarios?.find((horario) => horario.dia_semana == dia)?.horario_fin || ""]
-      })))
-    });
-
-    this.form.addControl('especialidad', this.fb.control(especialidad));
-    this.form.addControl('duracion_turno', this.fb.control(disponibilidadFiltrada.duracion_turno));
   }
 
 
 
 
 
-  
   //   usuario = {
   //   nombre: 'Juan',
   //   apellido: 'Pérez',

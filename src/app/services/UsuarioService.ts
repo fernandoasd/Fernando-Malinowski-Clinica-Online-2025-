@@ -127,7 +127,11 @@ export class UsuarioService {
   }
 
   async cargarDisponibilidad(disp: Disponibilidad){
-    const { data, error } = await this.db.supabase.from("disponibilidad").insert(disp);
+    const { data, error } = await this.db.supabase.from("disponibilidad").upsert(disp, {onConflict: "id_disponibilidad"}).select().single();
+    if (error){
+      console.log(error);
+    }
+    return { data, error };
   }
 
   async traerEspecialistas() {
