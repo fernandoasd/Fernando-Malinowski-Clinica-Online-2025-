@@ -1,0 +1,12 @@
+li{
+    display: flex;
+    /* text-align: center; */
+    /* align-items: center;  */
+}
+
+a{
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+
+}

@@ -1,64 +1,55 @@
-<nav class="navbar navbar-expand-sm navbar-dark bg-light">
+<nav class="navbar navbar-expand-sm navbar-secondary bg-light sticky-top">
   <div class="container-fluid">
     <!-- <a class="navbar-brand" href="javascript:void(0)">CLINICA ONLINE</a> -->
-     <a href="home">
-       <img class="" src="logo.jpg"  alt="clinica online" style="width: 10vw;">
-     </a>
+    <a href="home">
+      <img class=" m-2 me-3" src="logo.jpg" alt="clinica online" style="width: 10vw;">
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="mynavbar">
-      <ul class="navbar-nav ms-auto gap-1">
+      <ul class="navbar-nav ms-auto gap-1 text-uppercase d-flex justify-content-center gap-2 fw-bold">
         <li class="nav-item">
-          <a routerLink="/mi-perfil" class="btn btn-primary">Mi Perfil</a>
+          <a routerLink="/mi-perfil" class="btn btn-outline-primary">Mi Perfil</a>
         </li>
         <li class="nav-item">
-          <a routerLink="/home" class="btn btn-success">Home</a>
+          <a routerLink="/home" class="btn btn-outline-secondary">Home</a>
         </li>
+        <!-- <li class="nav-item">
+          <a routerLink="/error" class="btn btn-outline-secondary">not-found</a>
+        </li> -->
         <li class="nav-item">
-          <a routerLink="/error" class="btn btn-success">not-found</a>
+          <a routerLink="/about" class="btn btn-outline-secondary">About Me</a>
         </li>
-        <li class="nav-item">
-          <a routerLink="/about" class="btn btn-success">About Me</a>
-        </li>
+
         @if (auth.usuarioActual === null)
         {
         <li class="nav-item">
-          <a routerLink="login" class="btn btn-success">Login</a>
+          <a routerLink="login" class="btn btn-outline-success"><strong> Login </strong></a>
         </li>
         <li class="nav-item">
-          <a routerLink="registro" class="btn btn-success">Registro</a>
+          <a routerLink="registro" class="btn btn-outline-success"><strong> Registro </strong></a>
         </li>
         } @else {
-
-
         <li class="nav-item">
-          <a class="btn btn-warning ms-auto">Usuario: {{auth.usuarioActual.email}}</a>
+          <a routerLink="/usuarios" class="btn btn-outline-secondary">Usuarios</a>
         </li>
 
         <li class="nav-item">
-          <a (click)="cerrarSesion()" class="btn btn-danger">Cerrar Sesion</a>
-        </li>
-
-        }
-
-        @if (auth.usuarioActual === null)
-        {
-        } @else {
-        <li class="nav-item">
-          <a routerLink="/usuarios" class="btn btn-success">Usuarios</a>
+          <a routerLink="/solicitar-turno" class="btn btn-outline-secondary">Solicitar Turno</a>
         </li>
 
         <li class="nav-item">
-          <a routerLink="/solicitar-turno" class="btn btn-success">Solicitar Turno</a>
+          <a routerLink="/mis-turnos" class="btn btn-outline-secondary">Mis Turnos</a>
         </li>
 
         <li class="nav-item">
-          <a routerLink="/mis-turnos" class="btn btn-success">Mis Turnos</a>
+          <a class="btn btn-outline-secondary ms-auto"><strong>Usuario: {{auth.usuarioActual.email}}</strong></a>
         </li>
 
-
-
+        <li class="nav-item">
+          <a (click)="cerrarSesion()" class="btn btn-outline-danger">Cerrar Sesion</a>
+        </li>
         }
       </ul>
       <!-- <form class="d-flex">
@@ -71,14 +62,14 @@
 
 
 <!-- <div class="d-flex gap-1 mb-4">
-  <a routerLink="/" class="btn btn-success">Home</a>
-  <a routerLink="about" class="btn btn-success">About Me</a>
-  <a routerLink="listado" class="btn btn-success">Listado</a>
+  <a routerLink="/" class="btn btn-outline-secondary">Home</a>
+  <a routerLink="about" class="btn btn-outline-secondary">About Me</a>
+  <a routerLink="listado" class="btn btn-outline-secondary">Listado</a>
 
   @if (auth.usuarioActual === null)
   {
-  <a routerLink="login" class="btn btn-success">Login</a>
-  <a routerLink="registro" class="btn btn-success">Registro</a>
+  <a routerLink="login" class="btn btn-outline-secondary">Login</a>
+  <a routerLink="registro" class="btn btn-outline-secondary">Registro</a>
   } @else {
   <a (click)="cerrarSesion()" class="btn btn-danger">Cerrar Sesion</a>
   }
