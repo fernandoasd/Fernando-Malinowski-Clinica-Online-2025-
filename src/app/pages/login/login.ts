@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { EnlaceRapido } from '../enlace-rapido/enlace-rapido';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { Usuario } from '../../models/usuario';
+import { Perfil } from '../../enums/enums';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +20,7 @@ export class Login {
   mail: string = "";
   contrasenia: string = "";
   error = signal<string>("");
-  
+
 
   rellenar(array: string[]) {
     this.mail = array[0];
@@ -26,13 +28,27 @@ export class Login {
   }
 
   async loguearse() {
-
-    const { data, error } = await this.auth.iniciarSesion(this.mail, this.contrasenia);
-
-
-    if (error) {
-      console.log("login error: ", error);
+    let retorno = await this.usuario.buscarUsuarioMail(this.mail);
+    console.log("usuario: ", retorno);
+    if (retorno.error == null && retorno.data.length > 0) {
+      const usuarioEntrante = retorno.data[0]as Usuario;
+      if (usuarioEntrante.perfil == Perfil.Especialista) {
+        if (usuarioEntrante.activo) {
+          const { data, error } = await this.auth.iniciarSesion(this.mail, this.contrasenia);
+          if (error) {
+            console.log("login error: ", error);
+          }
+        } else {
+          Swal.fire("Ingreso no autorizado", "Usuario no autorizado por Admin", "warning");
+        }
+      } else {
+        const { data, error } = await this.auth.iniciarSesion(this.mail, this.contrasenia);
+        if (error) {
+          console.log("login error: ", error);
+        }
+      }
     }
+
 
   }
 }

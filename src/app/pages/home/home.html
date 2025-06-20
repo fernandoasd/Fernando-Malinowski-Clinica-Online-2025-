@@ -1,45 +1,74 @@
-Home works!
+  <!-- Hero -->
+  <section class="hero text-center">
+    <div>
+      <h1 class="display-4 fw-bold">Tu salud, nuestra prioridad</h1>
+      <p class="lead">Atención médica de calidad con profesionales comprometidos</p>
+      <a href="#contacto" class="btn btn-primary btn-lg mt-3">Solicitar turno</a>
+    </div>
+  </section>
 
-<div class="container">
-    <!-- <app-enlace-rapido></app-enlace-rapido> -->
+  <!-- Servicios -->
+  <section id="servicios" class="py-5 bg-light text-dark">
+    <div class="container">
+      <h2 class="text-center mb-5">Nuestros Servicios</h2>
+      <div class="row text-center">
+        <div class="col-md-4 mb-4">
+          <div class="servicio-icono mb-2">🩺</div>
+          <h5>Clínica médica</h5>
+          <p>Controles clínicos generales y seguimiento integral del paciente.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="servicio-icono mb-2">🦴</div>
+          <h5>Traumatología</h5>
+          <p>Atención especializada en lesiones óseas y musculares.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="servicio-icono mb-2">🧠</div>
+          <h5>Psicología</h5>
+          <p>Espacios de escucha y acompañamiento emocional.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <button (click)="alerta()"> alert</button>
-    <a href="/error" >NOT FOUND</a>
-    Augusto Morelli
-    21:39
-    * Botones de Acceso rápido
-    - Debe ser botones favbutton. Este debe tener una animación al mostrar las opciones de usuarios
-    - Debe tener la imagen de perfil del usuario
-    - Debe estar en la esquina inferior izquierda de la pantalla login. 6 usuarios. (3 pacientes, 2 especialistas, 1
-    admin)
+  <!-- Profesionales -->
+  <section id="profesionales" class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-5">Nuestro Equipo</h2>
+      <div class="row justify-content-center">
+        <div class="col-md-4 text-center mb-4">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" class="rounded-circle mb-3" width="120">
+          <h5>Dr. Juan Pérez</h5>
+          <p>Clínico general</p>
+        </div>
+        <div class="col-md-4 text-center mb-4">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" class="rounded-circle mb-3" width="120">
+          <h5>Dra. Ana García</h5>
+          <p>Traumatóloga</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    * Registro de usuarios
-    - Al ingresar a la página solo se deben ver 2 botones con la imagen que represente un paciente o especialista, según
-    esa elección mostrará el formulario correspondiente.
-    - Estas image
-    - Estas imagenes tienen que estar en botones rectangulares uno al abajo del otro. Al hacer click el formulario debe
-    aparecer con una aminación.
-
-
-    falta:
-    Pacientes: 
-    completar encuesta
-    calificar Atencion
-    justificacion de cancelacion de turnos
-
-    Turnos:
-    validar que el turno no se duplique
-    validar que el especialista este habilitado por un admin
-
-
-Augusto Morelli
-20:41
-* Sacar un turno
-- Comienza mostrando los PROFESIONALES en botones rectangulares con la imagen del mismo y su nombre por debajo del botón
-- Una vez seleccionado mostrará las ESPECIALIDADES, en botones redondos, con la imagen de la especialidad. En caso de no tener muestra imagen por default
-
-
-- Una vez seleccionada la especialidad, aparecerán los días y horarios con turnos disponibles para ese PROFESIONAL. Estos botones deben ser cuadrados con bordes redondeados. Formato (09-09 13:15)
-
-</div>
+  <!-- Contacto -->
+  <section id="contacto" class="py-5 bg-light text-dark">
+    <div class="container">
+      <h2 class="text-center mb-4">Contacto</h2>
+      <form class="col-md-6 mx-auto">
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre completo</label>
+          <input type="text" class="form-control" id="nombre" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Correo electrónico</label>
+          <input type="email" class="form-control" id="email" required>
+        </div>
+        <div class="mb-3">
+          <label for="mensaje" class="form-label">Mensaje</label>
+          <textarea class="form-control" id="mensaje" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+      </form>
+    </div>
+  </section>
 

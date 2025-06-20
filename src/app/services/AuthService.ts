@@ -56,7 +56,7 @@ export class AuthService {
       return { data, error };
     } catch (er: any) {
       let error = "";
-
+      
       if (er) {
         er = er as AuthError;
         console.log("er?.message ", er?.message);

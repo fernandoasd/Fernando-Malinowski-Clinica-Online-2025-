@@ -1,0 +1,13 @@
+.hero {
+      background: url('https://source.unsplash.com/1600x600/?hospital,clinic') no-repeat center center/cover;
+      height: 70vh;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-shadow: 1px 1px 3px black;
+    }
+    .servicio-icono {
+      font-size: 2rem;
+      color: #0d6efd;
+    }

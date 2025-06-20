@@ -1,15 +1,18 @@
-
 <h2>Porfavor, elija a un especialista:</h2>
 
-<div class="container m-1" *ngFor="let e of especialistas">
-    <div class="card" style="width:30vw">
-        <img class="card-img-top" src={{e.imagen_uno}} alt="Card image" style="width:100%">
-        <div class="card-body">
-            <h4 class="card-title">{{e.nombre}} {{e.apellido}}</h4>
-            <p class="card-text" > Especialidad/es: </p>
-            <div class="container text-center">
-                <button class="btn btn-primary me-2"*ngFor="let esp of e.especialidades"
-                 (click)="seleccionarMedico(e.id_especialista!, esp)"> {{esp}} </button>
+<div class="container m-1 d-flex">
+    <div *ngFor="let e of especialistas">
+        <div class="card m-2 border-dark" style="width:30vw">
+            <div class="card-head border border-dark" style="height: 40vh;">
+                <img class="card-img-top" src={{e.imagen_uno}} alt="Card image" style="height: 100%; width: 100%; object-fit: cover;">
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">{{e.nombre}} {{e.apellido}}</h4>
+                <p class="card-text"> Especialidad/es: </p>
+                <div class="container text-center">
+                    <button class="btn btn-primary me-2" *ngFor="let esp of e.especialidades"
+                        (click)="seleccionarMedico(e.id_especialista!, esp)"> {{esp}} </button>
+                </div>
             </div>
         </div>
     </div>
