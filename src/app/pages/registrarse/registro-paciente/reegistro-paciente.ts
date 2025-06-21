@@ -193,7 +193,7 @@ export class ReegistroPaciente {
         }).then((result) => {
 
           if (result.isConfirmed) {
-            this.us.buscarUsuarioMail(this.mail).then((respuesta) => {
+            this.us.traerUsuarioMail(this.mail).then((respuesta) => {
 
               //Verifico que el mail no existe en la tabla usuarios, si es asi creo una nueva cuenta
               if (respuesta.data?.length! == 0) {

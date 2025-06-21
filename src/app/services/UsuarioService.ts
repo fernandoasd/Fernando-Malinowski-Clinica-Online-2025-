@@ -39,16 +39,16 @@ export class UsuarioService {
 
   }
 
-  async buscarUsuarioContrasenia(mail: string, password: string) {
+  async traerUsuarioContrasenia(mail: string, password: string) {
     const { data, error, count, status, statusText } = await this.db.supabase.from("usuarios").select("*").eq("mail", mail).eq("contrasenia", password);
     return data;
   }
 
-  async buscarUsuarioMail(mail: string) {
+  async traerUsuarioMail(mail: string) {
     return await this.db.supabase.from("usuarios").select("*").eq("mail", mail);
   }
 
-  async buscarUsuarioId(id_usuario: number) {
+  async traerUsuarioId(id_usuario: number) {
     return await this.db.supabase.from("usuarios").select("*").eq("id_usuario", id_usuario);
   }
 
@@ -77,27 +77,27 @@ export class UsuarioService {
     console.log("cargar", data, error, count, status, statusText);
   }
 
-  async modificar(usuario: Usuario) {
+  async modificarUsuario(usuario: Usuario) {
     // UPDATE ... where id = n
     const { data, error, count, status, statusText } = await this.db.supabase.from("usuarios").update(usuario).eq("nombre", usuario.nombre);
     console.log("modificar", data, error, count, status, statusText);
   }
 
-  async eliminar(id_usuario?: number) {
+  async eliminarUsuario(id_usuario?: number) {
     if (id_usuario === undefined) return;
     const { data, error, count, status, statusText } = await this.db.supabase.from("usuarios").delete().eq("id", id_usuario);
     console.log("eliminar", data, error, count, status, statusText);
   }
 
   async cargarUsuarioContrasenia(mail: string, password: string) {
-    const data = await this.buscarUsuarioContrasenia(mail, password);
+    const data = await this.traerUsuarioContrasenia(mail, password);
     this.usuarioActual = data![0];
     console.log(this.usuarioActual);
   }
 
   async cargarUsuarioMail(mail: string) {
     // this.traerUltimoId();
-    const { data, error } = await this.buscarUsuarioMail(mail);
+    const { data, error } = await this.traerUsuarioMail(mail);
     if (error) {
       console.log(error)
     }
@@ -135,7 +135,7 @@ export class UsuarioService {
   }
 
   async traerEspecialistas() {
-    const { data, error } = await this.db.supabase.from("especialistas").select("*, usuarios(*)");
+    const { data, error } = (((await this.db.supabase.from("especialistas").select("*"))));
     if (error) {
       console.log(error)
     }
@@ -209,7 +209,7 @@ export class UsuarioService {
     return { data, error };
   }
 
-  async enviarResenia(resenia: { resenia: string, diagnostico: string }) {
+  async cargarResenia(resenia: { resenia: string, diagnostico: string }) {
 
   }
 

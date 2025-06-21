@@ -10,7 +10,8 @@ import { Usuario } from '../../interfaces/interfaces';
   styleUrl: './enlace-rapido.css'
 })
 export class EnlaceRapido {
-db = inject(UsuarioService);
+  @Output() rellenarEvent = new EventEmitter<string[]>();
+  db = inject(UsuarioService);
   // autos: Auto[] = [];
 
   //signal: cuando se actualiza envia una señal al HTML
@@ -29,10 +30,9 @@ db = inject(UsuarioService);
     });
   }
 
-  @Output() rellenarEvent = new EventEmitter<string[]>();
 
   eliminar(id?: number) {
-    this.db.eliminar(id);
+    this.db.eliminarUsuario(id);
     console.log("Eliminar: " + id);
   }
 

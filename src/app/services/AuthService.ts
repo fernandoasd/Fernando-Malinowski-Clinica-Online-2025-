@@ -94,6 +94,6 @@ export class AuthService {
 
   async traerUsuarioActual() {
     let mailUsuariOActual = this.usuarioActual?.email;
-    return (await this.usuarioService.buscarUsuarioMail(mailUsuariOActual!)).data![0];
+    return (await this.usuarioService.traerUsuarioMail(mailUsuariOActual!)).data![0];
   }
 }

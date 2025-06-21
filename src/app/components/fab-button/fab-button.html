@@ -1,0 +1,26 @@
+<!-- FAB BUTTON WRAPPER -->
+<div class="position-fixed">
+  <div class="fab-wrapper position-relative">
+
+    <!-- BOTÓN PRINCIPAL -->
+    <button class="btn btn-success rounded-circle shadow" style="width: 60px; height: 60px;" (click)="toggleFab()">
+      <i class="bi bi-plus-lg fs-4 text-white"></i>
+    </button>
+
+    <!-- LISTA DE MÉDICOS -->
+    <div class="d-flex flex-wrap gap-1 position-relative"
+      [ngClass]="{ 'slide-in': fabOpen, 'slide-out': !fabOpen }" style="bottom: 20vh; left: 80px;">
+
+
+      <div *ngFor="let user of usuarios()" class="text-center">
+        <div class="btn btn-success" (click)="autocompletar(user.mail!, user.contrasenia!)">
+          <div class="fw-bold mt-1 f-1">{{ user.nombre }} {{ user.apellido }}</div>
+          <img [src]="user.imagen_uno" class="rounded-circle border shadow" width="100" height="100"
+            alt="Foto de {{ user.nombre }}">
+          <div class="text-decoration-underline mt-1 f-2 fw-light">{{ user.perfil }}</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

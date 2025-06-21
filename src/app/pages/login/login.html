@@ -1,12 +1,14 @@
 <div class="container">
     <div class="row">
-        <!-- Enlaces Rápidos -->
+        <!-- Enlaces Rápidos
         <div class="col-sm mb-3">
             <app-enlace-rapido (rellenarEvent)="rellenar($event)"></app-enlace-rapido>
-        </div>
+        </div> -->
+
+
 
         <!-- Login box -->
-        <div class="col-sm mt-2">
+        <div class="col-sm m-5">
             <div class="login-box">
                 <h2 class="text-center mb-4">Iniciar Sesión</h2>
                 <div class="mb-3">
@@ -22,13 +24,18 @@
                 <div class="d-grid">
                     <button (click)="loguearse()" class="btn btn-success">Loguearse</button>
                 </div>
+
+
                 <div class="text-center">
                     <a href="#" class="text-light text-decoration-none">¿Olvidaste tu contraseña?</a><br>
                     <a href="#" class="text-light text-decoration-none">Crear una cuenta</a>
                 </div>
             </div>
+        </div>
 
-
+        <div class="my-5 mb-5">
+            <app-fab-button (rellenarEvent)="rellenar($event)"></app-fab-button>
+        </div>
 
         <!-- Mail: <input type="text" [(ngModel)]="mail">
     Contraseña: <input type="text" [(ngModel)]="contrasenia"> -->

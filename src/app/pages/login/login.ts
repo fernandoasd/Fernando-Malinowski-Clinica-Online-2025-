@@ -2,15 +2,15 @@ import { Component, inject, signal } from '@angular/core';
 import { UsuarioService } from '../../services/UsuarioService';
 import { AuthService } from '../../services/AuthService';
 import { CommonModule } from '@angular/common';
-import { EnlaceRapido } from '../enlace-rapido/enlace-rapido';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Usuario } from '../../models/usuario';
 import { Perfil } from '../../enums/enums';
+import { FabButton } from '../../components/fab-button/fab-button';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, CommonModule, EnlaceRapido],
+  imports: [FormsModule, CommonModule, FabButton],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
@@ -28,7 +28,7 @@ export class Login {
   }
 
   async loguearse() {
-    let retorno = await this.usuario.buscarUsuarioMail(this.mail);
+    let retorno = await this.usuario.traerUsuarioMail(this.mail);
     console.log("usuario: ", retorno);
     if (retorno.error == null && retorno.data.length > 0) {
       const usuarioEntrante = retorno.data[0]as Usuario;

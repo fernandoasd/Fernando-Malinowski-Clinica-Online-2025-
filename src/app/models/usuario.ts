@@ -1,18 +1,18 @@
 
 export class Usuario {
     // con ? puede ser undefined
-    nombre: string;
-    apellido: string;
-    edad: number;
-    dni: string;
-    obra_social: string;
-    mail: string;
-    contrasenia: string;
-    imagen_uno: string;
-    imagen_dos: string;
-    especialidad: string;
-    perfil: string;
-    activo: boolean;
+    nombre?: string;
+    apellido?: string;
+    edad?: number;
+    dni?: string;
+    obra_social?: string;
+    mail?: string;
+    contrasenia?: string;
+    imagen_uno?: string;
+    imagen_dos?: string;
+    especialidad?: string;
+    perfil?: string;
+    activo?: boolean;
 
     constructor(mail: string, contrasenia: string, nombre: string, apellido: string, 
         edad: number, dni: string, obra_social: string,  perfil: string = "usuario",
