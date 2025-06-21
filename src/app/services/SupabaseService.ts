@@ -12,7 +12,7 @@ export class SupabaseService {
 
   bucketPerfil = "imagen-perfil";
   mbMax = 2;
-  tamañoMaximoFoto = this.mbMax * 1024 * 1024
+  tamañoMaximoFoto = this.mbMax * 1024 * 1024;
 
   constructor() {
     this.supabase = createClient(
