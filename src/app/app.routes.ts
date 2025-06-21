@@ -102,6 +102,11 @@ export const routes: Routes = [
         loadComponent: () => import("./pages/mi-perfil/mi-perfil").then(m => m.MiPerfil),
     },
     {
+        path: "captcha",
+        title: "captcha",
+        loadComponent: () => import("./pages/captcha/captcha").then(m => m.Captcha),
+    },
+    {
         path: "**",
         title: "Page Not Found",
         loadComponent: () => import("./pages/page-not-found/page-not-found").then(m => m.PageNotFound),

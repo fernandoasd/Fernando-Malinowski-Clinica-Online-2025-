@@ -8,10 +8,11 @@ import { UsuarioService } from '../../../services/UsuarioService';
 import { CommonModule } from '@angular/common';
 import { AuthError } from '@supabase/supabase-js';
 import { Router } from '@angular/router';
+import { Captcha } from '../../captcha/captcha';
 
 @Component({
   selector: 'app-reegistro-paciente',
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, Captcha],
   templateUrl: './reegistro-paciente.html',
   styleUrl: './reegistro-paciente.css'
 })
@@ -37,6 +38,7 @@ export class ReegistroPaciente {
   hayError: boolean = false;
   mailEjemplo = "ejemplo@gmail.com";
   mensajeErrorEspecialidad = "";
+  captchaCompletado: boolean = false;
 
   opcionSeleccionada: string = "otro";
   otraOpcion: string = '';
@@ -129,7 +131,7 @@ export class ReegistroPaciente {
   validarImagen(control: AbstractControl, maxSizeMB: number = 2): ValidationErrors | null {
     const file = control.value;
     console.log("control: ", control);
-    if (!file) return null; // No hay archivo aún
+    if (!file) return null; // No hay archivo 
 
     const extensionesPermitidas = ['jpg', 'jpeg', 'png', 'webp'];
     const extension = file.split('.').pop()?.toLowerCase();
@@ -139,7 +141,7 @@ export class ReegistroPaciente {
       return { tipoInvalido: true };
     }
 
-    return null; // válido
+    return null; // valido
   }
 
   revisar() {
@@ -178,44 +180,48 @@ export class ReegistroPaciente {
   }
 
   enviar() {
-    if (this.formulario.valid) {
-      console.log("Se puede enviar");
+    if (this.captchaCompletado) {
+      if (this.formulario.valid) {
+        console.log("Se puede enviar");
 
-      Swal.fire({
-        title: "Crear cuenta??",
-        showDenyButton: true,
-        icon: 'question',
-        confirmButtonText: "Crear",
-        denyButtonText: `Cancelar`
-      }).then((result) => {
+        Swal.fire({
+          title: "Crear cuenta??",
+          showDenyButton: true,
+          icon: 'question',
+          confirmButtonText: "Crear",
+          denyButtonText: `Cancelar`
+        }).then((result) => {
 
-        if (result.isConfirmed) {
-          this.us.buscarUsuarioMail(this.mail).then((respuesta) => {
+          if (result.isConfirmed) {
+            this.us.buscarUsuarioMail(this.mail).then((respuesta) => {
 
-            //Verifico que el mail no existe en la tabla usuarios, si es asi creo una nueva cuenta
-            if (respuesta.data?.length! == 0) {
-              this.us.db.subirFotoPerfil(this.imagenSeleccionada!).then((imagenUno) => {
-                this.us.db.subirFotoPerfil(this.imagenSeleccionadaDos!).then((imagenDos) => {
-                  this.registrarse(this.perfil, imagenUno!.linkPublico!.data!.publicUrl || "", imagenDos!.linkPublico!.data!.publicUrl || "");
-                })
-              });
-            } else {
-              Swal.fire("Error", "El mail ya esta siendo usado", 'warning');
-            }
-          })
+              //Verifico que el mail no existe en la tabla usuarios, si es asi creo una nueva cuenta
+              if (respuesta.data?.length! == 0) {
+                this.us.db.subirFotoPerfil(this.imagenSeleccionada!).then((imagenUno) => {
+                  this.us.db.subirFotoPerfil(this.imagenSeleccionadaDos!).then((imagenDos) => {
+                    this.registrarse(this.perfil, imagenUno!.linkPublico!.data!.publicUrl || "", imagenDos!.linkPublico!.data!.publicUrl || "");
+                  })
+                });
+              } else {
+                Swal.fire("Error", "El mail ya esta siendo usado", 'warning');
+              }
+            })
 
-        }
-      });
+          }
+        });
 
-    } else {
-      this.formulario?.markAllAsTouched();
-      console.log("No se puede enviar");
-      Swal.fire({
-        icon: 'warning',
-        title: "Error",
-        text: "compruebe los campos requeridos",
-        draggable: true
-      });
+      } else {
+        this.formulario?.markAllAsTouched();
+        console.log("No se puede enviar");
+        Swal.fire({
+          icon: 'warning',
+          title: "Error",
+          text: "compruebe los campos requeridos",
+          draggable: true
+        });
+      }
+    } else { //Si el capcha es falso
+      Swal.fire("", "Por favor, complete el captcha", "warning");
     }
   }
 
@@ -280,4 +286,15 @@ export class ReegistroPaciente {
       Swal.fire("Error", this.error(), 'error');
     }
   }
+
+  recibirRespuestaCaptcha(respuesta: boolean) {
+    if (respuesta) {
+      Swal.fire("Ok", "", "success");
+    } else {
+      Swal.fire("mal", "", "error");
+    }
+    this.captchaCompletado = respuesta;
+  }
+
+
 }

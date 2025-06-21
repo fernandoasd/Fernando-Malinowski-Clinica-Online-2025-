@@ -194,6 +194,11 @@
                 <img [src]="imagenPreviewDos" alt="PreviewDos" class="img-thumbnail" width="50%">
             </div>
 
+            <!-- captcha -->
+            <div class="mb-3">
+                <app-captcha (completeCaptchaEvent)="recibirRespuestaCaptcha($event)"></app-captcha>
+            </div>
+
 
             <div class="d-grid">
                 <button type="submit" (click)="enviar()" class="btn btn-success">Registrarse</button>

@@ -6,7 +6,6 @@ import { Perfil } from '../../../enums/enums';
 import { Usuario, Paciente, Especialista } from '../../../interfaces/interfaces';
 import { AuthService } from '../../../services/AuthService';
 import { UsuarioService } from '../../../services/UsuarioService';
-import { async } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
