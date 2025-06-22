@@ -44,7 +44,7 @@ export class ListaMedicos implements OnInit {
   }
 
   traerTablas() {
-    this.us.traerEspecialistas().then(({ especialistas, error }) => {
+    this.us.traerEspecialistasCompleto().then(({ especialistas, error }) => {
       if (error === null) {
         this.especialistas = especialistas!;
         console.log("especialistas ", this.especialistas);

@@ -147,6 +147,19 @@ export class UsuarioService {
     return { especialistas, error };
   }
 
+    async traerEspecialistasCompleto() {
+    const { data, error } = (((await this.db.supabase.from("especialistas").select("*, usuarios(*)"))));
+    if (error) {
+      console.log(error)
+    }
+    const especialistas = data!.map(item => ({
+      ...item,
+      ...item.usuarios
+    }));
+    especialistas.forEach(obj => delete (obj as any).usuarios);
+    return { especialistas, error };
+  }
+
   async traerEspecialistaId(id_especialista: number) {
     const { data, error } = await this.db.supabase.from("especialistas")
       .select("*, usuarios(*)").eq("id_especialista", id_especialista);

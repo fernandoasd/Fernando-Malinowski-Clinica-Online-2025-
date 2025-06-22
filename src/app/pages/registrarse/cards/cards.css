@@ -1,0 +1,12 @@
+img {
+  height: 10rem;
+  object-fit: cover;
+}
+
+.btn{
+  transition: transform 0.3s ease-out;
+}
+
+.btn:hover{
+ transform: scale(1.1);
+}
