@@ -7,10 +7,11 @@ import Swal from 'sweetalert2';
 import { Usuario } from '../../models/usuario';
 import { Perfil } from '../../enums/enums';
 import { FabButton } from '../../components/fab-button/fab-button';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, CommonModule, FabButton],
+  imports: [FormsModule, CommonModule, FabButton, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })

@@ -122,7 +122,7 @@ export class MiPerfil implements OnInit {
     return { usuarioRetorno, disponibilidadRetorno };
   }
 
-    cargarFormulario(especialidad: string, disponibilidadFiltrada: Disponibilidad) {
+  cargarFormulario(especialidad: string, disponibilidadFiltrada: Disponibilidad) {
     this.form = this.fb.group({
       dias: this.fb.array(this.diasSemana.map((dia) => this.fb.group({
         dia_semana: [dia],
@@ -152,12 +152,12 @@ export class MiPerfil implements OnInit {
     }
   }
 
-  
+
 
 
   //si disponibilidadFiltrada esta vacia, le tiene que cargar los datos para subir a  la BBDD
   actualizarDisponibilidad(horarios: any, duracion_turno: number) {
-    console.log("disponiblidad ",  this.disponibilidadFiltrada)
+    console.log("disponiblidad ", this.disponibilidadFiltrada)
     this.disponibilidadFiltrada.especialidad = this.espSelect;
     this.disponibilidadFiltrada.id_especialista = this.usuario.id_especialista;
     this.disponibilidadFiltrada.horarios = horarios;
@@ -188,78 +188,77 @@ export class MiPerfil implements OnInit {
     }
   }
 
-guardarDisponibilidad() {
-  if (this.form.valid){
+  guardarDisponibilidad() {
+    if (this.form.valid) {
 
-    const diasActivos = this.form.value.dias
-      .map((d: any, i: number) => ({
-        dia_semana: this.diasSemana[i],
-        horario_inicio: d.horario_inicio,
-        horario_fin: d.horario_fin,
-        activo: d.activo
-      }))
-      .filter((d: any) => d.activo)
-      .map((d: any) => ({
-        dia_semana: d.dia_semana,
-        horario_inicio: d.horario_inicio,
-        horario_fin: d.horario_fin,
-      }));
+      const diasActivos = this.form.value.dias
+        .map((d: any, i: number) => ({
+          dia_semana: this.diasSemana[i],
+          horario_inicio: d.horario_inicio,
+          horario_fin: d.horario_fin,
+          activo: d.activo
+        }))
+        .filter((d: any) => d.activo)
+        .map((d: any) => ({
+          dia_semana: d.dia_semana,
+          horario_inicio: d.horario_inicio,
+          horario_fin: d.horario_fin,
+        }));
 
-    const errores: string[] = [];
-    console.log("this.form.value.dias ", this.form.value.dias);
-    for (let dia of diasActivos) {
-      console.log("dia: ", dia);
-      const inicio = dia.horario_inicio;
-      const fin = dia.horario_fin;
+      const errores: string[] = [];
+      console.log("this.form.value.dias ", this.form.value.dias);
+      for (let dia of diasActivos) {
+        console.log("dia: ", dia);
+        const inicio = dia.horario_inicio;
+        const fin = dia.horario_fin;
 
-      if (!inicio || !fin || inicio >= fin) {
-        errores.push(`Horario inválido en ${dia.dia_semana}`);
-        continue;
-      }
-
-      // Validaciones por día
-      if (dia.dia_semana === 'sábado') {
-        if (inicio < '08:00' || fin > '14:00') {
-          errores.push(`En sábado debe estar entre 08:00 y 14:00`);
+        if (!inicio || !fin || inicio >= fin) {
+          errores.push(`Horario inválido en ${dia.dia_semana}`);
+          continue;
         }
-      } else {
-        if (inicio < '08:00' || fin > '19:00') {
-          errores.push(`En ${dia.dia_semana} debe estar entre 08:00 y 19:00`);
-        }
-      }
-    }
 
-    if (errores.length > 0) {
-      Swal.fire("Error", "Errores:\n" + errores.join('\n'), "error")
-      return;
-    } else {
-      this.alert.confirmarYEnviar("Desea guardar la disponibilidad?").then((result) => {
-        try {
-          if (result.isConfirmed) {
-            // Llamás al servicio para guardar
-            this.actualizarDisponibilidad(diasActivos, this.form.get('duracion_turno')?.value);
-            console.log("disponibilidadFiltrada ", this.disponibilidadFiltrada);
-            this.guardarDispBBDD(this.disponibilidadFiltrada).then(({data, error}) =>{
-              if (error == null)
-              {
-                this.disponibilidadFiltrada = data as Disponibilidad;
-                Swal.fire('Enviado', 'La información se cargó correctamente.', 'success');
-              } else {
-                Swal.fire('Enviado', 'Error en la BBDD: ' + error.message, 'error');
-              }
-            });
+        // Validaciones por día
+        if (dia.dia_semana === 'sábado') {
+          if (inicio < '08:00' || fin > '14:00') {
+            errores.push(`En sábado debe estar entre 08:00 y 14:00`);
           }
-        } catch (error: any) {
-          Swal.fire('Error', 'No se pudo guardar.' + error, 'error');
-          throw error;
+        } else {
+          if (inicio < '08:00' || fin > '19:00') {
+            errores.push(`En ${dia.dia_semana} debe estar entre 08:00 y 19:00`);
+          }
         }
-      })
-    }
-    console.log('Días válidos:', diasActivos);
-  }else{
-    Swal.fire('Error', "Validaciones no aprobadas.", 'error');
+      }
 
-  }
+      if (errores.length > 0) {
+        Swal.fire("Error", "Errores:\n" + errores.join('\n'), "error")
+        return;
+      } else {
+        this.alert.confirmarYEnviar("Desea guardar la disponibilidad?").then((result) => {
+          try {
+            if (result.isConfirmed) {
+              // Llamás al servicio para guardar
+              this.actualizarDisponibilidad(diasActivos, this.form.get('duracion_turno')?.value);
+              console.log("disponibilidadFiltrada ", this.disponibilidadFiltrada);
+              this.guardarDispBBDD(this.disponibilidadFiltrada).then(({ data, error }) => {
+                if (error == null) {
+                  this.disponibilidadFiltrada = data as Disponibilidad;
+                  Swal.fire('Enviado', 'La información se cargó correctamente.', 'success');
+                } else {
+                  Swal.fire('Enviado', 'Error en la BBDD: ' + error.message, 'error');
+                }
+              });
+            }
+          } catch (error: any) {
+            Swal.fire('Error', 'No se pudo guardar.' + error, 'error');
+            throw error;
+          }
+        })
+      }
+      console.log('Días válidos:', diasActivos);
+    } else {
+      Swal.fire('Error', "Validaciones no aprobadas.", 'error');
+
+    }
 
   }
 

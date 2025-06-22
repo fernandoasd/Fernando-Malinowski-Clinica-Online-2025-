@@ -13,11 +13,11 @@
 
 
       <div *ngFor="let user of usuarios()" class="text-center">
-        <div class="btn btn-success" (click)="autocompletar(user.mail!, user.contrasenia!)">
-          <div class="fw-bold mt-1 f-1">{{ user.nombre }} {{ user.apellido }}</div>
+        <div class="btn btn-success border border-dark" (click)="autocompletar(user.mail!, user.contrasenia!)">
+          <div class="text-decoration-underline fw-bold mt-1">{{ user.nombre }} {{ user.apellido }}</div>
           <img [src]="user.imagen_uno" class="rounded-circle border shadow" width="100" height="100"
             alt="Foto de {{ user.nombre }}">
-          <div class="text-decoration-underline mt-1 f-2 fw-light">{{ user.perfil }}</div>
+          <div class="mt-1 f-2 fw-light">{{ user.perfil }}</div>
         </div>
       </div>
     </div>

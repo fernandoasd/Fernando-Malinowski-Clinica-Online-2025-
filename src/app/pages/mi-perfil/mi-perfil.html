@@ -1,7 +1,7 @@
 <div class="d-flex flex-column">
     <div class="container mt-5 mb-5" *ngIf="usuario != null; else sinUsuario">
-        <div class="card shadow rounded-4 border-0 mx-auto" style="max-width: 500px;">
-            <div class="card-body text-center">
+        <div class="card shadow rounded-4 border-0 mx-auto bg-dark bg-opacity-75 mt-5" style="max-width: 500px;">
+            <div class="card-body text-center text-light">
                 <p class="mb-1"><strong>Perfil: {{usuario!.perfil}}</strong></p>
                 <img [src]="usuario!.imagen_uno" class="rounded-circle mb-3" width="120" height="120"
                     alt="Foto de perfil" />

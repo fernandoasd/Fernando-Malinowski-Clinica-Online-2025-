@@ -1,48 +1,58 @@
-<h1> Medico: {{especialista.nombre}} {{especialista.apellido}}</h1>
-<h1> Especialidad: {{especialidad}}</h1>
-<h1>Disponibilidad horaria:</h1>
-<div *ngIf="disponibilidadMedico.length > 0; else sinDIsponibilidad">
+<div class="container m-5" style="width: 90vw;justify-self: center;">
 
-  <h3 *ngFor="let horario of disponibilidadMedico[0].horarios">
-    <p> -> {{horario.dia_semana}} de {{horario.horario_inicio}}
-      a {{horario.horario_fin}} hs.</p>
-  </h3>
+  <div class="bg-dark bg-opacity-75 border border-ligth  rounded-5 mt-5 p-3" >
+    <h1> Medico: {{especialista.nombre}} {{especialista.apellido}}</h1>
+    <h1> Especialidad: {{especialidad}}</h1>
+  </div>
 
+  <div *ngIf="disponibilidadMedico.length > 0; else sinDIsponibilidad">
+    <div class="bg-dark bg-opacity-75 border border-ligth  rounded-5 mt-5 p-3 mt-5 p-3">
+      <h1>Disponibilidad horaria:</h1>
+      <h3 *ngFor="let horario of disponibilidadMedico[0].horarios">
+        <p> -> {{horario.dia_semana}} de {{horario.horario_inicio}}
+          a {{horario.horario_fin}} hs.</p>
+      </h3>
 
-  <!-- <div class="container">
-    <button class="btn btn-primary m-1"*ngFor="let fecha of FechasDisponiblesEspecialidad"> {{fecha}}</button>
-</div> -->
-
-  <div class="container text-center mt-4">
-    <h3>Por favor, seleccione el día y la hora de su turno:</h3>
-    <p class="text-success">- TURNOS DISPONIBLES -</p>
-    <p class=" text-danger">- TURNOS TOMADOS -</p>
-    <div class="container">
-      <div class="d-flex flex-wrap mt-1 justify-content-start" *ngIf="diasSemana.length > 0; else sinDisponibilidad">
-        <div class="m-1" *ngFor="let dia of diasSemana">
-          <div class="card">
-            <div class="card-header bg-light fw-bold">
-              {{ dia.nombre }}<br />
-              <small>{{ dia.fecha }}</small>
-            </div>
-            <div class="card-body d-grid gap-2">
-              <button class="btn btn-outline-success" *ngFor="let hora of dia.horarios"
-                (click)="seleccionarTurno(dia.nombre, dia.fecha, hora)"
-                [ngClass]='comprobarTurnoTomado(dia.fecha, hora) ? "disabled btn-outline-danger" : ""'>
-                {{ hora }}
-              </button>
+      <div class="container text-center mt-4">
+        <h3>Por favor, seleccione el día y la hora de su turno:</h3>
+        <p class="text-success">- TURNOS DISPONIBLES -</p>
+        <p class=" text-danger">- TURNOS TOMADOS -</p>
+        <div class="container">
+          <div class="d-flex flex-wrap mt-1 justify-content-start"
+            *ngIf="diasSemana.length > 0; else sinDisponibilidad">
+            <div class="m-1" *ngFor="let dia of diasSemana">
+              <div class="card">
+                <div class="card-header bg-light fw-bold">
+                  {{ dia.nombre }}<br />
+                  <small>{{ dia.fecha }}</small>
+                </div>
+                <div class="card-body d-grid gap-2">
+                  <button class="btn btn-outline-success" *ngFor="let hora of dia.horarios"
+                    (click)="seleccionarTurno(dia.nombre, dia.fecha, hora)"
+                    [ngClass]='comprobarTurnoTomado(dia.fecha, hora) ? "disabled btn-outline-danger" : ""'>
+                    {{ hora }}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
+        <ng-template #sinDisponibilidad>
+          <h1 class="text-center text-danger">
+            <p>No hay turnos disponibles.</p>
+          </h1>
+        </ng-template>
       </div>
     </div>
 
-    <ng-template #sinDisponibilidad>
-        <h1 class="text-center text-danger"><p>No hay turnos disponibles.</p></h1>
-    </ng-template>
+
   </div>
 
+  <ng-template #sinDIsponibilidad>
+    <h1 class="text-center text-danger">
+      <p>No hay turnos disponibles.</p>
+    </h1>
+  </ng-template>
+
 </div>
-<ng-template #sinDIsponibilidad>
-  <h1 class="text-center text-danger"><p>No hay turnos disponibles.</p></h1>
-</ng-template>

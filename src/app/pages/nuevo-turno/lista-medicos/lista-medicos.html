@@ -1,9 +1,11 @@
-<h2 class="text-center mt-3">Porfavor, elija a un especialista:</h2>
+
+    <h2 class="bg-dark bg-opacity-50 text-center text-light mt-3">Porfavor, elija a un especialista:</h2>
+
 
 <div class="container m-1 d-flex">
     <div *ngFor="let e of especialistas">
-        <div class="card m-2 border-dark border-rounded-100px" style="width:20vw">
-            <div class="card-head border border-dark" style="height: 25vh;">
+        <div class="card m-2 border-dark border-rounded-100px bg-dark bg-opacity-75 text-light" style="width:20vw">
+            <div class="card-head " style="height: 25vh;">
                 <img class="card-img-top" src={{e.imagen_uno}} alt="Card image" style="height: 100%; width: 100%; object-fit: cover;">
             </div>
             <div class="card-body">
