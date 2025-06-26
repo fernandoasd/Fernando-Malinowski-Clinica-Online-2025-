@@ -7,7 +7,6 @@ import Swal from 'sweetalert2';
 import { Especialista, Paciente, Usuario } from '../../interfaces/interfaces';
 import { Perfil } from '../../enums/enums';
 import { RouterModule } from '@angular/router';
-import { AuthError } from '@supabase/supabase-js';
 
 
 @Component({

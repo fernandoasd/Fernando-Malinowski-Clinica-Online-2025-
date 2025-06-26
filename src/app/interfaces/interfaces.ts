@@ -53,7 +53,7 @@ export interface Turno {
     altura?: number | null;
     peso?: number | null;
     temperatura?: number | null;
-    presion?: string | null;
+    presion?: number | null;
     datos_dinamicos?: Array<{ clave: string; valor: string }>;
     fechaSolicitud?: Date | null;
 }

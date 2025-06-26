@@ -28,7 +28,7 @@ export class AuthService {
         this.usuarioActual = session.user;
         this.usuarioService.cargarUsuarioMail(this.usuarioActual.email!);
       }
-      this.router.navigateByUrl("/home");
+      // this.router.navigateByUrl("/home");
     });
   }
 

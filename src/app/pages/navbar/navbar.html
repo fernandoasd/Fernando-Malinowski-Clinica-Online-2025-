@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-sm navbar-secondary bg-light sticky-top border-bottom border-5 border-success-subtle">
   <div class="container-fluid">
     <!-- <a class="navbar-brand" href="javascript:void(0)">CLINICA ONLINE</a> -->
-    <a href="home">
+    <a routerLink="/home">
       <img class="ms-1" src="logo.jpg" alt="clinica online" style="max-height: 9vh; min-height: 9vh">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
@@ -9,18 +9,18 @@
     </button>
     <div class="collapse navbar-collapse" id="mynavbar">
       <ul class="navbar-nav ms-auto gap-1 text-uppercase d-flex justify-content-center gap-2 fw-bold">
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a routerLink="/mi-perfil" class="btn btn-outline-primary">Mi Perfil</a>
-        </li>
-        <li class="nav-item">
+        </li> -->
+        <!-- <li class="nav-item">
           <a routerLink="/home" class="btn btn-outline-secondary">Home</a>
-        </li>
+        </li> -->
         <!-- <li class="nav-item">
           <a routerLink="/error" class="btn btn-outline-secondary">not-found</a>
         </li> -->
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a routerLink="/about" class="btn btn-outline-secondary">About Me</a>
-        </li>
+        </li> -->
 
         @if (auth.usuarioActual === null)
         {
@@ -44,7 +44,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="btn btn-outline-secondary ms-auto"><strong>Usuario: {{auth.usuarioActual.email}}</strong></a>
+          <a routerLink="/mi-perfil" class="btn btn-outline-primary ms-auto"><strong>MI PERFIL: {{auth.usuarioActual.email}}</strong></a>
         </li>
 
         <li class="nav-item">

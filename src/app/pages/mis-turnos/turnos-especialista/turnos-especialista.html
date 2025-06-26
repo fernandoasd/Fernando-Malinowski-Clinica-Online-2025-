@@ -1,9 +1,14 @@
-
 <h1 class="bg-dark bg-opacity-75 text-center mt-5 mb-5">Mis turnos (Especialista)</h1>
-<div class="container mt-3 text-center">
+<div *ngIf="banderaHistorial">
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-danger" (click)="cerrarHC()">Cerrar</button>
+    </div>
+    <app-historial-medico [turnoInput]="turnoHistoriaClinica" (modificarHCEvent)="modificarHC($event)"></app-historial-medico>
+</div>
+<div class="container-fluid mt-3 text-center">
     <table class="table table-dark table-striped">
         <thead>
-            <tr >
+            <tr>
                 <th>Paciente</th>
                 <th>Fecha</th>
                 <th>Horario</th>
@@ -14,6 +19,7 @@
                 <th>Aceptar</th>
                 <th>Rechazar</th>
                 <th>Cancelar</th>
+                <th>Historia Clinica</th>
             </tr>
         </thead>
         <tbody>
@@ -27,7 +33,8 @@
                 <!-- finalizar -->
                 @if (turno.estado == "Aceptado") {
                 <td>
-                    <button class="btn btn-lg btn-success bi bi-clipboard-heart" (click)="finalizarTurno(turno)"></button>
+                    <button class="btn btn-lg btn-success bi bi-clipboard-heart"
+                        (click)="finalizarTurno(turno)"></button>
                 </td>
                 }
                 @else {
@@ -82,8 +89,59 @@
                 <td class="inhabilitado">No disponible</td>
                 }
 
+                <!-- historia clinica -->
+                @if (turno.estado == "Finalizado") {
 
+                @if(!turno.altura)
+                {
+                <td>
+                    <div (click)="verHistoriaClinica(turno)">
+                        <button>
+                            Completar
+                        </button>
+                    </div>
+                </td>
+                }
+                @else
+                {
+                <td>
+                    <div class="verde" (click)="verHistoriaClinica(turno)">
+                        <button>
+                            Editar
+                        </button>
+                    </div>
+                </td>
+                }
+                }
+                @else {
+                <td class="inhabilitado">No disponible</td>
+                }
             </tr>
         </tbody>
     </table>
 </div>
+<!-- <button (click)="customC()">custom</button> -->
+
+<!-- <div class="d-flex flex-row justify-content-center">
+    <div class="text-center p-2">
+        <p><strong><u>Altura: </u></strong></p>
+        <p><input id="input-altura" class="swal2-input border border-dark" placeholder="Altura"></p>
+        <p><strong><u>Peso: </u></strong></p>
+        <p><input id="input-peso" class="swal2-input border border-dark" placeholder="Peso"></p>
+        <p><strong><u>Temperatura: </u></strong></p>
+        <p><input id="input-temperatura" class="swal2-input border border-dark" placeholder="Temperatura"></p>
+        <p><strong><u>Presión: </u></strong></p>
+        <p><input id="input-presion" class="swal2-input border border-dark" placeholder="Presión"></p>
+    </div>
+    <div class="text-center p-2">
+        <div *ngFor="let dato of turnosDisponibles[3].datosDinamicos; let i = index" class="par">
+                    <label for="nuevo">Nuevo dato {{i+1}}</label>
+                    <input type="text" name="clave{{i}}" placeholder="Clave"  required>
+                    <input type="text" name="valor{{i}}" placeholder="Valor"  required>
+                </div>
+
+                <button type="button" (click)="agregarDatoDinamico()"
+                    >Agregar dato</button>
+                <button type="submit">Guardar</button>
+    </div>
+</div> -->

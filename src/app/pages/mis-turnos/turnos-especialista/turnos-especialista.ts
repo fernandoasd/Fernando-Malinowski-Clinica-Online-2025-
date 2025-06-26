@@ -5,10 +5,11 @@ import { Especialista, Paciente, Turno } from '../../../interfaces/interfaces';
 import { EstadoTurno } from '../../../enums/enums';
 import { AlertService } from '../../../services/alert-service';
 import Swal from 'sweetalert2';
+import { HistorialMedico } from '../../../components/historial-medico/historial-medico';
 
 @Component({
   selector: 'app-turnos-especialista',
-  imports: [CommonModule],
+  imports: [CommonModule, HistorialMedico],
   templateUrl: './turnos-especialista.html',
   styleUrl: './turnos-especialista.css'
 })
@@ -17,6 +18,8 @@ export class TurnosEspecialista {
   turnosDisponibles: any[] = [];
   tuplaTurnosPacientes: [Turno, Paciente] = [{}, {}];
   especialista: Especialista = {};
+  banderaHistorial = false;
+  turnoHistoriaClinica: Turno = {};
   us = inject(UsuarioService);
   alert = inject(AlertService);
 
@@ -104,9 +107,46 @@ export class TurnosEspecialista {
 
     });
   }
+  customC() {
+    this.alert.custom();
+  }
+
+  verHistoriaClinica(turno: any) {
+    this.turnoHistoriaClinica = turno;
+    this.banderaHistorial = true
+  }
 
   leerResenia(turno: any) {
     this.alert.leerResenia(turno.resenia.resenia, turno.resenia.diagnostico);
+  }
+
+  agregarDatoDinamico() {
+
+  }
+
+  modificarHC(turnoModif: any) {
+    let index = this.turnosDisponibles.findIndex(t => t.id === turnoModif.id)
+    if (index) {
+      this.turnosDisponibles[index] = turnoModif;
+      let turnoCopia = { ...turnoModif };
+      delete turnoCopia.especialistas;
+      delete turnoCopia.pacientes;
+      console.log("turnoCopia: ", turnoCopia);
+      this.us.actualizarTurno(turnoCopia).then(({ data, error }) => {
+        if (error == null) {
+          Swal.fire("", "Turno actualizado correctamente", 'success');
+        } else {
+          Swal.fire("", "No se pudo actualizar el turno, Error: " + error.message, 'error')
+        }
+      });
+    }
+
+    console.log("HC modificado: ", turnoModif);
+    console.log("turnosDisponibles: ", this.turnosDisponibles);
+  }
+
+  cerrarHC() {
+    this.banderaHistorial = !this.banderaHistorial;
   }
 
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import Swal from 'sweetalert2';
+import { Turno } from '../interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -73,5 +74,95 @@ export class AlertService {
     return result;
   }
 
-  
+  agregarDatoDinamico(){
+      console.log("agregarDatoDinamico");
+    }
+
+  async enviarHC(turno: Turno, maxDatosDinamicos: number = 3) {
+    const nombre = "Fernando";
+    if (!turno.datos_dinamicos){
+      turno.datos_dinamicos = [];
+    }
+    let htmlContent = `
+    <button type="button" (click)="${this.agregarDatoDinamico()}"
+                    [disabled]="${turno.datos_dinamicos} && ${turno.datos_dinamicos!.length} >= ${maxDatosDinamicos}">Agregar dato</button>
+    <button type="submit">Guardar</button>
+    `;
+    turno.datos_dinamicos!.forEach((dato, i) => {
+    htmlContent += `
+    <div style="margin-bottom:10px;">
+      <label>Nuevo dato ${i + 1}</label><br>
+      <input id="clave-${i}" class="swal2-input" placeholder="Clave" />
+      <input id="valor-${i}" class="swal2-input" placeholder="Valor" />
+    </div>
+  `;
+    });
+    return Swal.fire({
+      title: 'Finalizar Turno.',
+      html:
+        `
+<div class="d-flex flex-row justify-content-center">
+    <div class="text-center p-2">
+        <p><strong><u>Altura: </u></strong></p>
+        <p><input id="input-altura" class="swal2-input border border-dark" placeholder="Altura"></p>
+        <p><strong><u>Peso: </u></strong></p>
+        <p><input id="input-peso" class="swal2-input border border-dark" placeholder="Peso"></p>
+        <p><strong><u>Temperatura: </u></strong></p>
+        <p><input id="input-temperatura" class="swal2-input border border-dark" placeholder="Temperatura"></p>
+        <p><strong><u>Presión: </u></strong></p>
+        <p><input id="input-presion" class="swal2-input border border-dark" placeholder="Presión"></p>
+    </div>
+    <div class="text-center p-2">
+        <div *ngFor="let dato of datosDinamicos; let i = index">
+                    <label for="nuevo">Nuevo dato {{i+1}}</label>
+                    <input type="text" name="clave{{i}}" placeholder="Clave" [(ngModel)]="dato.clave" required>
+                    <input type="text" name="valor{{i}}" placeholder="Valor" [(ngModel)]="dato.valor" required>
+        </div>
+
+                <button type="button" (click)="agregarDatoDinamico()"
+                    [disabled]="historiaClinica.datosDinamicos.length >= maxDatosDinamicos">Agregar dato</button>
+                <button type="submit">Guardar</button>
+    </div>
+</div>
+        `,
+      focusConfirm: false,
+      showCancelButton: true,
+      draggable: true,
+      confirmButtonText: 'Guardar',
+      width: "80vw",
+      preConfirm: () => {
+        const resenia = (document.getElementById('input-resena') as HTMLInputElement).value;
+        const diagnostico = (document.getElementById('input-diagnostico') as HTMLInputElement).value;
+
+        if (!resenia || !diagnostico) {
+          Swal.showValidationMessage('Ambos campos son obligatorios');
+          return;
+        }
+
+        return { resenia, diagnostico };
+      }
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        console.log('Reseña:', result.value.resenia);
+        console.log('Diagnóstico:', result.value.diagnostico);
+
+        // podés guardar los datos o usarlos como necesites
+        return [result.value.resenia, result.value.diagnostico];
+      }
+      return [];
+    });
+  }
+
+  custom() {
+    Swal.fire({
+      title: 'Modal grande',
+      text: 'Este es un modal con tamaño grande.',
+      icon: 'info',
+      width: '80vw'
+    });
+  }
+
+
+
+
 }
