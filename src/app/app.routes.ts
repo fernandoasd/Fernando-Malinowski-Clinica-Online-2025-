@@ -3,6 +3,7 @@ import { PageNotFound } from './pages/page-not-found/page-not-found';
 import { logueadoGuard } from './guards/logueado-guard';
 import { adminGuard } from './guards/admin-guard';
 import { pacienteGuard } from './guards/paciente-guard';
+import { adminPacienteGuard } from './guards/admin-paciente-guard';
 
 export const routes: Routes = [
     {
@@ -88,7 +89,7 @@ export const routes: Routes = [
         path: "solicitar-turno",
         title: "solicitar-turno",
         loadChildren: () => import("./pages/nuevo-turno/nuevo-turno.routes").then(m => m.nuevo_turno),
-        canActivate: [pacienteGuard]
+        canActivate: [adminPacienteGuard]
     },
     {
         path: "mis-turnos",

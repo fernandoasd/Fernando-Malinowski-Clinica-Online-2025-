@@ -126,9 +126,9 @@ export class UsuarioService {
     }
   }
 
-  async cargarDisponibilidad(disp: Disponibilidad){
-    const { data, error } = await this.db.supabase.from("disponibilidad").upsert(disp, {onConflict: "id_disponibilidad"}).select().single();
-    if (error){
+  async cargarDisponibilidad(disp: Disponibilidad) {
+    const { data, error } = await this.db.supabase.from("disponibilidad").upsert(disp, { onConflict: "id_disponibilidad" }).select().single();
+    if (error) {
       console.log(error);
     }
     return { data, error };
@@ -147,7 +147,7 @@ export class UsuarioService {
     return { especialistas, error };
   }
 
-    async traerEspecialistasCompleto() {
+  async traerEspecialistasCompleto() {
     const { data, error } = (((await this.db.supabase.from("especialistas").select("*, usuarios(*)"))));
     if (error) {
       console.log(error)
@@ -224,6 +224,14 @@ export class UsuarioService {
 
   async cargarResenia(resenia: { resenia: string, diagnostico: string }) {
 
+  }
+
+  async traerHistoriaClinica(id_paciente: number) {
+    const { data, error } = await this.db.supabase.from("turnos").select("fecha_turno, horario_turno, altura, peso, temperatura, presion, datos_dinamicos").eq("id_paciente", id_paciente).eq("estado", "Finalizado");
+    if (error) {
+      console.log(error)
+    }
+    return { data, error };
   }
 
 }

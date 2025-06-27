@@ -5,7 +5,7 @@ import { Perfil } from '../../enums/enums';
 
 @Component({
   selector: 'app-mis-turnos',
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet],
   templateUrl: './mis-turnos.html',
   styleUrl: './mis-turnos.css'
 })

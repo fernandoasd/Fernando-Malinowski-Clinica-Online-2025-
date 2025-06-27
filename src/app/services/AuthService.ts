@@ -34,12 +34,12 @@ export class AuthService {
 
   //crear cuenta
   async crearCuenta(correo: string, contraseña: string) {
-      const { data, error } = await this.supabaseService.supabase.auth.signUp({
-        email: correo,
-        password: contraseña
-      });
-      console.log("aunth, crear cuenta:", data, "error :", error, "status:  ", error?.status);
-      return { data, error };
+    const { data, error } = await this.supabaseService.supabase.auth.signUp({
+      email: correo,
+      password: contraseña
+    });
+    console.log("aunth, crear cuenta:", data, "error :", error, "status:  ", error?.status);
+    return { data, error };
   }
 
   //iniciar sesión
@@ -56,7 +56,7 @@ export class AuthService {
       return { data, error };
     } catch (er: any) {
       let error = "";
-      
+
       if (er) {
         er = er as AuthError;
         console.log("er?.message ", er?.message);
@@ -90,6 +90,7 @@ export class AuthService {
   async cerrarSesion() {
     const { error } = await this.supabaseService.supabase.auth.signOut()
     console.log("aunth, cerrar sesion:", error);
+    this.router.navigate(["home"]);
   }
 
   async traerUsuarioActual() {

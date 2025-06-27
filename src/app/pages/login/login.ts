@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import { Usuario } from '../../models/usuario';
 import { Perfil } from '../../enums/enums';
 import { FabButton } from '../../components/fab-button/fab-button';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +23,10 @@ export class Login {
   error = signal<string>("");
 
 
+  constructor(private router: Router) {
+
+  }
+
   rellenar(array: string[]) {
     this.mail = array[0];
     this.contrasenia = array[1];
@@ -32,20 +36,20 @@ export class Login {
     let retorno = await this.usuario.traerUsuarioMail(this.mail);
     console.log("usuario: ", retorno);
     if (retorno.error == null && retorno.data.length > 0) {
-      const usuarioEntrante = retorno.data[0]as Usuario;
+      const usuarioEntrante = retorno.data[0] as Usuario;
       if (usuarioEntrante.perfil == Perfil.Especialista) {
         if (usuarioEntrante.activo) {
           const { data, error } = await this.auth.iniciarSesion(this.mail, this.contrasenia);
-          if (error) {
-            console.log("login error: ", error);
+          if (data) {
+            this.router.navigate(["home"]);
           }
         } else {
           Swal.fire("Ingreso no autorizado", "Usuario no autorizado por Admin", "warning");
         }
       } else {
         const { data, error } = await this.auth.iniciarSesion(this.mail, this.contrasenia);
-        if (error) {
-          console.log("login error: ", error);
+        if (data) {
+          this.router.navigate(["home"]);
         }
       }
     }

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { UsuarioService } from '../../services/UsuarioService';
-import { Disponibilidad, Especialista, Paciente, Usuario } from '../../interfaces/interfaces';
+import { Disponibilidad, Especialista, Paciente, Turno, Usuario } from '../../interfaces/interfaces';
 import { DiaSemana, Perfil } from '../../enums/enums';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -17,8 +17,9 @@ import { AlertService } from '../../services/alert-service';
 export class MiPerfil implements OnInit {
   us = inject(UsuarioService);
   alert = inject(AlertService);
+  historiaClinica: Turno[] = [];
   usuario: any;
-  especialista: Especialista = {}
+  especialista: Especialista = {};
   form!: FormGroup;
   espSelect = "";
   especialidades = ['Medico', 'Traumatologo', 'Cardiologo'];
@@ -63,6 +64,7 @@ export class MiPerfil implements OnInit {
       especialidad: ['']
     });
 
+
     console.log("this.form.controls", this.form.controls);
   }
 
@@ -88,6 +90,11 @@ export class MiPerfil implements OnInit {
           console.log("mi perfil: ", this.usuario);
         }
       });
+      this.us.traerHistoriaClinica(this.us.usuarioActual?.id_usuario!).then(({data, error}) =>{
+        if (error == null && data?.length! > 0){
+          this.historiaClinica = data!;
+        }
+      })
     }
   }
 
@@ -259,6 +266,10 @@ export class MiPerfil implements OnInit {
       Swal.fire('Error', "Validaciones no aprobadas.", 'error');
 
     }
+
+  }
+
+  descargarHistoriaClinica(){
 
   }
 

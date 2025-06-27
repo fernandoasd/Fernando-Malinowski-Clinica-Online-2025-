@@ -15,6 +15,7 @@ export class HistorialMedico {
   private formBuilder = inject(FormBuilder);
   maxDatosDinamicos = 3;
 
+
   formularioHC = this.formBuilder.group({
     altura: [this.turnoInput()?.altura ?? 0, [Validators.required]],
     peso: [this.turnoInput()?.peso ?? 0, [Validators.required]],
@@ -23,14 +24,22 @@ export class HistorialMedico {
     datosDinamicos: this.formBuilder.array([]),
   });
 
-  ngOnInit(){
-    if (this.turnoInput()?.datos_dinamicos){
+  ngOnInit() {
+    if (this.turnoInput()?.datos_dinamicos) {
       this.turnoInput()?.datos_dinamicos?.forEach(obj => {
         this.agregarDatoDinamico(obj.clave, obj.valor);
       })
     } else {
       console.log("sin datos dinamicos");
     }
+
+    this.getControl("altura").setValue(this.turnoInput()?.altura ?? null);
+    this.getControl("peso").setValue(this.turnoInput()?.peso ?? null);
+    this.getControl("temperatura").setValue(this.turnoInput()?.temperatura ?? null);
+    this.getControl("presion").setValue(this.turnoInput()?.presion ?? null);
+
+
+
     console.log(this.formularioHC.value);
     console.log("datos din: ", this.datosDinamicos.length);
   }
@@ -47,8 +56,8 @@ export class HistorialMedico {
   }
 
   getControl(campo: string) {
-  return this.formularioHC.get(campo)!;
-}
+    return this.formularioHC.get(campo)!;
+  }
 
   agregarDatoDinamico(clave: string = "", valor: string = "") {
     this.datosDinamicos.push(this.crearDatoDinamico(clave, valor));
@@ -60,29 +69,31 @@ export class HistorialMedico {
 
   enviarFormulario() {
     this.formularioHC.markAllAsTouched();
-    if(this.formularioHC.valid){
-      let turnoRetorno = {...this.turnoInput()}
+    if (this.formularioHC.valid) {
+      let turnoRetorno = { ...this.turnoInput() }
       turnoRetorno.altura = this.formularioHC.get("altura")?.value;
       turnoRetorno.peso = this.formularioHC.get("peso")?.value;
       turnoRetorno.temperatura = this.formularioHC.get("temperatura")?.value;
       turnoRetorno.presion = this.formularioHC.get("presion")?.value;
-      
-      // for (let dato of this.datosDinamicos.controls)
-      //   turnoRetorno.datos_dinamicos?.push({clave: dato.clave, valor: dato.valor});
-      // });
+      turnoRetorno.datos_dinamicos = [];
+      for (let control of this.datosDinamicos.controls){
+        turnoRetorno.datos_dinamicos?.push({clave: control.get('clave')?.value, valor: control.get('valor')?.value});
+      }
+
       this.modificarHCEvent.emit(turnoRetorno);
-      console.log(this.formularioHC.value);
+      console.log("this.formularioHC.value ", this.formularioHC.value);
+      console.log("turnoRetorno ", turnoRetorno);
     } else {
       console.log("no es valido!");
     }
   }
 
-  emitirTurnoModificado(){
+  emitirTurnoModificado() {
 
   }
 
   initDatosDinamicos() {
-    if (this.turnoInput()?.datos_dinamicos != undefined) { 
+    if (this.turnoInput()?.datos_dinamicos != undefined) {
       if (this.turnoInput()!.datos_dinamicos!.length < this.maxDatosDinamicos) {
         this.turnoInput()!.datos_dinamicos!.push({ clave: '', valor: '' });
       }

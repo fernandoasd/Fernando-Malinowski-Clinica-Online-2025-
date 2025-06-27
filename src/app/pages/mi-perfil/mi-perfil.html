@@ -10,14 +10,19 @@
                 <span class="btn badge badge-lg bg-primary m-2" *ngFor="let item of usuario!.especialidades"
                     (click)="modificarEspecialidad($event)">{{ item
                     }}</span>
-
                 }
                 <p class="mb-1"><strong>Email:</strong> {{ usuario!.mail }}</p>
                 <p class="mb-1"><strong>Edad:</strong> {{ usuario!.edad }}</p>
                 <p class="mb-1"><strong>Documento:</strong> {{ usuario!.documento }}</p>
+                <button class="btn btn-primary">Descargar Historia Clinica</button>
             </div>
         </div>
     </div>
+
+    <div class="container mt-5 mb-5">
+        <h1>Historia clinica</h1>
+    </div>
+
     <ng-template #sinUsuario>
         <p class="text-center">Cargando...</p>
     </ng-template>

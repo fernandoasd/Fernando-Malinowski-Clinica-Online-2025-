@@ -31,15 +31,15 @@
           <a routerLink="registro" class="btn btn-outline-success"><strong> Registro </strong></a>
         </li>
         } @else {
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="us.usuarioActual?.perfil === perfil.Admin">
           <a routerLink="/usuarios" class="btn btn-outline-secondary">Usuarios</a>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="us.usuarioActual?.perfil === perfil.Admin || us.usuarioActual?.perfil === perfil.Paciente">
           <a routerLink="/solicitar-turno" class="btn btn-outline-secondary">Solicitar Turno</a>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="us.usuarioActual?.perfil === perfil.Paciente || us.usuarioActual?.perfil === perfil.Especialista">
           <a routerLink="/mis-turnos" class="btn btn-outline-secondary">Mis Turnos</a>
         </li>
 

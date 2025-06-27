@@ -140,9 +140,7 @@ export class TurnosEspecialista {
         }
       });
     }
-
-    console.log("HC modificado: ", turnoModif);
-    console.log("turnosDisponibles: ", this.turnosDisponibles);
+    this. cerrarHC();
   }
 
   cerrarHC() {
