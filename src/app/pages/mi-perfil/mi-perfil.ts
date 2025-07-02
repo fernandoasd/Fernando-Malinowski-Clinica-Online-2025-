@@ -2,15 +2,18 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { UsuarioService } from '../../services/UsuarioService';
 import { Disponibilidad, Especialista, Paciente, Turno, Usuario } from '../../interfaces/interfaces';
-import { DiaSemana, Perfil } from '../../enums/enums';
+import { Perfil } from '../../enums/enums';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { AlertService } from '../../services/alert-service';
+import jsPDF from 'jspdf';
+import { HistorialMedico } from '../../components/historial-medico/historial-medico';
+import { Titulo } from '../../components/titulo/titulo';
 
 
 @Component({
   selector: 'app-mi-perfil',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, HistorialMedico, Titulo],
   templateUrl: './mi-perfil.html',
   styleUrl: './mi-perfil.css'
 })
@@ -26,7 +29,6 @@ export class MiPerfil implements OnInit {
   miDisponibilidad: Disponibilidad[] = [];
   disponibilidadFiltrada: Disponibilidad = {};
   diasSemana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
-
   // disponibilidad = [
   //   { especialidad: 'Medico', dia_semana: 'lunes', horario_inicio: '08:00', horario_fin: '12:00' },
   //   { especialidad: 'Medico', dia_semana: 'martes', horario_inicio: '10:00', horario_fin: '14:00' },
@@ -88,13 +90,15 @@ export class MiPerfil implements OnInit {
         if (error == null && data?.length! > 0) {
           this.usuario = data![0];
           console.log("mi perfil: ", this.usuario);
+          this.us.traerHistoriaClinica(this.usuario.id_paciente!).then(({ data, error }) => {
+            if (error == null && data?.length! > 0) {
+              console.log("data: ", data);
+              this.historiaClinica = data!;
+            }
+          });
         }
       });
-      this.us.traerHistoriaClinica(this.us.usuarioActual?.id_usuario!).then(({data, error}) =>{
-        if (error == null && data?.length! > 0){
-          this.historiaClinica = data!;
-        }
-      })
+
     }
   }
 
@@ -269,8 +273,191 @@ export class MiPerfil implements OnInit {
 
   }
 
-  descargarHistoriaClinica(){
+  descargarHistoriaClinica() {
+    if (this.us.usuarioActual!.perfil === Perfil.Paciente) {
+      const doc = new jsPDF();
+      type RGB = [number, number, number];
 
+      const verde: RGB = [30, 170, 70];
+      const negro: RGB = [0, 0, 0];
+
+      // Encabezado
+      doc.setFillColor(255, 255, 255);
+      doc.rect(0, 0, 210, 30, 'F');
+      doc.setTextColor(...verde);
+      // doc.setFontSize(16);
+      // doc.text("HISTORIA CLÍNICA", 20, 20);
+      doc.addImage("logo.jpg", 'JPG', 160, 5, 40, 20);
+
+      // Título del documento
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...negro);
+      doc.setFontSize(20);
+      doc.text("HISTORIA CLÍNICA", 105, 50, { align: "center" });
+      doc.setFontSize(16);
+      doc.text(`Paciente: ${this.us.usuarioActual!.nombre} ${this.us.usuarioActual!.apellido}`, 105, 60, { align: "center" });
+
+      const fechaCreacion = new Date();
+      const fechaFormateada = `${fechaCreacion.getDate()}/${fechaCreacion.getMonth() + 1}/${fechaCreacion.getFullYear()}`;
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      let yPosition = 80;
+
+      // Procesar cada turno
+      this.historiaClinica.forEach(turno => {
+        // Filtrar solo los turnos con historia clínica
+        if (turno && turno.temperatura! > 0) {
+          const fechaTurno = new Date(turno.fecha_turno!);
+          const fechaTurnoFormateada = turno.fecha_turno
+            ? `${fechaTurno.getDate()}/${fechaTurno.getMonth() + 1}/${fechaTurno.getFullYear()}`
+            : 'Fecha no disponible';
+
+          // Agregar fecha del turno
+          doc.setFont('helvetica', 'bold');
+          doc.setTextColor(...negro);
+          doc.text(`FECHA DEL TURNO: ${fechaTurnoFormateada}`, 20, yPosition);
+          yPosition += 10;
+
+          // Agregar datos en formato "Clave: valor" con colores diferenciados
+          Object.entries(turno).forEach(([clave, valor]: [string, any]) => {
+            if (clave !== 'horario_turno' && clave !== 'fecha_turno' && clave !== 'datos_dinamicos') {
+
+              const formattedKey = clave.charAt(0).toUpperCase() + clave.slice(1);
+
+              let valueWithUnit = `${valor}`;
+              switch (clave) {
+                case 'altura':
+                  valueWithUnit = `${valor} cm`;
+                  break;
+                case 'peso':
+                  valueWithUnit = `${valor} kg`;
+                  break;
+                case 'temperatura':
+                  valueWithUnit = `${valor} °C`;
+                  break;
+                case 'presion':
+                  valueWithUnit = `${valor} mmHg`;
+                  break;
+                default:
+                  break;
+              }
+
+              if (clave == "resenia" && turno.resenia) {
+                doc.setFont('helvetica', 'bold');
+                doc.text("Reseña médica: ", 20, yPosition);
+                yPosition += 7;
+                Object.entries(turno.resenia!).forEach(([clave, valor]: [string, any]) => {
+                  const formattedKey = clave.charAt(0).toUpperCase() + clave.slice(1);
+                  let valueWithUnit = `${valor}`;
+
+                  // Clave en verde
+                  doc.setFont('helvetica', 'bold');
+                  doc.setTextColor(...verde);
+                  doc.text(`- ${formattedKey}:`, 20, yPosition);
+
+                  // Calcular el espacio para el valor y evitar superposición
+                  const keyWidth = doc.getTextWidth(`- ${formattedKey}:`);
+                  const valuePosX = 20 + keyWidth + 2;  // Espacio para el valor
+
+                  // Verificar si el valor cabe en la línea
+                  const pageWidth = doc.internal.pageSize.width - 20;
+                  if (valuePosX > pageWidth) {
+                    // Si no cabe, saltamos a la siguiente línea
+                    yPosition += 7;
+                    doc.text(`${valueWithUnit}`, 20, yPosition);
+                  } else {
+                    // Si cabe, colocamos el valor en la misma línea
+                    doc.setFont('helvetica', 'normal');
+                    doc.setTextColor(...negro);
+                    doc.text(`${valueWithUnit}`, valuePosX, yPosition);
+                  }
+
+                  yPosition += 7; // Incrementar para la siguiente línea
+
+                });
+              } else {
+                // Clave en verde
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(...verde);
+                doc.text(`- ${formattedKey}:`, 20, yPosition);
+
+                // Calcular el espacio para el valor y evitar superposición
+                const keyWidth = doc.getTextWidth(`- ${formattedKey}:`);
+                const valuePosX = 20 + keyWidth + 2;  // Espacio para el valor
+
+                // Verificar si el valor cabe en la línea
+                const pageWidth = doc.internal.pageSize.width - 20;
+                if (valuePosX > pageWidth) {
+                  // Si no cabe, saltamos a la siguiente línea
+                  yPosition += 7;
+                  doc.text(`${valueWithUnit}`, 20, yPosition);
+                } else {
+                  // Si cabe, colocamos el valor en la misma línea
+                  doc.setFont('helvetica', 'normal');
+                  doc.setTextColor(...negro);
+                  doc.text(`${valueWithUnit}`, valuePosX, yPosition);
+                }
+
+                yPosition += 7; // Incrementar para la siguiente línea
+              }
+
+            }
+          });
+
+          // Agregar datos dinámicos
+          if (turno.datos_dinamicos) {
+            doc.setFont('helvetica', 'bold');
+            doc.text("Datos dinámicos: ", 20, yPosition);
+            yPosition += 7;
+
+            turno.datos_dinamicos.forEach((item: any) => {
+              const formattedKey = item.clave.charAt(0).toUpperCase() + item.clave.slice(1);
+
+              // Clave en verde
+              doc.setFont('helvetica', 'bold');
+              doc.setTextColor(...verde);
+              doc.text(`- ${formattedKey}:`, 20, yPosition);
+
+              // Calcular el espacio para el valor y evitar superposición
+              const keyWidth = doc.getTextWidth(`- ${formattedKey}:`);
+              const valuePosX = 20 + keyWidth + 2;  // Espacio para el valor
+
+              // Verificar si el valor cabe en la línea
+              const pageWidth = doc.internal.pageSize.width - 20;
+              if (valuePosX > pageWidth) {
+                // Si no cabe, saltamos a la siguiente línea
+                yPosition += 7;
+                doc.text(`${item.valor}`, 20, yPosition);
+              } else {
+                // Si cabe, colocamos el valor en la misma línea
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(...negro);
+                doc.text(`${item.valor}`, valuePosX, yPosition);
+              }
+
+              yPosition += 7; // Incrementar para la siguiente línea
+            });
+          }
+
+          yPosition += 10;
+        }
+      });
+
+      // Pie de página
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(...negro);
+      doc.text(`Fecha de generación del PDF: ${fechaFormateada}`, 20, 290);
+
+      // Descargar PDF
+      doc.save('historia_clinica.pdf');
+    } else {
+      console.error('El paciente no tiene historia clínica o no es un paciente.');
+    }
+  }
+
+  modificarHC(t: Turno){
+    console.log("Modificar Turno:", t);
   }
 
 

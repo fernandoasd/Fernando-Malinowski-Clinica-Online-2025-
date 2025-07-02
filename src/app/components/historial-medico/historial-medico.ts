@@ -11,6 +11,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFo
 })
 export class HistorialMedico {
   turnoInput = input<Turno>();
+  puedeEditarInput = input<boolean>(false);
   modificarHCEvent = output<Turno>();
   private formBuilder = inject(FormBuilder);
   maxDatosDinamicos = 3;

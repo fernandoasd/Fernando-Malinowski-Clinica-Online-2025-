@@ -4,10 +4,10 @@ import { AuthService } from '../../services/AuthService';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { Usuario } from '../../models/usuario';
 import { Perfil } from '../../enums/enums';
 import { FabButton } from '../../components/fab-button/fab-button';
 import { Router, RouterLink } from '@angular/router';
+import { Usuario } from '../../interfaces/interfaces';
 
 @Component({
   selector: 'app-login',

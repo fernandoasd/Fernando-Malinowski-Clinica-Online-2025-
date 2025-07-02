@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, output, signal } from '@angular/core';
 import { UsuarioService } from '../../services/UsuarioService';
-import { Usuario } from '../../models/usuario';
+import { Usuario } from '../../interfaces/interfaces';
+
 
 @Component({
   selector: 'app-fab-button',

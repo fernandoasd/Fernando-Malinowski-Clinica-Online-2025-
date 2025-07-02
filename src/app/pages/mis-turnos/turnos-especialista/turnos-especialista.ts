@@ -6,10 +6,11 @@ import { EstadoTurno } from '../../../enums/enums';
 import { AlertService } from '../../../services/alert-service';
 import Swal from 'sweetalert2';
 import { HistorialMedico } from '../../../components/historial-medico/historial-medico';
+import { Titulo } from '../../../components/titulo/titulo';
 
 @Component({
   selector: 'app-turnos-especialista',
-  imports: [CommonModule, HistorialMedico],
+  imports: [CommonModule, HistorialMedico, Titulo],
   templateUrl: './turnos-especialista.html',
   styleUrl: './turnos-especialista.css'
 })

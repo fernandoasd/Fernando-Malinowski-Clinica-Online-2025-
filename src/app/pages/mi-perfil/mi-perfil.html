@@ -1,11 +1,13 @@
 <div class="d-flex flex-column">
     <div class="container mt-5 mb-5" *ngIf="usuario != null; else sinUsuario">
-        <div class="card shadow rounded-4 border-0 mx-auto bg-dark bg-opacity-75 mt-5" style="max-width: 500px;">
+        <div class="card shadow rounded-4 mx-auto bg-dark bg-opacity-75 mt-5" style="max-width: 500px;">
             <div class="card-body text-center text-light">
                 <p class="mb-1"><strong>Perfil: {{usuario!.perfil}}</strong></p>
                 <img [src]="usuario!.imagen_uno" class="rounded-circle mb-3" width="120" height="120"
                     alt="Foto de perfil" />
-                <h4 class="card-title mb-1"> {{ usuario!.nombre }} {{ usuario!.apellido }}</h4>
+          <app-titulo [tituloInput]="usuario!.nombre + ' ' + usuario!.apellido "></app-titulo>
+
+                <!-- <h4 class="card-title mb-1"> {{ usuario!.nombre }} {{ usuario!.apellido }}</h4> -->
                 @if ( usuario!.perfil == "especialista"){
                 <span class="btn badge badge-lg bg-primary m-2" *ngFor="let item of usuario!.especialidades"
                     (click)="modificarEspecialidad($event)">{{ item
@@ -14,13 +16,18 @@
                 <p class="mb-1"><strong>Email:</strong> {{ usuario!.mail }}</p>
                 <p class="mb-1"><strong>Edad:</strong> {{ usuario!.edad }}</p>
                 <p class="mb-1"><strong>Documento:</strong> {{ usuario!.documento }}</p>
-                <button class="btn btn-primary">Descargar Historia Clinica</button>
             </div>
         </div>
     </div>
 
-    <div class="container mt-5 mb-5">
-        <h1>Historia clinica</h1>
+    <div class="container mt-5 mb-5 bg-dark bg-opacity-50 border border rounded-4 text-center" *ngIf="usuario.perfil == 'paciente'">
+        <app-titulo [tituloInput]="'Historial Médico'"></app-titulo>
+        <button class="btn btn-success" (click)="descargarHistoriaClinica()">Descargar HC en PDF</button>
+        <div class="" *ngFor="let turno of historiaClinica">
+            <app-titulo [tituloInput]="'-Fecha: ' + turno.fecha_turno"></app-titulo>
+            <app-historial-medico [turnoInput]="turno" [puedeEditarInput]="false" 
+            (modificarHCEvent)="modificarHC($event)" class="mb-1"></app-historial-medico>
+        </div>
     </div>
 
     <ng-template #sinUsuario>

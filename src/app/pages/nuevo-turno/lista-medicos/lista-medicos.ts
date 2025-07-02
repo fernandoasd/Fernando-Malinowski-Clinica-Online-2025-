@@ -4,11 +4,12 @@ import { Disponibilidad } from '../../../interfaces/interfaces';
 import { CommonModule } from '@angular/common';
 import { Especialista } from '../../../interfaces/interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Titulo } from '../../../components/titulo/titulo';
 
 
 @Component({
   selector: 'app-crear-turno',
-  imports: [CommonModule],
+  imports: [CommonModule, Titulo],
   templateUrl: './lista-medicos.html',
   styleUrl: './lista-medicos.css'
 })
