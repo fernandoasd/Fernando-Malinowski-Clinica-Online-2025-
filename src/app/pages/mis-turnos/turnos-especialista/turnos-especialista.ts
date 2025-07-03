@@ -9,10 +9,11 @@ import { HistorialMedico } from '../../../components/historial-medico/historial-
 import { Titulo } from '../../../components/titulo/titulo';
 import { FormsModule } from '@angular/forms';
 import { TurnosPipe } from '../../../pipes/turnos-pipe';
+import { LetrasMayusculasPipe } from '../../../pipes/letras-mayusculas-pipe';
 
 @Component({
   selector: 'app-turnos-especialista',
-  imports: [CommonModule, HistorialMedico, Titulo, TurnosPipe, FormsModule],
+  imports: [CommonModule, HistorialMedico, Titulo, TurnosPipe, FormsModule, LetrasMayusculasPipe],
   templateUrl: './turnos-especialista.html',
   styleUrl: './turnos-especialista.css'
 })

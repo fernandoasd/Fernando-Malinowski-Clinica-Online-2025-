@@ -3,20 +3,20 @@
     <div class="bg-dark border border-dark rounded-4 bg-opacity-50">
         <form class="d-flex flex-row justify-content-center " [formGroup]="formularioHC">
             <div class="text-center p-2 border border rounded-4 p-2 mt-2">
-                <p><strong><label for="altura">Altura</label></strong></p>
-                <p><input id="altura" formControlName="altura" placeholder="0" [readOnly]="!puedeEditarInput()"></p>
+                <p><strong><label for="altura">Altura {{"" | unidadesHc : "altura"}}</label></strong></p>
+                <p><input id="altura" formControlName="altura" placeholder="0 | unidadesHc : 'altura'" [readOnly]="!puedeEditarInput()"></p>
                 <small class="text-error"
                     *ngIf="getControl('altura').errors?.['required'] && getControl('altura').touched">
                     La altura es obligatoria.
                 </small>
 
-                <p><strong><label for="peso">Peso</label></strong></p>
+                <p><strong><label for="peso">Peso {{"" | unidadesHc : "peso"}}</label></strong></p>
                 <p><input id="peso" formControlName="peso" placeholder="0" [readOnly]="!puedeEditarInput()"></p>
                 <small class="text-error" *ngIf="getControl('peso').errors?.['required'] && getControl('peso').touched">
                     El peso es obligatorio.
                 </small>
 
-                <p><strong><label for="temperatura">Temperatura</label></strong></p>
+                <p><strong><label for="temperatura">Temperatura {{"" | unidadesHc : "temperatura"}}</label></strong></p>
                 <p><input id="temperatura" formControlName="temperatura" placeholder="0"
                         [readOnly]="!puedeEditarInput()"></p>
                 <small class="text-error"
@@ -24,7 +24,7 @@
                     la temperatura es obligatoria.
                 </small>
 
-                <p><strong><label for="presion">Presion</label></strong></p>
+                <p><strong><label for="presion">Presion {{"" | unidadesHc : "Presion"}}</label></strong></p>
                 <p><input id="presion" formControlName="presion" placeholder="0" [readOnly]="!puedeEditarInput()"></p>
                 <small class="text-error"
                     *ngIf="getControl('presion').errors?.['required'] && getControl('presion').touched">

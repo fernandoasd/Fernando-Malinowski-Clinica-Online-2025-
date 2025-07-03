@@ -9,11 +9,12 @@ import { AlertService } from '../../services/alert-service';
 import jsPDF from 'jspdf';
 import { HistorialMedico } from '../../components/historial-medico/historial-medico';
 import { Titulo } from '../../components/titulo/titulo';
+import { LetrasMayusculasPipe } from '../../pipes/letras-mayusculas-pipe';
 
 
 @Component({
   selector: 'app-mi-perfil',
-  imports: [CommonModule, ReactiveFormsModule, HistorialMedico, Titulo],
+  imports: [CommonModule, ReactiveFormsModule, HistorialMedico, Titulo, LetrasMayusculasPipe],
   templateUrl: './mi-perfil.html',
   styleUrl: './mi-perfil.css'
 })

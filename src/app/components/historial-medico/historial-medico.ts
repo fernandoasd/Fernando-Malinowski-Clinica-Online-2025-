@@ -3,10 +3,11 @@ import { Component, inject, input, output } from '@angular/core';
 import { Turno } from '../../interfaces/interfaces';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Titulo } from '../titulo/titulo';
+import { UnidadesHcPipe } from '../../pipes/unidades-hc-pipe';
 
 @Component({
   selector: 'app-historial-medico',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, Titulo],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, Titulo, UnidadesHcPipe],
   templateUrl: './historial-medico.html',
   styleUrl: './historial-medico.css'
 })
@@ -19,7 +20,7 @@ export class HistorialMedico {
 
 
   formularioHC = this.formBuilder.group({
-    altura: [this.turnoInput()?.altura ?? 0, [Validators.required]],
+    altura: [this.turnoInput()?.altura  ?? 0, [Validators.required]],
     peso: [this.turnoInput()?.peso ?? 0, [Validators.required]],
     temperatura: [this.turnoInput()?.temperatura ?? 0, [Validators.required]],
     presion: [this.turnoInput()?.presion ?? 0, [Validators.required]],

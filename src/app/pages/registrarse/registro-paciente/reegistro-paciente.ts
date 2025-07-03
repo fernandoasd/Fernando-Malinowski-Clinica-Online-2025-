@@ -233,8 +233,8 @@ export class ReegistroPaciente {
       let nuevoUsuario: Usuario = {
         mail: this.mail.toLowerCase(),
         contrasenia: this.contrasenia,
-        nombre: this.nombre,
-        apellido: this.apellido,
+        nombre: this.nombre.toLowerCase(),
+        apellido: this.apellido.toLowerCase(),
         edad: this.edad,
         documento: this.dni,
         perfil: perfil,
