@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UsuarioService } from '../../../services/UsuarioService';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Disponibilidad, Especialista, Paciente, Turno } from '../../../interfaces/interfaces';
 import { DiaSemana, EstadoTurno } from '../../../enums/enums';
 import Swal from 'sweetalert2';

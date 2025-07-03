@@ -1,4 +1,4 @@
-img {
+/* img {
   height: 10rem;
   object-fit: cover;
 }
@@ -9,4 +9,18 @@ img {
 
 .btn:hover{
  transform: scale(1.1);
+} */
+
+.boton-img {
+    width: 15rem; 
+    height: 15rem; 
+    padding: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.boton-img:hover {
+    transform: scale(1.1);
+    transition: transform 300ms ease;
 }
