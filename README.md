@@ -1,13 +1,44 @@
+# Clinica Online
 
-# Pagina de Bienvenida
+## Descripcion general 
+Proyecto que representa un portal de turnos medicos digitl.
+# Deploy: 
+
+[Clinica Online](https://fernando-malinowski-clinica-online-2025-fmalinowskis-projects.vercel.app/home
+)
+
+### pagina de Bienvenida
+Posee accesos directos a las secciones:
+-**login**: inicio de sesion.
+-**registro**: crear cuenta.
+-**solicitar turno**: si esta logueado solicita turno o en caso contrario redirige al login.
+
+![Home](./public/readme/home.png)
+
+### Registro
+Le pregunta al usuario si quere registrarse como:
+-**paciente**: debe completar un captcha y cargar dos imagenes.
+-**especialista**: tiene que cargar al menos una especialidad.
+
+![registro-paciente](./public/readme/registro-pac.png)
+![registro-especialista](./public/readme/registro-esp.png)
+
+### Login
+En esta seccion permite al usuario registrarse. Tambien hay un boton de acceso rapido.
+![login](./public/readme/login.png)
+
+### LoMi perfil
+![mi-perfil](./public/readme/login.png)
 
 
 
-
-
-# Clinica 
-
-# Deploy: https://fernando-malinowski-clinica-online-2025-fmalinowskis-projects.vercel.app/home
+### Seccion Usuarios
+Seccion disponible solo para usuarios de perfil administrador: 
+-**Lista de usuarios**: se peuden ver todos los usuarios con sus datos y tambien se puede habilitar o deshabilitar usuarios especialista.
+-**Registrar paciente**: permite dar de alta un paciente.
+-**Registrar Especialista**: permite dar de alta un especialista.
+-**Registrar admin**: permite dar de alta un administrador.
+-**datos de usuarios**: permite descargar un excel con los datos de los usuarios.
 
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.1.

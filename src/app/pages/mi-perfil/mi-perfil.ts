@@ -71,34 +71,37 @@ export class MiPerfil implements OnInit {
   }
 
   ngOnInit() {
-    if (this.us.usuarioActual!.perfil === Perfil.Especialista) {
-      this.us.traerEspecialistaUsuarioId(this.us.usuarioActual!.id_usuario!).then(({ data, error }) => {
-        if (error == null && data?.length! > 0) {
-          this.usuario = data![0];
-          console.log("this.usuario", this.usuario);
-          this.us.traerDisponibilidad(this.usuario.id_especialista).then(({ data, error }) => {
-            if (error == null && data?.length! > 0) {
-              this.miDisponibilidad = data!;
-              console.log("this.miDisponibilidad", this.miDisponibilidad);
-            }
-          })
-        }
-      })
+    if (this.us.usuarioActual !== null) {
 
-    } else if (this.us.usuarioActual!.perfil === Perfil.Paciente) {
-      this.us.traerPacienteUsuarioId(this.us.usuarioActual!.id_usuario!).then(({ data, error }) => {
-        if (error == null && data?.length! > 0) {
-          this.usuario = data![0];
-          console.log("mi perfil: ", this.usuario);
-          this.us.traerHistoriaClinica(this.usuario.id_paciente!).then(({ data, error }) => {
-            if (error == null && data?.length! > 0) {
-              console.log("data: ", data);
-              this.historiaClinica = data!;
-            }
-          });
-        }
-      });
+      if (this.us.usuarioActual!.perfil === Perfil.Especialista) {
+        this.us.traerEspecialistaUsuarioId(this.us.usuarioActual!.id_usuario!).then(({ data, error }) => {
+          if (error == null && data?.length! > 0) {
+            this.usuario = data![0];
+            console.log("this.usuario", this.usuario);
+            this.us.traerDisponibilidad(this.usuario.id_especialista).then(({ data, error }) => {
+              if (error == null && data?.length! > 0) {
+                this.miDisponibilidad = data!;
+                console.log("this.miDisponibilidad", this.miDisponibilidad);
+              }
+            })
+          }
+        })
 
+      } else if (this.us.usuarioActual!.perfil === Perfil.Paciente) {
+        this.us.traerPacienteUsuarioId(this.us.usuarioActual!.id_usuario!).then(({ data, error }) => {
+          if (error == null && data?.length! > 0) {
+            this.usuario = data![0];
+            console.log("mi perfil: ", this.usuario);
+            this.us.traerHistoriaClinica(this.usuario.id_paciente!).then(({ data, error }) => {
+              if (error == null && data?.length! > 0) {
+                console.log("data: ", data);
+                this.historiaClinica = data!;
+              }
+            });
+          }
+        });
+
+      }
     }
   }
 

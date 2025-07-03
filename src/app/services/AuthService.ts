@@ -17,7 +17,6 @@ export class AuthService {
   usuarioActual: User | null = null;
   nombre: string = "";
 
-
   constructor() {
     //saber si el usuario esta logueado o no
     this.supabaseService.supabase.auth.onAuthStateChange((event, session) => {
@@ -27,7 +26,8 @@ export class AuthService {
         // this.router.navigateByUrl("/login");
       } else { //si inicia sesion
         this.usuarioActual = session.user;
-        this.usuarioService.cargarUsuarioMail(this.usuarioActual.email!).then();
+          console.log("inicio sesion! (constructor)");
+        this.usuarioService.cargarUsuarioMail(this.usuarioActual.email!);
       }
       // this.router.navigateByUrl("/home");
     });
@@ -52,9 +52,10 @@ export class AuthService {
       });
       console.log("aunth, iniciar sesion:", data, error);
       if (error) throw error;
-      this.nombre = correo.split('@')[0];;
+      this.nombre = correo.split('@')[0];
       this.usuarioService.cargarUsuarioMail(data.user?.email!).then((data) =>{
         if (data!.length > 0){
+          console.log("inicio sesion!");
           this.usuarioService.cargarIngreso((data![0] as Usuario).id_usuario!);
         }
       });

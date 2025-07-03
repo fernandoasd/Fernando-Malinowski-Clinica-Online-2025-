@@ -101,7 +101,7 @@ export class UsuarioService {
     if (error) {
       console.log(error)
     }
-    this.usuarioActual = data![0];
+    this.usuarioActual = (data![0]) as Usuario;
     console.log("Usuario actual:", this.usuarioActual);
     return data;
   }
