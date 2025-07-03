@@ -1,5 +1,11 @@
-<h3 class="bg-dark bg-opacity-75 text-center"> Mis turnos (Paciente)
-    <strong> {{this.paciente.nombre}} {{this.paciente.apellido}}</strong>.</h3>
+<h1 class="bg-dark bg-opacity-50 text-center border rounded-4 m-1 p-1"> Mis turnos (Paciente)
+    <strong> {{this.paciente.nombre}} {{this.paciente.apellido}}</strong>.
+</h1>
+
+<div class="mb-3 bg-dark bg-opacity-50 border rounded-4 m-1 p-3">
+    <label for="nombre" class="form-label fs-3">Filtro: </label>
+    <input type="text" class="form-control" id="nombre" placeholder="Filtrar por dato del turno..." [(ngModel)]="filtro">
+</div>
 
 <div class="tabla">
     <div class="tabla-scroll">
@@ -19,8 +25,9 @@
             </thead>
             <tbody>
 
-
-                <tr *ngFor="let turno of turnosDisponibles">
+                <tr
+                    *ngFor="let turno of turnosDisponibles | turnosPipe: filtro : ['especialidad', 'especialistas', 'pacientes',
+                'fecha_turno', 'horario_turno', 'estado', 'altura', 'peso', 'temperatura', 'presion', 'datos_dinamicos']">
                     <td>{{ turno.especialistas.nombre}} {{ turno.especialistas.apellido}}</td>
                     <td>{{ turno.especialidad }}</td>
                     <td>{{ turno.fecha_turno }}</td>
@@ -28,7 +35,7 @@
                     <td>{{ turno.estado }}</td>
 
                     @if(turno.estado == "Cancelado") {
-                    <td >Ya cancelado</td>
+                    <td>Ya cancelado</td>
                     }
                     @else if (turno.estado == "Pendiente" || turno.estado == "Aceptado") {
                     <td>
@@ -45,33 +52,35 @@
                     </td>
                     }
                     @else {
-                    <td >No disponible</td>
+                    <td>No disponible</td>
                     }
 
                     @if(turno.encuesta)
                     {
-                    <td >Ya completada</td>
+                    <td>Ya completada</td>
                     }
                     @else if (turno.estado == "Finalizado" && turno.resenia) {
                     <td>
-                        <button class="btn btn-lg btn-primary bi bi-bookmark-check" (click)="completarEncuesta(turno)"></button>
+                        <button class="btn btn-lg btn-primary bi bi-bookmark-check"
+                            (click)="completarEncuesta(turno)"></button>
                     </td>
                     }
                     @else {
-                    <td >No disponible</td>
+                    <td>No disponible</td>
                     }
 
                     @if(turno.calificacion)
                     {
-                    <td >Ya calificado</td>
+                    <td>Ya calificado</td>
                     }
                     @else if (turno.estado == "Finalizado") {
-                    <td >
-                        <button class="btn btn-lg btn-success bi bi-building-fill-up" (click)="calificarAtencion(turno)"></button>
+                    <td>
+                        <button class="btn btn-lg btn-success bi bi-building-fill-up"
+                            (click)="calificarAtencion(turno)"></button>
                     </td>
                     }
                     @else {
-                    <td >No disponible</td>
+                    <td>No disponible</td>
                     }
                 </tr>
             </tbody>

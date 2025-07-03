@@ -4,6 +4,7 @@ import { AuthError, User } from '@supabase/supabase-js';
 import { UsuarioService } from './UsuarioService';
 import { SupabaseService } from './SupabaseService';
 import Swal from 'sweetalert2';
+import { Usuario } from '../interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +53,11 @@ export class AuthService {
       console.log("aunth, iniciar sesion:", data, error);
       if (error) throw error;
       this.nombre = correo.split('@')[0];;
-      this.usuarioService.cargarUsuarioMail(data.user?.email!);
+      this.usuarioService.cargarUsuarioMail(data.user?.email!).then((data) =>{
+        if (data!.length > 0){
+          this.usuarioService.cargarIngreso((data![0] as Usuario).id_usuario!);
+        }
+      });
       return { data, error };
     } catch (er: any) {
       let error = "";

@@ -7,10 +7,12 @@ import { AlertService } from '../../../services/alert-service';
 import Swal from 'sweetalert2';
 import { HistorialMedico } from '../../../components/historial-medico/historial-medico';
 import { Titulo } from '../../../components/titulo/titulo';
+import { FormsModule } from '@angular/forms';
+import { TurnosPipe } from '../../../pipes/turnos-pipe';
 
 @Component({
   selector: 'app-turnos-especialista',
-  imports: [CommonModule, HistorialMedico, Titulo],
+  imports: [CommonModule, HistorialMedico, Titulo, TurnosPipe, FormsModule],
   templateUrl: './turnos-especialista.html',
   styleUrl: './turnos-especialista.css'
 })
@@ -23,6 +25,7 @@ export class TurnosEspecialista {
   turnoHistoriaClinica: Turno = {};
   us = inject(UsuarioService);
   alert = inject(AlertService);
+  filtro: string = "";
 
   constructor() { }
 

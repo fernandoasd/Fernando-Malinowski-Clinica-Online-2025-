@@ -6,6 +6,13 @@
     <app-titulo [tituloInput]="'Historial Médico'"></app-titulo>
     <app-historial-medico [turnoInput]="turnoHistoriaClinica" [puedeEditarInput]="true" (modificarHCEvent)="modificarHC($event)"></app-historial-medico>
 </div>
+
+<div class="mb-3 bg-dark bg-opacity-50 border rounded-4 m-1 p-3">
+    <label for="nombre" class="form-label fs-3">Filtro: </label>
+    <input type="text" class="form-control" id="nombre" placeholder="Filtrar por dato del turno..." [(ngModel)]="filtro">
+</div>
+
+
 <div class="container p-1 mt-3 text-center bg-dark rounded-4">
     <table class="table table-dark table-striped">
         <thead>
@@ -24,7 +31,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let turno  of turnosDisponibles">
+            <tr *ngFor="let turno  of turnosDisponibles | turnosPipe: filtro : ['especialidad', 'especialistas', 'pacientes',
+                'fecha_turno', 'horario_turno', 'estado', 'altura', 'peso', 'temperatura', 'presion', 'datos_dinamicos']">
                 <td> {{turno.pacientes.nombre}} {{turno.pacientes.apellido}}</td>
                 <td>{{ turno.fecha_turno }}</td>
                 <td>{{ turno.horario_turno }}</td>

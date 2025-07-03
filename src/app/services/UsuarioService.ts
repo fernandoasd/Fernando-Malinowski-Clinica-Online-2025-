@@ -229,7 +229,24 @@ export class UsuarioService {
   async traerHistoriaClinica(id_paciente: number) {
     const { data, error } = await this.db.supabase.from("turnos").select("fecha_turno, horario_turno, altura, peso, temperatura, presion, datos_dinamicos, resenia").eq("id_paciente", id_paciente).eq("estado", "Finalizado");
     if (error) {
-      console.log(error)
+      console.log(error);
+    }
+    return { data, error };
+  }
+
+  async cargarIngreso(id_usuario: number) {
+    const { error } = await this.db.supabase.from("ingresos").insert({ id_usuario: id_usuario });
+    if (error) {
+      console.log(error);
+    }
+    console.log("Nuevo Ingreso, usuario: ", id_usuario);
+    return { error };
+  }
+
+  async traerIngresos() {
+    const { data, error } = await this.db.supabase.from("ingresos").select("*");
+    if (error) {
+      console.log(error);
     }
     return { data, error };
   }

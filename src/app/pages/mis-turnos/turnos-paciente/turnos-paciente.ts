@@ -4,10 +4,12 @@ import { UsuarioService } from '../../../services/UsuarioService';
 import { CommonModule } from '@angular/common';
 import { AlertService } from '../../../services/alert-service';
 import { EstadoTurno } from '../../../enums/enums';
+import { TurnosPipe } from '../../../pipes/turnos-pipe';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-turnos-paciente',
-  imports: [CommonModule],
+  imports: [CommonModule, TurnosPipe, FormsModule],
   templateUrl: './turnos-paciente.html',
   styleUrl: './turnos-paciente.css'
 })
@@ -19,6 +21,7 @@ export class TurnosPaciente {
   paciente: Paciente = {};
   us = inject(UsuarioService);
   alert = inject(AlertService);
+  filtro: string = "";
 
 
   constructor() { }
