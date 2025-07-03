@@ -34,7 +34,7 @@
     </div>
 
 
-    <div class="container" *ngIf="espSelect != ''">
+    <div class="container bg-dark bg-opacity-75 mt-4 mb-4 p-3 border rounded-4 text-center" style="width: 50vw;" *ngIf="espSelect != ''">
         <h3>Editar especialidad: <strong>{{espSelect}}</strong></h3>
         <!-- <div class="container mt-4" *ngIf="usuario.perfil == 'especialista'"> -->
         <form [formGroup]="form" (ngSubmit)="guardarDisponibilidad()">

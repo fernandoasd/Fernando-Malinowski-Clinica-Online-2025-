@@ -28,8 +28,16 @@ En esta seccion permite al usuario registrarse. Tambien hay un boton de acceso r
 ![login](./public/readme/login.png)
 
 ### LoMi perfil
-![mi-perfil](./public/readme/login.png)
+Desde esta seccion el usuario puede consultar sus datos dependiendo de su perfil:
+-**perfil especialista**: Aparecen sus especialidades y si se hacen click en ellas se peuden editar
 
+![perfil-medico](./public/readme/perfil-medico.png)
+![disponibilidad](./public/readme/editar-disponibilidad.png)
+
+-**perfil paciente**: Puede visualizar sus datos y su historia clinica (HC), com opcion de descargarla en formato pdf.
+![perfil-paciente](./public/readme/perfil-paciente.png)
+HC en formato pdf de ejemplo:
+![disponibilidad](./public/readme/hc-pdf.png)
 
 
 ### Seccion Usuarios
