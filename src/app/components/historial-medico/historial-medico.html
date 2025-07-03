@@ -1,60 +1,79 @@
-<div class="bg-dark border border-dark rounded-4 bg-opacity-50">
-    <form class="d-flex flex-row justify-content-center " [formGroup]="formularioHC">
-        <div class="text-center p-2">
-            <p><strong><label for="altura">Altura</label></strong></p>
-            <p><input id="altura" formControlName="altura" placeholder="0" [readOnly]="!puedeEditarInput()"></p>
-            <small class="text-error" *ngIf="getControl('altura').errors?.['required'] && getControl('altura').touched">
-                La altura es obligatoria.
-            </small>
+<div class="container mt-1 mb-5 p-3 bg-dark bg-opacity-50 border rounded-4 text-center">
+    <app-titulo [tituloInput]="'📅 Fecha: ' + turnoInput()!.fecha_turno" [classInput]="'text-start'"></app-titulo>
+    <div class="bg-dark border border-dark rounded-4 bg-opacity-50">
+        <form class="d-flex flex-row justify-content-center " [formGroup]="formularioHC">
+            <div class="text-center p-2 border border rounded-4 p-2 mt-2">
+                <p><strong><label for="altura">Altura</label></strong></p>
+                <p><input id="altura" formControlName="altura" placeholder="0" [readOnly]="!puedeEditarInput()"></p>
+                <small class="text-error"
+                    *ngIf="getControl('altura').errors?.['required'] && getControl('altura').touched">
+                    La altura es obligatoria.
+                </small>
 
-            <p><strong><label for="peso">Peso</label></strong></p>
-            <p><input id="peso" formControlName="peso" placeholder="0" [readOnly]="!puedeEditarInput()"></p>
-            <small class="text-error" *ngIf="getControl('peso').errors?.['required'] && getControl('peso').touched">
-                El peso es obligatorio.
-            </small>
+                <p><strong><label for="peso">Peso</label></strong></p>
+                <p><input id="peso" formControlName="peso" placeholder="0" [readOnly]="!puedeEditarInput()"></p>
+                <small class="text-error" *ngIf="getControl('peso').errors?.['required'] && getControl('peso').touched">
+                    El peso es obligatorio.
+                </small>
 
-            <p><strong><label for="temperatura">Temperatura</label></strong></p>
-            <p><input id="temperatura" formControlName="temperatura" placeholder="0" [readOnly]="!puedeEditarInput()"></p>
-            <small class="text-error"
-                *ngIf="getControl('temperatura').errors?.['required'] && getControl('temperatura').touched">
-                la temperatura es obligatoria.
-            </small>
+                <p><strong><label for="temperatura">Temperatura</label></strong></p>
+                <p><input id="temperatura" formControlName="temperatura" placeholder="0"
+                        [readOnly]="!puedeEditarInput()"></p>
+                <small class="text-error"
+                    *ngIf="getControl('temperatura').errors?.['required'] && getControl('temperatura').touched">
+                    la temperatura es obligatoria.
+                </small>
 
-            <p><strong><label for="presion">Presion</label></strong></p>
-            <p><input id="presion" formControlName="presion" placeholder="0" [readOnly]="!puedeEditarInput()"></p>
-            <small class="text-error"
-                *ngIf="getControl('presion').errors?.['required'] && getControl('presion').touched">
-                la presion es obligatoria.
-            </small>
-
-        </div>
-        <div class="text-center p-2 m-1">
-            <div formArrayName="datosDinamicos">
-                <div *ngFor="let control of datosDinamicos.controls; let i = index" [formGroupName]="i">
-                    <h3>Dato dinámico {{ i + 1 }}</h3>
-                    <div class="text-center p-2 m-1">
-                        <label class="me-3">Clave:</label>
-                        <input type="string" formControlName="clave" [readOnly]="!puedeEditarInput()">
-                        <div *ngIf="control.get('clave')?.touched && control.get('clave')?.invalid">
-                            <small *ngIf="control.get('clave')?.errors?.['required']">La clave es obligatoria</small>
-                            <small *ngIf="control.get('clave')?.errors?.['minlength']">Mínimo 3 caracteres</small>
-                        </div>
-                    </div>
-                    <div class="text-center p-2 m-1">
-                        <label class="me-3">Valor:</label>
-                        <input type="string" formControlName="valor" [readOnly]="!puedeEditarInput()">
-                        <div *ngIf="control.get('valor')?.touched && control.get('valor')?.invalid">
-                            <small *ngIf="control.get('valor')?.errors?.['required']">El valor es obligatorio</small>
-                        </div>
-                    </div>
-
-                    <button type="button" (click)="eliminarDatoDinamico(i)" *ngIf="puedeEditarInput()">Eliminar</button>
-                </div>
+                <p><strong><label for="presion">Presion</label></strong></p>
+                <p><input id="presion" formControlName="presion" placeholder="0" [readOnly]="!puedeEditarInput()"></p>
+                <small class="text-error"
+                    *ngIf="getControl('presion').errors?.['required'] && getControl('presion').touched">
+                    la presion es obligatoria.
+                </small>
             </div>
-            <button type="button" (click)="agregarDatoDinamico()"
-                [disabled]="this.datosDinamicos.length >= maxDatosDinamicos" *ngIf="puedeEditarInput()">Agregar
-                dato</button>
-            <button type="submit" (click)="enviarFormulario()" *ngIf="puedeEditarInput()">Guardar</button>
+
+            <div class="text-center p-2 m-1">
+                <div formArrayName="datosDinamicos">
+                    <div *ngFor="let control of datosDinamicos.controls; let i = index" [formGroupName]="i">
+
+                        <div class="border p-3 mb-2 border rounded-4">
+                            <div class="text-end">
+                                <button type="button" class="btn btn-danger btn-sm rounded-pill"
+                                    (click)="eliminarDatoDinamico(i)" *ngIf="puedeEditarInput()">✖️</button>
+                            </div>
+                            <h3>Dato dinámico {{ i + 1 }}</h3>
+
+                            <div class="text-center p-2 m-1">
+                                <label class="me-3">Clave:</label>
+                                <input type="string" formControlName="clave" [readOnly]="!puedeEditarInput()">
+                                <div *ngIf="control.get('clave')?.touched && control.get('clave')?.invalid">
+                                    <small *ngIf="control.get('clave')?.errors?.['required']">La clave es
+                                        obligatoria</small>
+                                    <small *ngIf="control.get('clave')?.errors?.['minlength']">Mínimo 3
+                                        caracteres</small>
+                                </div>
+                            </div>
+                            <div class="text-center p-2 m-1">
+                                <label class="me-3">Valor:</label>
+                                <input type="string" formControlName="valor" [readOnly]="!puedeEditarInput()">
+                                <div *ngIf="control.get('valor')?.touched && control.get('valor')?.invalid">
+                                    <small *ngIf="control.get('valor')?.errors?.['required']">El valor es
+                                        obligatorio</small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" (click)="agregarDatoDinamico()"
+                    [disabled]="this.datosDinamicos.length >= maxDatosDinamicos" *ngIf="puedeEditarInput()">Agregar
+                    dato</button>
+
+            </div>
+        </form>
+        <div class="m-1 ps-5 pe-5">
+            <button type="submit" class="container-fluid btn btn-success mb-2" (click)="enviarFormulario()"
+                *ngIf="puedeEditarInput()">Guardar</button>
         </div>
-    </form>
+    </div>
 </div>

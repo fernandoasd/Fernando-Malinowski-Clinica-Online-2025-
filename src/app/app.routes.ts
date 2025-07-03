@@ -14,7 +14,10 @@ export const routes: Routes = [
     {
         path: "home",
         title: "Home",
-        loadComponent: () => import("./pages/home/home").then((a) => a.Home)
+        redirectTo: "graficos",
+
+        // loadComponent: () => import("./pages/home/home").then((a) => a.Home)
+        
     },
     {
         path: "login",
@@ -106,6 +109,39 @@ export const routes: Routes = [
         path: "captcha",
         title: "captcha",
         loadComponent: () => import("./pages/captcha/captcha").then(m => m.Captcha),
+    },
+    {
+        path: "graficos",
+        title: "graficos",
+        loadComponent: () => import("./components/graficos/graficos").then((a) => a.Graficos),
+        children: [
+            {
+                path: "ingresos",
+                title: "Graficos",
+                loadComponent: () => import("./components/graficos/ingresos/ingresos").then(m => m.Ingresos)
+            },
+            {
+                path: "turnos-dia",
+                title: "Graficos",
+                loadComponent: () => import("./components/graficos/turnos-dia/turnos-dia").then(m => m.TurnosDia)
+            },
+            {
+                path: "turnos-especialidad",
+                title: "Graficos",
+                loadComponent: () => import("./components/graficos/turnos-especialidad/turnos-especialidad").then(m => m.TurnosEspecialidad)
+            },
+            {
+                path: "turnos-solicitados",
+                title: "Graficos",
+                loadComponent: () => import("./components/graficos/turnos-solicitados-medico/turnos-solicitados-medico").then(m => m.TurnosSolicitadosMedico)
+            },
+            {
+                path: "turnos-finalizados",
+                title: "Graficos",
+                loadComponent: () => import("./components/graficos/turnos-finalizados-medico/turnos-finalizados-medico").then(m => m.TurnosFinalizadosMedico)
+            },
+            
+        ]
     },
     {
         path: "**",

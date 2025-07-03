@@ -1,11 +1,11 @@
-<div class="d-flex flex-column">
-    <div class="container mt-5 mb-5" *ngIf="usuario != null; else sinUsuario">
-        <div class="card shadow rounded-4 mx-auto bg-dark bg-opacity-75 mt-5" style="max-width: 500px;">
+<div class="d-flex flex-column container mt-5 mb-5">
+    <div class="" *ngIf="usuario != null; else sinUsuario">
+        <div class="card shadow rounded-4 mx-auto bg-dark bg-opacity-75 mt-5 border" style="max-width: 500px;">
             <div class="card-body text-center text-light">
                 <p class="mb-1"><strong>Perfil: {{usuario!.perfil}}</strong></p>
                 <img [src]="usuario!.imagen_uno" class="rounded-circle mb-3" width="120" height="120"
                     alt="Foto de perfil" />
-          <app-titulo [tituloInput]="usuario!.nombre + ' ' + usuario!.apellido "></app-titulo>
+                <app-titulo [tituloInput]="usuario!.nombre + ' ' + usuario!.apellido "></app-titulo>
 
                 <!-- <h4 class="card-title mb-1"> {{ usuario!.nombre }} {{ usuario!.apellido }}</h4> -->
                 @if ( usuario!.perfil == "especialista"){
@@ -20,19 +20,19 @@
         </div>
     </div>
 
-    <div class="container mt-5 mb-5 bg-dark bg-opacity-50 border border rounded-4 text-center" *ngIf="usuario.perfil == 'paciente'">
-        <app-titulo [tituloInput]="'Historial Médico'"></app-titulo>
-        <button class="btn btn-success" (click)="descargarHistoriaClinica()">Descargar HC en PDF</button>
-        <div class="" *ngFor="let turno of historiaClinica">
-            <app-titulo [tituloInput]="'-Fecha: ' + turno.fecha_turno"></app-titulo>
-            <app-historial-medico [turnoInput]="turno" [puedeEditarInput]="false" 
-            (modificarHCEvent)="modificarHC($event)" class="mb-1"></app-historial-medico>
-        </div>
-    </div>
-
     <ng-template #sinUsuario>
         <p class="text-center">Cargando...</p>
     </ng-template>
+
+    <div class="bg-dark bg-opacity-50 mt-4 mb-4 p-3 border rounded-4 text-center" *ngIf="usuario.perfil == 'paciente'">
+        <app-titulo [tituloInput]="'Historial Médico'"></app-titulo>
+        <button class="btn btn-success btn-lg m-3" (click)="descargarHistoriaClinica()">Descargar HC en PDF</button>
+        <div class="" *ngFor="let turno of historiaClinica">
+            <app-historial-medico [turnoInput]="turno" [puedeEditarInput]="false"
+                (modificarHCEvent)="modificarHC($event)"></app-historial-medico>
+        </div>
+    </div>
+
 
     <div class="container" *ngIf="espSelect != ''">
         <h3>Editar especialidad: <strong>{{espSelect}}</strong></h3>
@@ -48,7 +48,7 @@
                         Valor necesario
                     </div>
                     <div *ngIf='form.get("duracion_turno")?.errors?.["min"]'>
-                       La duracion del turno debe ser de 30 minutos como mínimo.
+                        La duracion del turno debe ser de 30 minutos como mínimo.
                     </div>
                 </div>
             </div>
@@ -80,4 +80,3 @@
             <button class="btn btn-primary" type="submit">Guardar disponibilidad</button>
         </form>
     </div>
-

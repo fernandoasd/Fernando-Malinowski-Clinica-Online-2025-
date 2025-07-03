@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, input, output } from '@angular/core';
 import { Turno } from '../../interfaces/interfaces';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Titulo } from '../titulo/titulo';
 
 @Component({
   selector: 'app-historial-medico',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, Titulo],
   templateUrl: './historial-medico.html',
   styleUrl: './historial-medico.css'
 })

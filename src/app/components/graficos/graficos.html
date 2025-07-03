@@ -1,0 +1,54 @@
+<div class="container m-2 p-1">
+    <app-titulo [tituloInput]="'Gráficos y estadísticas.'"></app-titulo>
+
+    <div class="container bg-dark bg-opacity-50 border rounded-4 text-center m-1 p-1">
+        <router-outlet></router-outlet>
+    </div>
+
+    <div class="d-flex flex-wrap">
+        <div class="text-center p-1 m-3" style="width: 15rem;">
+            <div routerLink="ingresos" class="btn border border-dark rounded-4 boton-img"
+                style="background-image: url('grafico.jpg');">
+            </div>
+            <h3 class="bg-dark bg-opacity-50 border rounded-4 mt-3 p-1">
+                Ingresos al sistema.
+            </h3>
+
+        </div>
+
+        <div class="text-center p-1 m-3" style="width: 15rem;">
+            <div routerLink="turnos-dia" class="btn border border-dark rounded-4 boton-img"
+                style="background-image: url('grafico.jpg');">
+            </div>
+            <h3 class="bg-dark bg-opacity-50 border rounded-4 mt-3 p-1">
+                Turnos por dia.
+            </h3>
+        </div>
+
+        <div class="text-center p-1 m-3" style="width: 15rem;">
+            <div routerLink="turnos-especialidad" class="btn border border-dark rounded-4 boton-img" style="background-image: url('grafico.jpg');">
+            </div>
+            <h3 class="bg-dark bg-opacity-50 border rounded-4 mt-3 p-1">
+                Turnos por especialidad.
+            </h3>
+        </div>
+
+        <div class="text-center p-1 m-3" style="width: 15rem;">
+            <div routerLink="turnos-solicitados" class="btn border border-dark rounded-4 boton-img" style="background-image: url('grafico.jpg');">
+            </div>
+            <h3 class="bg-dark bg-opacity-50 border rounded-4 mt-3 p-1">
+                Turnos solicitados.
+            </h3>
+        </div>
+
+        <div class="text-center p-1 m-3" style="width: 15rem;">
+            <div routerLink="turnos-finalizados" class="btn border border-dark rounded-4 boton-img" style="background-image: url('grafico.jpg');">
+            </div>
+            <h3 class="bg-dark bg-opacity-50 border rounded-4 mt-3 p-1">
+                Turnos finalizados.
+            </h3>
+        </div>
+    </div>
+
+
+</div>

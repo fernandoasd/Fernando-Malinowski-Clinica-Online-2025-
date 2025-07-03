@@ -276,6 +276,7 @@ export class MiPerfil implements OnInit {
   descargarHistoriaClinica() {
     if (this.us.usuarioActual!.perfil === Perfil.Paciente) {
       const doc = new jsPDF();
+      const pageHeight = doc.internal.pageSize.height;
       type RGB = [number, number, number];
 
       const verde: RGB = [30, 170, 70];
@@ -284,7 +285,7 @@ export class MiPerfil implements OnInit {
       // Encabezado
       doc.setFillColor(255, 255, 255);
       doc.rect(0, 0, 210, 30, 'F');
-      doc.setTextColor(...verde);
+      // doc.setTextColor(...verde);
       // doc.setFontSize(16);
       // doc.text("HISTORIA CLÍNICA", 20, 20);
       doc.addImage("logo.jpg", 'JPG', 160, 5, 40, 20);
@@ -299,6 +300,10 @@ export class MiPerfil implements OnInit {
 
       const fechaCreacion = new Date();
       const fechaFormateada = `${fechaCreacion.getDate()}/${fechaCreacion.getMonth() + 1}/${fechaCreacion.getFullYear()}`;
+      doc.setTextColor(...negro);
+      doc.setFontSize(13);
+      doc.text(`Fecha de generación del PDF: ${fechaFormateada}`, 20, 20);
+
       doc.setFontSize(12);
       doc.setFont('helvetica', 'normal');
       let yPosition = 80;
@@ -320,7 +325,14 @@ export class MiPerfil implements OnInit {
 
           // Agregar datos en formato "Clave: valor" con colores diferenciados
           Object.entries(turno).forEach(([clave, valor]: [string, any]) => {
-            if (clave !== 'horario_turno' && clave !== 'fecha_turno' && clave !== 'datos_dinamicos') {
+            if (clave !== 'horario_turno' && clave !== 'fecha_turno' && clave !== 'datos_dinamicos' && clave !== 'resenia') {
+
+              //comprobar si sobrepasa limite inferior de pagina
+              if (yPosition > pageHeight - 17) {
+                // doc.text(`"yPosition:MMM" ${yPosition}`, valuePosX, yPosition);
+                doc.addPage();
+                yPosition = 20; //reinicia posicicon en Y
+              }
 
               const formattedKey = clave.charAt(0).toUpperCase() + clave.slice(1);
 
@@ -347,6 +359,7 @@ export class MiPerfil implements OnInit {
                 doc.text("Reseña médica: ", 20, yPosition);
                 yPosition += 7;
                 Object.entries(turno.resenia!).forEach(([clave, valor]: [string, any]) => {
+
                   const formattedKey = clave.charAt(0).toUpperCase() + clave.slice(1);
                   let valueWithUnit = `${valor}`;
 
@@ -361,8 +374,10 @@ export class MiPerfil implements OnInit {
 
                   // Verificar si el valor cabe en la línea
                   const pageWidth = doc.internal.pageSize.width - 20;
+
+
                   if (valuePosX > pageWidth) {
-                    // Si no cabe, saltamos a la siguiente línea
+                    // Si no cabe, siguiente línea
                     yPosition += 7;
                     doc.text(`${valueWithUnit}`, 20, yPosition);
                   } else {
@@ -406,6 +421,14 @@ export class MiPerfil implements OnInit {
 
           // Agregar datos dinámicos
           if (turno.datos_dinamicos) {
+
+            //comprobar si sobrepasa limite inferior de pagina
+            if (yPosition > pageHeight - 17) {
+              // doc.text(`"yPosition:MMM" ${yPosition}`, valuePosX, yPosition);
+              doc.addPage();
+              yPosition = 20; //reinicia posicicon en Y
+            }
+
             doc.setFont('helvetica', 'bold');
             doc.text("Datos dinámicos: ", 20, yPosition);
             yPosition += 7;
@@ -427,6 +450,13 @@ export class MiPerfil implements OnInit {
               if (valuePosX > pageWidth) {
                 // Si no cabe, saltamos a la siguiente línea
                 yPosition += 7;
+
+                //comprobar si sobrepasa limite inferior de pagina
+                if (yPosition > 280) {
+                  doc.addPage();
+                  yPosition = 80; //reinicia posicicon en Y
+                }
+
                 doc.text(`${item.valor}`, 20, yPosition);
               } else {
                 // Si cabe, colocamos el valor en la misma línea
@@ -447,7 +477,7 @@ export class MiPerfil implements OnInit {
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(10);
       doc.setTextColor(...negro);
-      doc.text(`Fecha de generación del PDF: ${fechaFormateada}`, 20, 290);
+      doc.text(`© Clinica Online 2025`, 90, 290);
 
       // Descargar PDF
       doc.save('historia_clinica.pdf');
@@ -456,7 +486,7 @@ export class MiPerfil implements OnInit {
     }
   }
 
-  modificarHC(t: Turno){
+  modificarHC(t: Turno) {
     console.log("Modificar Turno:", t);
   }
 
