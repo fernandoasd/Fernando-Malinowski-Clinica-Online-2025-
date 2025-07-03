@@ -14,9 +14,8 @@ export const routes: Routes = [
     {
         path: "home",
         title: "Home",
-        redirectTo: "graficos",
-
-        // loadComponent: () => import("./pages/home/home").then((a) => a.Home)
+        // redirectTo: "graficos",
+        loadComponent: () => import("./pages/home/home").then((a) => a.Home)
         
     },
     {
@@ -114,6 +113,7 @@ export const routes: Routes = [
         path: "graficos",
         title: "graficos",
         loadComponent: () => import("./components/graficos/graficos").then((a) => a.Graficos),
+        canActivate: [adminGuard],
         children: [
             {
                 path: "ingresos",

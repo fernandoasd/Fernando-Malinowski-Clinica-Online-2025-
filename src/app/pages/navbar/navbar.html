@@ -35,16 +35,23 @@
           <a routerLink="/usuarios" class="btn btn-outline-secondary">Usuarios</a>
         </li>
 
-        <li class="nav-item" *ngIf="us.usuarioActual?.perfil === perfil.Admin || us.usuarioActual?.perfil === perfil.Paciente">
+        <li class="nav-item" *ngIf="us.usuarioActual?.perfil === perfil.Admin">
+          <a routerLink="/graficos" class="btn btn-outline-secondary">Graficos</a>
+        </li>
+
+        <li class="nav-item"
+          *ngIf="us.usuarioActual?.perfil === perfil.Admin || us.usuarioActual?.perfil === perfil.Paciente">
           <a routerLink="/solicitar-turno" class="btn btn-outline-secondary">Solicitar Turno</a>
         </li>
 
-        <li class="nav-item" *ngIf="us.usuarioActual?.perfil === perfil.Paciente || us.usuarioActual?.perfil === perfil.Especialista">
+        <li class="nav-item"
+          *ngIf="us.usuarioActual?.perfil === perfil.Paciente || us.usuarioActual?.perfil === perfil.Especialista">
           <a routerLink="/mis-turnos" class="btn btn-outline-secondary">Mis Turnos</a>
         </li>
 
         <li class="nav-item">
-          <a routerLink="/mi-perfil" class="btn btn-outline-primary ms-auto"><strong>MI PERFIL: {{auth.usuarioActual.email}}</strong></a>
+          <a routerLink="/mi-perfil" class="btn btn-outline-primary ms-auto"><strong>MI PERFIL:
+              {{auth.usuarioActual.email}}</strong></a>
         </li>
 
         <li class="nav-item">
