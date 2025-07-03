@@ -250,6 +250,7 @@ export class ReegistroPaciente {
 
             if (perfil === Perfil.Paciente) {
               console.log("paciente...");
+              nuevoUsuario.activo = true;
               let nuevoPaciente = { ...nuevoUsuario, obra_social: this.obra_social, imagen_dos: linkPublicoDos } as unknown as Paciente;
               this.us.cargarPaciente(nuevoPaciente);
             }

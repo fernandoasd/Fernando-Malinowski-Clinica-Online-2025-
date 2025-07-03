@@ -36,7 +36,6 @@ Desde esta seccion el usuario puede consultar sus datos dependiendo de su perfil
 
 -**perfil paciente**: Puede visualizar sus datos y su historia clinica (HC), com opcion de descargarla en formato pdf.
 ![perfil-paciente](./public/readme/perfil-paciente.png)
-HC en formato pdf de ejemplo:
 ![disponibilidad](./public/readme/hc-pdf.png)
 
 

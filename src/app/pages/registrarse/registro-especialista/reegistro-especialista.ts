@@ -267,6 +267,7 @@ export class ReegistroEspecialista {
               this.us.cargarPaciente(nuevoPaciente);
             } else if (perfil === Perfil.Especialista) {
               console.log("especialista...");
+              nuevoUsuario.activo = false;
               let nuevoEspecialista = { ...nuevoUsuario, especialidades: this.especialidades } as unknown as Especialista;
               this.us.cargarEspecialista(nuevoEspecialista);
             }
