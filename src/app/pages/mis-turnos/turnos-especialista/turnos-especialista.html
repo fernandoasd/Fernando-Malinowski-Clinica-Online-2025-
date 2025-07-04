@@ -33,10 +33,10 @@
         <tbody>
             <tr *ngFor="let turno  of turnosDisponibles | turnosPipe: filtro : ['especialidad', 'especialistas', 'pacientes',
                 'fecha_turno', 'horario_turno', 'estado', 'altura', 'peso', 'temperatura', 'presion', 'datos_dinamicos']">
-                <td> {{turno.pacientes.nombre | letrasMayusculasPipe}} {{turno.pacientes.apellido | letrasMayusculasPipe}}</td>
+                <td> {{turno.pacientes.nombre | palabrasMayusculasPipe}} {{turno.pacientes.apellido | palabrasMayusculasPipe}}</td>
                 <td>{{ turno.fecha_turno }}</td>
                 <td>{{ turno.horario_turno }}</td>
-                <td>{{ turno.especialidad | letrasMayusculasPipe}}</td>
+                <td>{{ turno.especialidad | palabrasMayusculasPipe}}</td>
                 <td>{{ turno.estado }}</td>
 
                 <!-- finalizar -->

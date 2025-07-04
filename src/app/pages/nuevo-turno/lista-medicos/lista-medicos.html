@@ -1,13 +1,25 @@
+<div class="container mt-3">
 
-    <!-- <h2 class="bg-dark bg-opacity-50 text-center text-light mt-3">Porfavor, elija a un especialista:</h2> -->
-     <app-titulo [tituloInput]="'Mis turnos (Especialista)'"></app-titulo>
+    <app-titulo [tituloInput]="'Nuevo Turno.'"></app-titulo>
+    <app-titulo [tituloInput]="'🧑‍⚕️ Medicos disponibles:'" [classInput]="'text-start p-1'"></app-titulo>
+
+    <div class="container m-1 d-flex">
+        <div *ngFor="let e of especialistas">
 
 
-<div class="container m-1 d-flex">
-    <div *ngFor="let e of especialistas">
-        <div class="card m-2 border-dark border-rounded-100px bg-dark bg-opacity-75 text-light" style="width:20vw">
+            <div class="text-center p-1 m-3" style="width: 15rem;">
+                <div (click)="seleccionarMedico(e.id_especialista!)" class="btn boton-img border border-dark rounded-1"
+                    style="background-image: url({{e.imagen_uno}});">
+                </div>
+                <h3 class="bg-dark bg-opacity-50 border border-dark rounded-4 mt-3 p-1">
+                    {{e.nombre + " " + e.apellido}}
+                </h3>
+            </div>
+
+            <!-- <div class="card m-2 border-dark border-rounded-100px bg-dark bg-opacity-75 text-light" style="width:20vw">
             <div class="card-head " style="height: 25vh;">
-                <img class="card-img-top" src={{e.imagen_uno}} alt="Card image" style="height: 100%; width: 100%; object-fit: cover;">
+                <img class="card-img-top" src={{e.imagen_uno}} alt="Card image"
+                    style="height: 100%; width: 100%; object-fit: cover;">
             </div>
             <div class="card-body">
                 <h4 class="card-title">{{e.nombre}} {{e.apellido}}</h4>
@@ -17,6 +29,26 @@
                         (click)="seleccionarMedico(e.id_especialista!, esp)"> {{esp}} </button>
                 </div>
             </div>
+        </div> -->
+
         </div>
+
+    </div>
+
+    <div *ngIf="verEspecialidades">
+        <app-titulo [tituloInput]="'📕 Especialidades disponibles:'" [classInput]="'text-start p-1'"></app-titulo>
+        <div class="container m-1 d-flex">
+            <div *ngFor="let esp of especialidadesMedico">
+                <div class="text-center p-1 m-3" style="width: 15rem;">
+                    <div (click)="seleccionarEspecialidad(esp)" class="btn boton-img border border-dark rounded-1"
+                        style="background-image: url('esp.jpg');">
+                    </div>
+                    <h3 class="bg-dark bg-opacity-50 border border-dark rounded-4 mt-3 p-1">
+                        {{esp | palabrasMayusculasPipe}}
+                    </h3>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

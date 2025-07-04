@@ -12,6 +12,10 @@ export const nuevo_turno: Routes = [
                 loadComponent: () => import("./lista-medicos/lista-medicos").then((a) => a.ListaMedicos),
             },
             {
+                path: "especialidad",
+                loadComponent: () => import("./especialidades/especialidades").then((a) => a.Especialidades),
+            },
+            {
                 path: "disponibilidad",
                 loadComponent: () => import("./disponibilidad-medico/disponibilidad-medico").then((a) => a.DisponibilidadMedico),
             }

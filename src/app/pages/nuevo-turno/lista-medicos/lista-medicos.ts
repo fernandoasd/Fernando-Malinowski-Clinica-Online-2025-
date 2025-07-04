@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { Especialista } from '../../../interfaces/interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Titulo } from '../../../components/titulo/titulo';
+import { PalabrasMayusculasPipe } from '../../../pipes/letras-mayusculas-pipe';
 
 
 @Component({
   selector: 'app-crear-turno',
-  imports: [CommonModule, Titulo],
+  imports: [CommonModule, Titulo, PalabrasMayusculasPipe, Titulo],
   templateUrl: './lista-medicos.html',
   styleUrl: './lista-medicos.css'
 })
@@ -26,8 +27,10 @@ export class ListaMedicos implements OnInit {
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
   ];
-
+  verEspecialidades: boolean = false;
   especialistas: Especialista[] = [];
+  especialidadesMedico: string[] = [];
+  medicoElegido: Especialista = {};
 
   constructor(private router: Router, private route: ActivatedRoute) {
     const today = new Date();
@@ -53,9 +56,20 @@ export class ListaMedicos implements OnInit {
     })
   }
 
+  seleccionarMedico(id_medico: number){
+    this.verEspecialidades = true;
+    this.medicoElegido = this.especialistas.find(esp => esp.id_especialista == id_medico)!;
+    this.especialidadesMedico = this.medicoElegido.especialidades!;
+    console.log("especialidades: ", this.especialidadesMedico);
 
-
-  seleccionarMedico(id_medico: number, especialidad: string){
-      this.router.navigate(["disponibilidad"], {queryParams: {id: id_medico, esp: especialidad}, relativeTo: this.route});
+      // this.router.navigate(["especialidad"], {queryParams: {id: id_medico}, relativeTo: this.route});
   }
+
+    seleccionarEspecialidad(especialidad: string){
+      this.router.navigate(["disponibilidad"], {queryParams: {id: this.medicoElegido.id_especialista, esp: especialidad}, relativeTo: this.route});
+  }
+
+  // seleccionarMedico(id_medico: number, especialidad: string){
+  //     this.router.navigate(["disponibilidad"], {queryParams: {id: id_medico, esp: especialidad}, relativeTo: this.route});
+  // }
 }

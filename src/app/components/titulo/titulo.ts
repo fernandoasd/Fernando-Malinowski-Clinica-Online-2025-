@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { LetrasMayusculasPipe } from '../../pipes/letras-mayusculas-pipe';
+import { PalabrasMayusculasPipe } from '../../pipes/letras-mayusculas-pipe';
 
 @Component({
   selector: 'app-titulo',
-  imports: [CommonModule, LetrasMayusculasPipe],
+  imports: [CommonModule, PalabrasMayusculasPipe],
   templateUrl: './titulo.html',
   styleUrl: './titulo.css'
 })

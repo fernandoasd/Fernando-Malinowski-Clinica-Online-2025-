@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'letrasMayusculasPipe'
+  name: 'palabrasMayusculasPipe'
 })
-export class LetrasMayusculasPipe implements PipeTransform {
+export class PalabrasMayusculasPipe implements PipeTransform {
 
   transform(value: string): string {
     if (!value) return '';

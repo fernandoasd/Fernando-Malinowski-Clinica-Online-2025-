@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UsuarioService } from '../../../services/UsuarioService';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Disponibilidad, Especialista, Paciente, Turno } from '../../../interfaces/interfaces';
 import { DiaSemana, EstadoTurno } from '../../../enums/enums';
 import Swal from 'sweetalert2';
@@ -15,8 +15,8 @@ import Swal from 'sweetalert2';
 export class DisponibilidadMedico {
   us = inject(UsuarioService);
   id_medico = -1;
-  pacienteActual: Paciente | null = null;
   especialidad = "";
+  pacienteActual: Paciente | null = null;
   especialista: Especialista = {}
   fechasDisponibles: string[] = [];
   disponibilidadMedico: Disponibilidad[] = [];
@@ -193,7 +193,7 @@ export class DisponibilidadMedico {
         console.log("Error ", error);
         if (error == null) {
           Swal.fire("Exito", "Nuevo turno agendado: " + dia + " " + fecha + " a las " + hora, 'success');
-          this.turnosPorEspecialista.push({fecha_turno: fecha, horario_turno: hora})
+          this.turnosPorEspecialista.push({ fecha_turno: fecha, horario_turno: hora })
         } else {
           Swal.fire("Error", "Su turno no se guardó: ${error}", 'warning');
         }
@@ -229,7 +229,7 @@ export class DisponibilidadMedico {
 
   comprobarTurnoTomado(fecha_turno: string, horario_turno: string): Boolean {
     return this.turnosPorEspecialista.some((t) => {
-      if (t.fecha_turno == fecha_turno && t.horario_turno == horario_turno 
+      if (t.fecha_turno == fecha_turno && t.horario_turno == horario_turno
         && t.estado != EstadoTurno.Cancelado && t.estado != EstadoTurno.Rechazado) {
         return true;
       } else {

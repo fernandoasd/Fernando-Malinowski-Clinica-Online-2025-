@@ -6,11 +6,11 @@ import { AlertService } from '../../../services/alert-service';
 import { EstadoTurno } from '../../../enums/enums';
 import { TurnosPipe } from '../../../pipes/turnos-pipe';
 import { FormsModule } from '@angular/forms';
-import { LetrasMayusculasPipe } from '../../../pipes/letras-mayusculas-pipe';
+import { PalabrasMayusculasPipe } from '../../../pipes/letras-mayusculas-pipe';
 
 @Component({
   selector: 'app-turnos-paciente',
-  imports: [CommonModule, TurnosPipe, FormsModule, LetrasMayusculasPipe],
+  imports: [CommonModule, TurnosPipe, FormsModule, PalabrasMayusculasPipe],
   templateUrl: './turnos-paciente.html',
   styleUrl: './turnos-paciente.css'
 })
