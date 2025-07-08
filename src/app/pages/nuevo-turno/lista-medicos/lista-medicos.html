@@ -1,47 +1,32 @@
 <div class="container mt-3">
-
-    <app-titulo [tituloInput]="'Nuevo Turno.'"></app-titulo>
-    <app-titulo [tituloInput]="'🧑‍⚕️ Medicos disponibles:'" [classInput]="'text-start p-1'"></app-titulo>
-
-    <div class="container m-1 d-flex">
-        <div *ngFor="let e of especialistas">
+    <h1 appDirectivaTitulo="text-center">Nuevo turno</h1>
+    <h3 appDirectivaTitulo="text-start">🧑‍⚕️ Medicos disponibles:</h3>
 
 
-            <div class="text-center p-1 m-3" style="width: 15rem;">
-                <div (click)="seleccionarMedico(e.id_especialista!)" class="btn boton-img border border-dark rounded-1"
-                    style="background-image: url({{e.imagen_uno}});">
-                </div>
-                <h3 class="bg-dark bg-opacity-50 border border-dark rounded-4 mt-3 p-1">
-                    {{e.nombre + " " + e.apellido}}
-                </h3>
-            </div>
-
-            <!-- <div class="card m-2 border-dark border-rounded-100px bg-dark bg-opacity-75 text-light" style="width:20vw">
-            <div class="card-head " style="height: 25vh;">
-                <img class="card-img-top" src={{e.imagen_uno}} alt="Card image"
-                    style="height: 100%; width: 100%; object-fit: cover;">
-            </div>
-            <div class="card-body">
-                <h4 class="card-title">{{e.nombre}} {{e.apellido}}</h4>
-                <p class="card-text"> Especialidad/es: </p>
-                <div class="container text-center">
-                    <button class="btn btn-primary m-1" *ngFor="let esp of e.especialidades"
-                        (click)="seleccionarMedico(e.id_especialista!, esp)"> {{esp}} </button>
+        <div class="container m-1 d-flex" *ngIf="especialistas.length > 0; else sinMedicos">
+            <div  *ngFor="let e of especialistas">
+                <div *ngIf="e.activo" class="text-center p-1 m-3" style="width: 15rem;">
+                    <div (click)="seleccionarMedico(e.id_especialista!)" appBotonImagen
+                        style="background-image: url({{e.imagen_uno}});">
+                    </div>
+                    <h3 class="bg-dark bg-opacity-50 border border-dark rounded-4 mt-3 p-1">
+                        {{e.nombre + " " + e.apellido}}
+                    </h3>
                 </div>
             </div>
-        </div> -->
-
         </div>
+        <ng-template class="container m-1 d-flex" #sinMedicos>
+            <h1 appDirectivaTitulo>No hay medicos disponibles.</h1>
+        </ng-template>
 
-    </div>
 
     <div *ngIf="verEspecialidades">
         <app-titulo [tituloInput]="'📕 Especialidades disponibles:'" [classInput]="'text-start p-1'"></app-titulo>
         <div class="container m-1 d-flex">
             <div *ngFor="let esp of especialidadesMedico">
                 <div class="text-center p-1 m-3" style="width: 15rem;">
-                    <div (click)="seleccionarEspecialidad(esp)" class="btn boton-img border border-dark rounded-1"
-                        style="background-image: url('esp.jpg');">
+                    <div (click)="seleccionarEspecialidad(esp)" appBotonImagen
+                        style="background-image: url('{{selectImagen(esp)}}');">
                     </div>
                     <h3 class="bg-dark bg-opacity-50 border border-dark rounded-4 mt-3 p-1">
                         {{esp | palabrasMayusculasPipe}}
@@ -49,6 +34,22 @@
                 </div>
             </div>
         </div>
-
     </div>
+
+    <div *ngIf="verPacientes">
+        <app-titulo [tituloInput]="' Pacientes disponibles:'" [classInput]="'text-start p-1'"></app-titulo>
+        <div class="container m-1 d-flex">
+            <div *ngFor="let p of listaPacientes">
+                <div class="text-center p-1 m-3" style="width: 15rem;">
+                    <div (click)="seleccionarPaciente(p)" appBotonImagen
+                        style="background-image: url('{{p.imagen_uno}}');">
+                    </div>
+                    <h3 class="bg-dark bg-opacity-50 border border-dark rounded-4 mt-3 p-1">
+                        {{p.nombre + " " + p.apellido}}
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { UsuarioService } from '../../../services/UsuarioService';
 import { Usuario } from '../../../interfaces/interfaces';
 
+
 @Component({
   selector: 'app-lista-usuarios',
   imports: [CommonModule],

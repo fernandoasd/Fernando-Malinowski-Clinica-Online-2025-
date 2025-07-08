@@ -1,8 +1,8 @@
-
 <h1 class="text-center mt-5 mb-5 bg-dark bg-opacity-75"> Usuarios</h1>
+
 <table class="table table-bordered table-striped mt-5 mb-5" *ngIf="listaUsuarios.length > 0; else cargando">
   <thead class="table-dark">
-    <tr >
+    <tr>
       <th>CREATED_AT</th>
       <th>Email</th>
       <th>Nombre</th>
@@ -16,14 +16,15 @@
   <tbody class="table-dark">
     <tr *ngFor="let c of listaUsuarios">
       <td>{{ c.created_at| date: 'short' }}</td>
-      <td>{{ c.mail }}</td>
+      <td >{{ c.mail }}</td>
       <td>{{ c.nombre }}</td>
       <td>{{ c.apellido }}</td>
       <td>{{ c.documento }}</td>
       <td>{{ c.edad }}</td>
       <td>{{ c.perfil }}</td>
-      <td><button class="btn btn-lg" [ngClass]="c.activo ? 'bg-success' : 'bg-danger'" *ngIf="c.perfil == 'especialista'" (click)="cambiarActivo(c.id_usuario!, c.activo!)">
-        {{ c.activo ? "Habilitado" : "Deshabilitado"}}</button></td>
+      <td><button class="btn btn-lg" [ngClass]="c.activo ? 'bg-success' : 'bg-danger'"
+          *ngIf="c.perfil == 'especialista'" (click)="cambiarActivo(c.id_usuario!, c.activo!)">
+          {{ c.activo ? "Habilitado" : "Deshabilitado"}}</button></td>
     </tr>
   </tbody>
 </table>

@@ -160,6 +160,22 @@ export class UsuarioService {
     return { especialistas, error };
   }
 
+    async traerEspecialistasActivos() {
+    const { data, error } = (((await this.db.supabase.from("usuarios").select("*, especialistas(*)").eq("perfil", "especialista").eq("activo", true))));
+    let especialistas = [];
+    if (error) {
+      console.log(error)
+    } else if (data){
+          especialistas = data!.map(item => ({
+      ...item,
+      ...item.usuarios
+    }));
+    }
+    
+    especialistas.forEach(obj => delete (obj as any).usuarios);
+    return { especialistas, error };
+  }
+
   async traerEspecialistaId(id_especialista: number) {
     const { data, error } = await this.db.supabase.from("especialistas")
       .select("*, usuarios(*)").eq("id_especialista", id_especialista);
@@ -176,6 +192,14 @@ export class UsuarioService {
 
   async traerPacienteUsuarioId(id_usuario: number) {
     const { data, error } = await this.db.supabase.from("pacientes").select("*, ...usuarios(*)").eq("id_usuario", id_usuario);
+    if (error) {
+      console.log(error)
+    }
+    return { data, error };
+  }
+
+    async traerPacientes() {
+    const { data, error } = await this.db.supabase.from("pacientes").select("*, ...usuarios(*)");
     if (error) {
       console.log(error)
     }

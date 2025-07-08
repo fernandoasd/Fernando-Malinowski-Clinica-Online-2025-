@@ -4,7 +4,6 @@ import { AuthService } from '../../services/AuthService';
 import { CommonModule } from '@angular/common';
 import { UsuarioService } from '../../services/UsuarioService';
 import { Perfil } from '../../enums/enums';
-import { timeInterval } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',

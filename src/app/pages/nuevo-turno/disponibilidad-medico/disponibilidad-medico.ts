@@ -24,6 +24,7 @@ export class DisponibilidadMedico {
   FechasDisponiblesEspecialidad: string[] = [];
   diasSemana: any[] = [];
   turnosPorEspecialista: Turno[] = []
+  idPacienteElegido: number = 0;
 
 
   datosDinamicos?: Array<{
@@ -38,16 +39,18 @@ export class DisponibilidadMedico {
         // this.especialista = this.us.tr
         console.log("params: ", params);
         this.id_medico = params["id"];
-        this.especialidad = params["esp"]
+        this.especialidad = params["esp"];
+        this.idPacienteElegido = params["paciente"];
         this.actualizarEspecialista(this.id_medico);
       })
   }
 
   async ngOnInit() {
     console.log("on init...");
-    console.log("id: ", this.id_medico);
+    console.log("id medico: ", this.id_medico);
     console.log("this.especialidad: ", this.especialidad);
-    this.us.traerPacienteUsuarioId(this.us.usuarioActual?.id_usuario!).then(({ data, error }) => {
+    console.log("this.idPacienteElegido: ", this.idPacienteElegido);
+    this.us.traerPacienteUsuarioId(this.idPacienteElegido).then(({ data, error }) => {
       if (error == null) {
         this.pacienteActual = data![0];
         this.us.traerTurnosEspecialista(this.id_medico).then(({ data, error }) => {
