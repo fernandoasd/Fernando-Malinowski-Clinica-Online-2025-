@@ -58,8 +58,6 @@ export class DisponibilidadMedico {
             this.turnosPorEspecialista = data!;
             console.log("turnosPorEspecialista:", this.turnosPorEspecialista);
           }
-
-
         })
       }
       console.log("turnosPorEspecialista:", this.turnosPorEspecialista);

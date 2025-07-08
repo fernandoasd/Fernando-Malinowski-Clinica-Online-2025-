@@ -252,6 +252,7 @@ export class ReegistroEspecialista {
         documento: this.dni,
         perfil: perfil,
         imagen_uno: linkPublico,
+        activo: false,
       };
 
       await this.us.cargarUsuario(nuevoUsuario).then(({ data, error }) => {
@@ -261,13 +262,8 @@ export class ReegistroEspecialista {
             console.log("nuevoUsuario :", nuevoUsuario);
             console.log("perfil :", perfil);
 
-            if (perfil === Perfil.Paciente) {
-              console.log("paciente...");
-              let nuevoPaciente = { ...nuevoUsuario, obra_social: this.obra_social, imagen_dos: this.imagen_dos } as unknown as Paciente;
-              this.us.cargarPaciente(nuevoPaciente);
-            } else if (perfil === Perfil.Especialista) {
+            if (perfil === Perfil.Especialista) {
               console.log("especialista...");
-              nuevoUsuario.activo = false;
               let nuevoEspecialista = { ...nuevoUsuario, especialidades: this.especialidades } as unknown as Especialista;
               this.us.cargarEspecialista(nuevoEspecialista);
             }

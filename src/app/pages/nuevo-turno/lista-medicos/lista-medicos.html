@@ -1,12 +1,34 @@
 <div class="container mt-3">
     <h1 appDirectivaTitulo="text-center">Nuevo turno</h1>
-    <h3 appDirectivaTitulo="text-start">🧑‍⚕️ Medicos disponibles:</h3>
+
+    <h3 *ngIf="pacienteSeleccionado.id_usuario" appDirectivaTitulo="text-center">Paciente: {{pacienteSeleccionado.nombre + " " + pacienteSeleccionado.apellido}}</h3>
+    <h3 *ngIf="especialistaElegido.id_especialista" appDirectivaTitulo="text-center">Profesional: {{especialistaElegido.nombre + " " + especialistaElegido.apellido}}</h3>
+    <h3 *ngIf="especialidadElegida != ''" appDirectivaTitulo="text-center">Especialidad: {{especialidadElegida}}</h3>
 
 
+        <div *ngIf="verPacientes">
+        <app-titulo [tituloInput]="'👨‍💼 Seleccionar un paciente:'" [classInput]="'text-start p-1'"></app-titulo>
+        <div class="container m-1 d-flex">
+            <div *ngFor="let p of listaPacientes">
+                <div class="text-center p-1 m-3" style="width: 15rem;">
+                    <div (click)="seleccionarUsuario(p)" appBotonImagen
+                        style="background-image: url('{{p.imagen_uno}}');">
+                    </div>
+                    <h3 class="bg-dark bg-opacity-50 border border-dark rounded-4 mt-3 p-1">
+                        {{p.nombre + " " + p.apellido}}
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="verEspecialistas">
+        <h3 appDirectivaTitulo="text-start">🧑‍⚕️ Seleccionar un especialista:</h3>
         <div class="container m-1 d-flex" *ngIf="especialistas.length > 0; else sinMedicos">
-            <div  *ngFor="let e of especialistas">
+            <div *ngFor="let e of especialistas">
                 <div *ngIf="e.activo" class="text-center p-1 m-3" style="width: 15rem;">
-                    <div (click)="seleccionarMedico(e.id_especialista!)" appBotonImagen
+                    <div (click)="seleccionarEspecialista(e.id_especialista!)" appBotonImagen
                         style="background-image: url({{e.imagen_uno}});">
                     </div>
                     <h3 class="bg-dark bg-opacity-50 border border-dark rounded-4 mt-3 p-1">
@@ -15,13 +37,17 @@
                 </div>
             </div>
         </div>
-        <ng-template class="container m-1 d-flex" #sinMedicos>
-            <h1 appDirectivaTitulo>No hay medicos disponibles.</h1>
-        </ng-template>
+        <button class="btn btn-lg btn-secondary" (click)="comprobarUsuarioActual()">Atras</button>
+
+    </div>
+
+    <ng-template class="container m-1 d-flex" #sinMedicos>
+        <h1 appDirectivaTitulo>No hay medicos disponibles.</h1>
+    </ng-template>
 
 
     <div *ngIf="verEspecialidades">
-        <app-titulo [tituloInput]="'📕 Especialidades disponibles:'" [classInput]="'text-start p-1'"></app-titulo>
+        <app-titulo [tituloInput]="'📕 Seleccionar especialidad:'" [classInput]="'text-start p-1'"></app-titulo>
         <div class="container m-1 d-flex">
             <div *ngFor="let esp of especialidadesMedico">
                 <div class="text-center p-1 m-3" style="width: 15rem;">
@@ -34,22 +60,13 @@
                 </div>
             </div>
         </div>
+        <button class="btn btn-lg btn-secondary" (click)="seleccionarEspecialista(null)">Atras</button>
     </div>
 
-    <div *ngIf="verPacientes">
-        <app-titulo [tituloInput]="' Pacientes disponibles:'" [classInput]="'text-start p-1'"></app-titulo>
-        <div class="container m-1 d-flex">
-            <div *ngFor="let p of listaPacientes">
-                <div class="text-center p-1 m-3" style="width: 15rem;">
-                    <div (click)="seleccionarPaciente(p)" appBotonImagen
-                        style="background-image: url('{{p.imagen_uno}}');">
-                    </div>
-                    <h3 class="bg-dark bg-opacity-50 border border-dark rounded-4 mt-3 p-1">
-                        {{p.nombre + " " + p.apellido}}
-                    </h3>
-                </div>
-            </div>
-        </div>
+    <div *ngIf="verConfirmacion" class="text-center m-3">
+        <button class="btn btn-lg btn-primary" (click)="mostrarDisponibilidad()">Ver Turnos disponibles</button>
     </div>
+
+
 
 </div>

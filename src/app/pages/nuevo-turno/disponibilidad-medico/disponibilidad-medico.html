@@ -1,9 +1,9 @@
 <div class="container m-5" style="width: 90vw;justify-self: center;">
 
   <div class="bg-dark bg-opacity-75 border border-ligth  rounded-5 mt-5 p-3" >
+    <h1> Paciente: {{pacienteActual?.nombre + " " + pacienteActual?.apellido}}</h1>
     <h1> Medico: {{especialista.nombre}} {{especialista.apellido}}</h1>
     <h1> Especialidad: {{especialidad}}</h1>
-    <h1> Paciente: {{pacienteActual?.nombre + " " + pacienteActual?.apellido}}</h1>
   </div>
 
   <div *ngIf="disponibilidadMedico.length > 0; else sinDIsponibilidad">

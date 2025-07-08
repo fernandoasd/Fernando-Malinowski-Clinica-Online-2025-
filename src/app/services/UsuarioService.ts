@@ -168,11 +168,10 @@ export class UsuarioService {
     } else if (data){
           especialistas = data!.map(item => ({
       ...item,
-      ...item.usuarios
+      ...item.especialistas[0]
     }));
     }
-    
-    especialistas.forEach(obj => delete (obj as any).usuarios);
+    especialistas.forEach(obj => delete (obj as any).especialistas);
     return { especialistas, error };
   }
 

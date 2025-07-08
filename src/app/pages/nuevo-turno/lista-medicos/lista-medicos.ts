@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UsuarioService } from '../../../services/UsuarioService';
-import { Disponibilidad, Paciente } from '../../../interfaces/interfaces';
+import { Disponibilidad, Paciente, Usuario } from '../../../interfaces/interfaces';
 import { CommonModule } from '@angular/common';
 import { Especialista } from '../../../interfaces/interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -33,10 +33,13 @@ export class ListaMedicos implements OnInit {
   verEspecialidades: boolean = false;
   especialistas: Especialista[] = [];
   especialidadesMedico: string[] = [];
-  medicoElegido: Especialista = {};
-  especialidadElegida: string = "";
   listaPacientes: Paciente[] = [];
+  pacienteSeleccionado: Paciente = {};
+  especialistaElegido: Especialista = {};
+  especialidadElegida: string = "";
   verPacientes: boolean = false;
+  verEspecialistas: boolean = false;
+  verConfirmacion: boolean = false;
 
   constructor(private router: Router, private route: ActivatedRoute) {
     const today = new Date();
@@ -49,7 +52,8 @@ export class ListaMedicos implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.traerTablas();
-    }, 500)
+    }, 500);
+    this.comprobarUsuarioActual();
 
   }
 
@@ -61,35 +65,63 @@ export class ListaMedicos implements OnInit {
       }
     });
 
-    this.us.traerPacientes().then(({data, error})=>{
-      if (error == null){
+    this.us.traerPacientes().then(({ data, error }) => {
+      if (error == null) {
         this.listaPacientes = data!;
         console.log("this.listaPacientes: ", this.listaPacientes);
       }
     })
-
   }
 
-  seleccionarMedico(id_medico: number) {
-    this.verEspecialidades = true;
-    this.medicoElegido = this.especialistas.find(esp => esp.id_especialista == id_medico)!;
-    this.especialidadesMedico = this.medicoElegido.especialidades!;
-    console.log("especialidades: ", this.especialidadesMedico);
+  comprobarUsuarioActual() {
+    this.verPacientes = false;
+    this.verEspecialidades = false;
+    this.verEspecialistas = false;
+    if (this.us.usuarioActual?.perfil == Perfil.Admin) {
+      this.verPacientes = true;
+    } else if (this.us.usuarioActual?.perfil == Perfil.Paciente) {
+      this.seleccionarUsuario(this.us.usuarioActual!);
+    }
+  }
 
+  seleccionarUsuario(usuario: Usuario | null) {
+    if (usuario) {
+      this.pacienteSeleccionado = usuario;
+      this.verEspecialistas = true;
+      this.verPacientes = false;
+    } else {
+      this.pacienteSeleccionado = {};
+    }
+  }
+
+  seleccionarEspecialista(id_medico: number | null) {
+    if (id_medico) {
+      this.especialistaElegido = this.especialistas.find(esp => esp.id_especialista == id_medico)!;
+      this.especialidadesMedico = this.especialistaElegido.especialidades!;
+      this.verEspecialistas = false;
+      this.verEspecialidades = true;
+      this.verConfirmacion = false;
+
+    } else {
+      this.especialidadElegida = "";
+      this.especialistaElegido = {};
+      this.especialidadesMedico = [];
+      this.verEspecialistas = true;
+      this.verEspecialidades = false;
+    }
+
+    console.log("especialidades: ", this.especialidadesMedico);
     // this.router.navigate(["especialidad"], {queryParams: {id: id_medico}, relativeTo: this.route});
   }
 
   seleccionarEspecialidad(especialidad: string) {
-    if (this.us.usuarioActual?.perfil == Perfil.Admin) {
-      this.verPacientes = true;
-      this.especialidadElegida = especialidad;
-    } else {
-      this.router.navigate(["disponibilidad"], { queryParams: { id: this.medicoElegido.id_especialista, esp: especialidad , paciente: this.us.usuarioActual?.id_usuario}, relativeTo: this.route });
-    }
+    this.especialidadElegida = especialidad;
+    this.verEspecialidades = false;
+    this.verConfirmacion = true;
   }
 
-  seleccionarPaciente(paciente: Paciente){
-    this.router.navigate(["disponibilidad"], { queryParams: { id: this.medicoElegido.id_especialista, esp: this.especialidadElegida , paciente: paciente.id_usuario}, relativeTo: this.route });
+  mostrarDisponibilidad() {
+    this.router.navigate(["disponibilidad"], { queryParams: { id: this.especialistaElegido.id_especialista, esp: this.especialidadElegida, paciente: this.pacienteSeleccionado.id_usuario }, relativeTo: this.route });
   }
 
   selectImagen(esp: string) {

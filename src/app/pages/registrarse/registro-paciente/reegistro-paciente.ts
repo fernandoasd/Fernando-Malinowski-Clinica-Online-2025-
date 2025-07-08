@@ -239,6 +239,7 @@ export class ReegistroPaciente {
         documento: this.dni,
         perfil: perfil,
         imagen_uno: linkPublico,
+        activo: true
       };
 
       await this.us.cargarUsuario(nuevoUsuario).then(({ data, error }) => {
@@ -250,7 +251,6 @@ export class ReegistroPaciente {
 
             if (perfil === Perfil.Paciente) {
               console.log("paciente...");
-              nuevoUsuario.activo = true;
               let nuevoPaciente = { ...nuevoUsuario, obra_social: this.obra_social, imagen_dos: linkPublicoDos } as unknown as Paciente;
               this.us.cargarPaciente(nuevoPaciente);
             }
