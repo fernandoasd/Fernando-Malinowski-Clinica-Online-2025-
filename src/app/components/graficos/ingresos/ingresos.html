@@ -1,1 +1,17 @@
-<p>ingresos works!</p>
+<div class="d-flex">
+    <div *ngIf="chartData" style="width: 50vw;">
+        <canvas baseChart id="ingresosChart" [type]="chartData!.type" [data]="chartData!.data" [options]="chartData!.options"></canvas>
+    </div>
+
+    <div *ngIf="chartData" class="text-dark mt-5 p-4 text-start">
+            <h4>Estadísticas de Ingresos</h4>
+            <p>📅<strong>Día con más ingresos:</strong> {{ ingresosStats.maxIngresosDay[0] }} ({{ ingresosStats.maxIngresosDay[1] }} ingresos)</p>
+            <p>📅<strong>Día con menos ingresos:</strong> {{ ingresosStats.minIngresosDay[0] }} ({{ ingresosStats.minIngresosDay[1] }} ingresos)</p>
+            <!-- <p>📅<strong>Usuario con más ingresos:</strong> {{ ingresosStats.maxIngresosUser[0] }} ({{ ingresosStats.maxIngresosUser[1] }} ingresos)</p>
+            <p>📅<strong>Usuario con menos ingresos:</strong> {{ ingresosStats.minIngresosUser[0] }} ({{ ingresosStats.minIngresosUser[1] }} ingresos)</p> -->
+            <div class="text-center">
+                <button class="btn btn-lg btn-primary mt-3">Descargar PDF</button>
+            </div>
+        </div>
+
+</div>
