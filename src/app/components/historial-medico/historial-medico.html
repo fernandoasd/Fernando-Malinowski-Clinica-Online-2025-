@@ -142,7 +142,7 @@
 
                                     <div class="form-check form-switch mb-3">
                                         <input class="form-check-input" type="checkbox" id="switchSiNo"
-                                            formControlName="valor">
+                                            formControlName="valor" [disabled]="!puedeEditarInput()">
                                         <label class="form-check-label" for="switchSiNo">
                                             {{ control.get('valor')?.value ? 'Sí' : 'No' }}
                                         </label>

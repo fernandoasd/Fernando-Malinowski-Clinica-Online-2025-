@@ -260,7 +260,7 @@ export class UsuarioService {
   }
 
   async traerHistoriaClinica(id_paciente: number) {
-    const { data, error } = await this.db.supabase.from("turnos").select("fecha_turno, horario_turno, altura, peso, temperatura, presion, datos_dinamicos, resenia").eq("id_paciente", id_paciente).eq("estado", "Finalizado");
+    const { data, error } = await this.db.supabase.from("turnos").select("fecha_turno, horario_turno, altura, peso, temperatura, presion, datos_dinamicos, resenia, datos_dinamicos_adicionales").eq("id_paciente", id_paciente).eq("estado", "Finalizado");
     if (error) {
       console.log(error);
     }

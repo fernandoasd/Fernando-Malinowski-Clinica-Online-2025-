@@ -43,7 +43,7 @@ export class HistorialMedico {
       this.turnoInput()?.datos_dinamicos_adicionales?.forEach(obj => {
         this.agregarDatoDinamicoAdicional(obj.clave, obj.valor, obj.tipo);
       })
-    } else {
+    } else if (this.puedeEditarInput()){
       this.agregarDatoDinamicoAdicional("clave", 50, TipoControl.rango);
       this.agregarDatoDinamicoAdicional("clave", 1, TipoControl.numerico);
       this.agregarDatoDinamicoAdicional("clave", false, TipoControl.switch);
@@ -112,6 +112,8 @@ export class HistorialMedico {
       turnoRetorno.temperatura = this.formularioHC.get("temperatura")?.value;
       turnoRetorno.presion = this.formularioHC.get("presion")?.value;
       turnoRetorno.datos_dinamicos = [];
+      turnoRetorno.datos_dinamicos_adicionales = [];
+      console.log("datos adicionales: ", this.datosDinamicosAdicionales.controls);
       for (let control of this.datosDinamicos.controls) {
         turnoRetorno.datos_dinamicos?.push({ clave: control.get('clave')?.value, valor: control.get('valor')?.value });
       };
@@ -126,7 +128,6 @@ export class HistorialMedico {
       console.log("no es valido!");
     }
 
-    console.log("datos asicionales: ", this.datosDinamicosAdicionales.controls);
   }
 
   emitirTurnoModificado() {

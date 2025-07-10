@@ -328,7 +328,7 @@ export class MiPerfil implements OnInit {
 
           // Agregar datos en formato "Clave: valor" con colores diferenciados
           Object.entries(turno).forEach(([clave, valor]: [string, any]) => {
-            if (clave !== 'horario_turno' && clave !== 'fecha_turno' && clave !== 'datos_dinamicos' && clave !== 'resenia') {
+            if (clave !== 'horario_turno' && clave !== 'fecha_turno' && clave !== 'datos_dinamicos' && clave !== 'resenia' && clave !== 'datos_dinamicos_adicionales') {
 
               //comprobar si sobrepasa limite inferior de pagina
               if (yPosition > pageHeight - 17) {
@@ -437,6 +437,56 @@ export class MiPerfil implements OnInit {
             yPosition += 7;
 
             turno.datos_dinamicos.forEach((item: any) => {
+              const formattedKey = item.clave.charAt(0).toUpperCase() + item.clave.slice(1);
+
+              // Clave en verde
+              doc.setFont('helvetica', 'bold');
+              doc.setTextColor(...verde);
+              doc.text(`- ${formattedKey}:`, 20, yPosition);
+
+              // Calcular el espacio para el valor y evitar superposición
+              const keyWidth = doc.getTextWidth(`- ${formattedKey}:`);
+              const valuePosX = 20 + keyWidth + 2;  // Espacio para el valor
+
+              // Verificar si el valor cabe en la línea
+              const pageWidth = doc.internal.pageSize.width - 20;
+              if (valuePosX > pageWidth) {
+                // Si no cabe, saltamos a la siguiente línea
+                yPosition += 7;
+
+                //comprobar si sobrepasa limite inferior de pagina
+                if (yPosition > 280) {
+                  doc.addPage();
+                  yPosition = 80; //reinicia posicicon en Y
+                }
+
+                doc.text(`${item.valor}`, 20, yPosition);
+              } else {
+                // Si cabe, colocamos el valor en la misma línea
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(...negro);
+                doc.text(`${item.valor}`, valuePosX, yPosition);
+              }
+
+              yPosition += 7; // Incrementar para la siguiente línea
+            });
+          };
+
+          // Agregar datos dinámicos ad
+          if (turno.datos_dinamicos_adicionales) {
+
+            //comprobar si sobrepasa limite inferior de pagina
+            if (yPosition > pageHeight - 17) {
+              // doc.text(`"yPosition:MMM" ${yPosition}`, valuePosX, yPosition);
+              doc.addPage();
+              yPosition = 20; //reinicia posicicon en Y
+            }
+
+            doc.setFont('helvetica', 'bold');
+            doc.text("Datos dinámicos adicionales: ", 20, yPosition);
+            yPosition += 7;
+
+            turno.datos_dinamicos_adicionales.forEach((item: any) => {
               const formattedKey = item.clave.charAt(0).toUpperCase() + item.clave.slice(1);
 
               // Clave en verde
