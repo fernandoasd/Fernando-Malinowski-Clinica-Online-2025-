@@ -9,11 +9,12 @@ import { PalabrasMayusculasPipe } from '../../../pipes/letras-mayusculas-pipe';
 import { Perfil } from '../../../enums/enums';
 import { BotonImagen } from '../../../directivas/boton-imagen';
 import { DirectivaTitulo } from '../../../directivas/directivaTitulo';
+import { Captcha } from '../../../directivas/captcha';
 
 
 @Component({
   selector: 'app-crear-turno',
-  imports: [CommonModule, Titulo, PalabrasMayusculasPipe, Titulo, BotonImagen, DirectivaTitulo],
+  imports: [CommonModule, Titulo, PalabrasMayusculasPipe, Titulo, BotonImagen, DirectivaTitulo, Captcha],
   templateUrl: './lista-medicos.html',
   styleUrl: './lista-medicos.css'
 })
@@ -40,6 +41,7 @@ export class ListaMedicos implements OnInit {
   verPacientes: boolean = false;
   verEspecialistas: boolean = false;
   verConfirmacion: boolean = false;
+  captchaOk: boolean = false;
 
   constructor(private router: Router, private route: ActivatedRoute) {
     const today = new Date();
@@ -53,8 +55,6 @@ export class ListaMedicos implements OnInit {
     setTimeout(() => {
       this.traerTablas();
     }, 500);
-    this.comprobarUsuarioActual();
-
   }
 
   traerTablas() {
@@ -71,6 +71,14 @@ export class ListaMedicos implements OnInit {
         console.log("this.listaPacientes: ", this.listaPacientes);
       }
     })
+  }
+
+  onCaptchaResultado(captcha: boolean) {
+    this.captchaOk = captcha;
+    if (captcha){
+      this.comprobarUsuarioActual();
+    }
+    console.log("captcha: ", captcha ? "OK" : "ERROR");
   }
 
   comprobarUsuarioActual() {
@@ -142,6 +150,8 @@ export class ListaMedicos implements OnInit {
     }
     return retorno;
   }
+
+
 
   // seleccionarMedico(id_medico: number, especialidad: string){
   //     this.router.navigate(["disponibilidad"], {queryParams: {id: id_medico, esp: especialidad}, relativeTo: this.route});

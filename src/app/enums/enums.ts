@@ -30,3 +30,9 @@ export enum DiaSemana {
     Viernes = "viernes",
     Sabado = "sabado"
 }
+
+export enum TipoControl{
+    rango = "rango",
+    numerico = "numerico",
+    switch = "switch"
+}

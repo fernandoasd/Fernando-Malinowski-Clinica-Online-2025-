@@ -1,4 +1,4 @@
-import { DiaSemana, EstadoTurno, Perfil } from "../enums/enums";
+import { DiaSemana, EstadoTurno, Perfil, TipoControl } from "../enums/enums";
 
 export interface Usuario {
     id_usuario?: number;
@@ -55,6 +55,7 @@ export interface Turno {
     temperatura?: number | null;
     presion?: number | null;
     datos_dinamicos?: Array<{ clave: string; valor: string }>;
+    datos_dinamicos_adicionales?: Array<{ clave: string; valor: string; tipo: TipoControl}>;
     fechaSolicitud?: Date | null;
 }
 

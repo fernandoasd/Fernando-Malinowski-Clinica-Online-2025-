@@ -22,4 +22,8 @@ export class Home {
           }) ;
   }
 
+  // onCaptchaResultado(captcha: boolean){
+  //   console.log("captcha: ",captcha ? "OK" : "ERROR");
+  // }
+
 }

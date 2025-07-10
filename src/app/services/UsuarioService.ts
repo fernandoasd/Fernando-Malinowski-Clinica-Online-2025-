@@ -284,4 +284,13 @@ export class UsuarioService {
     return { data, error };
   }
 
+    async traerCaptcha() {
+    const { data, error } = await this.db.supabase.from("captcha").select("*");
+    if (error) {
+      console.log(error);
+    }
+    return { data, error };
+  }
+
+
 }

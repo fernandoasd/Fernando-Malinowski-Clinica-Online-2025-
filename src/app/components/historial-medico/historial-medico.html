@@ -68,8 +68,118 @@
                 <button type="button" class="btn btn-primary" (click)="agregarDatoDinamico()"
                     [disabled]="this.datosDinamicos.length >= maxDatosDinamicos" *ngIf="puedeEditarInput()">Agregar
                     dato</button>
+            </div>
+
+            <div class="text-center p-2 m-1">
+                <div formArrayName="datosDinamicosAdicionales">
+                    <div *ngFor="let control of datosDinamicosAdicionales.controls; let i = index" [formGroupName]="i">
+
+                        <div class="border p-3 mb-2 border rounded-4">
+                            <!-- <div class="text-end">
+                                <button type="button" class="btn btn-danger btn-sm rounded-pill"
+                                    (click)="eliminarDatoDinamico(i)" *ngIf="puedeEditarInput()">✖️</button>
+                            </div> -->
+                            <h3>Dato dinámico Adicional {{ i + 1 }}</h3>
+
+                            <div *ngIf="control.get('tipo')?.value == 'rango'">
+                                <div class="text-center p-2 m-1">
+                                    <label for="numero-clave" class="me-3">Clave:</label>
+                                    <input id="numero-clave" type="string" formControlName="clave"
+                                        [readOnly]="!puedeEditarInput()">
+                                    <div *ngIf="control.get('clave')?.touched && control.get('clave')?.invalid">
+                                        <small *ngIf="control.get('clave')?.errors?.['required']">La clave es
+                                            obligatoria</small>
+                                        <small *ngIf="control.get('clave')?.errors?.['minlength']">Mínimo 3
+                                            caracteres</small>
+                                    </div>
+                                </div>
+                                <div class="text-center p-2 m-1">
+                                    <label for="range-valor" class="me-3">Valor: {{ control.get('valor')?.value }}</label>
+                                    <input type="range" id="range-valor" class="form-range" formControlName="valor"
+                                        [readOnly]="!puedeEditarInput()" min="0" max="100">
+                                    <div *ngIf="control.get('valor')?.touched && control.get('valor')?.invalid">
+                                        <small *ngIf="control.get('valor')?.errors?.['required']">El valor es
+                                            obligatorio</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div *ngIf="control.get('tipo')?.value == 'numerico'">
+                                <div class="text-center p-2 m-1">
+                                    <label for="rango-clave" class="me-3">Clave:</label>
+                                    <input id="rango-clave" type="string" formControlName="clave"
+                                        [readOnly]="!puedeEditarInput()">
+                                    <div *ngIf="control.get('clave')?.touched && control.get('clave')?.invalid">
+                                        <small *ngIf="control.get('clave')?.errors?.['required']">La clave es
+                                            obligatoria</small>
+                                        <small *ngIf="control.get('clave')?.errors?.['minlength']">Mínimo 3
+                                            caracteres</small>
+                                    </div>
+                                </div>
+                                <div class="text-center p-2 m-1">
+                                    <label for="numero" class="me-3">Valor: </label>
+                                    <input type="number" id="numero" class="form-control" formControlName="valor"
+                                        [readOnly]="!puedeEditarInput()">
+                                    <div *ngIf="control.get('valor')?.touched && control.get('valor')?.invalid">
+                                        <small *ngIf="control.get('valor')?.errors?.['required']">El valor es
+                                            obligatorio</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div *ngIf="control.get('tipo')?.value == 'switch'">
+                                <div class="text-center p-2 m-1">
+
+                                    <label for="switchSiNo-clave" class="me-3">Clave:</label>
+                                    <input id="switchSiNo-clave" type="string" formControlName="clave"
+                                        [readOnly]="!puedeEditarInput()">
+                                    <div *ngIf="control.get('clave')?.touched && control.get('clave')?.invalid">
+                                        <small *ngIf="control.get('clave')?.errors?.['required']">La clave es
+                                            obligatoria</small>
+                                        <small *ngIf="control.get('clave')?.errors?.['minlength']">Mínimo 3
+                                            caracteres</small>
+                                    </div>
+
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="switchSiNo"
+                                            formControlName="valor">
+                                        <label class="form-check-label" for="switchSiNo">
+                                            {{ control.get('valor')?.value ? 'Sí' : 'No' }}
+                                        </label>
+                                    </div>
+
+                                    <!-- <label for="rango-clave" class="me-3">Clave:</label>
+                                    <input id="rango-clave" type="string" formControlName="clave"
+                                        [readOnly]="!puedeEditarInput()">
+                                    <div *ngIf="control.get('clave')?.touched && control.get('clave')?.invalid">
+                                        <small *ngIf="control.get('clave')?.errors?.['required']">La clave es
+                                            obligatoria</small>
+                                        <small *ngIf="control.get('clave')?.errors?.['minlength']">Mínimo 3
+                                            caracteres</small>
+                                    </div> -->
+                                </div>
+                                <!-- <div class="text-center p-2 m-1">
+                                    <label for="c" class="form-check-label">Valor: {{ control.get('valor')?.value ? 'Sí'
+                                        : 'No' }}</label>
+                                    <input type="checkbox" id="c" class="form-check-input" formControlName="valor"
+                                        [readOnly]="!puedeEditarInput()">
+                                    <div *ngIf="control.get('valor')?.touched && control.get('valor')?.invalid">
+                                        <small *ngIf="control.get('valor')?.errors?.['required']">El valor es
+                                            obligatorio</small>
+                                    </div>
+                                </div> -->
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" (click)="agregarDatoDinamico()"
+                    [disabled]="this.datosDinamicos.length >= maxDatosDinamicos" *ngIf="puedeEditarInput()">Agregar
+                    dato</button>
 
             </div>
+
         </form>
         <div class="m-1 ps-5 pe-5">
             <button type="submit" class="container-fluid btn btn-success mb-2" (click)="enviarFormulario()"

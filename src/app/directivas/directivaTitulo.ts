@@ -14,7 +14,6 @@ export class DirectivaTitulo implements OnChanges {
     this.renderer.addClass(this.el.nativeElement, "rounded-4");
     this.renderer.addClass(this.el.nativeElement, "p-2");
     this.renderer.addClass(this.el.nativeElement, this.alignClass);
-
   }
 
 ngOnChanges(changes: SimpleChanges): void {

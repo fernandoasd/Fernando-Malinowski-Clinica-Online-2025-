@@ -4,6 +4,7 @@ import { Turno } from '../../interfaces/interfaces';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Titulo } from '../titulo/titulo';
 import { UnidadesHcPipe } from '../../pipes/unidades-hc-pipe';
+import { TipoControl } from '../../enums/enums';
 
 @Component({
   selector: 'app-historial-medico',
@@ -19,12 +20,14 @@ export class HistorialMedico {
   maxDatosDinamicos = 3;
 
 
+
   formularioHC = this.formBuilder.group({
-    altura: [this.turnoInput()?.altura  ?? 0, [Validators.required]],
+    altura: [this.turnoInput()?.altura ?? 0, [Validators.required]],
     peso: [this.turnoInput()?.peso ?? 0, [Validators.required]],
     temperatura: [this.turnoInput()?.temperatura ?? 0, [Validators.required]],
     presion: [this.turnoInput()?.presion ?? 0, [Validators.required]],
     datosDinamicos: this.formBuilder.array([]),
+    datosDinamicosAdicionales: this.formBuilder.array([]),
   });
 
   ngOnInit() {
@@ -36,12 +39,21 @@ export class HistorialMedico {
       console.log("sin datos dinamicos");
     }
 
+    if (this.turnoInput()?.datos_dinamicos_adicionales) {
+      this.turnoInput()?.datos_dinamicos_adicionales?.forEach(obj => {
+        this.agregarDatoDinamicoAdicional(obj.clave, obj.valor, obj.tipo);
+      })
+    } else {
+      this.agregarDatoDinamicoAdicional("clave", 50, TipoControl.rango);
+      this.agregarDatoDinamicoAdicional("clave", 1, TipoControl.numerico);
+      this.agregarDatoDinamicoAdicional("clave", false, TipoControl.switch);
+      console.log("se inicializan datos dinamicos adicionales");
+    }
+
     this.getControl("altura").setValue(this.turnoInput()?.altura ?? null);
     this.getControl("peso").setValue(this.turnoInput()?.peso ?? null);
     this.getControl("temperatura").setValue(this.turnoInput()?.temperatura ?? null);
     this.getControl("presion").setValue(this.turnoInput()?.presion ?? null);
-
-
 
     console.log(this.formularioHC.value);
     console.log("datos din: ", this.datosDinamicos.length);
@@ -51,10 +63,22 @@ export class HistorialMedico {
     return this.formularioHC.get('datosDinamicos') as FormArray;
   }
 
+  get datosDinamicosAdicionales(): FormArray {
+    return this.formularioHC.get('datosDinamicosAdicionales') as FormArray;
+  }
+
   crearDatoDinamico(c: string, v: string): FormGroup {
     return this.formBuilder.group({
       clave: [c, [Validators.required, Validators.minLength(3)]],
       valor: [v, [Validators.required]]
+    });
+  }
+
+  crearDatoDinamicoAdicional(c: string, v: string | number | boolean, t: TipoControl): FormGroup {
+    return this.formBuilder.group({
+      clave: [c, [Validators.required, Validators.minLength(3)]],
+      valor: [v, [Validators.required]],
+      tipo: [t],
     });
   }
 
@@ -66,9 +90,18 @@ export class HistorialMedico {
     this.datosDinamicos.push(this.crearDatoDinamico(clave, valor));
   }
 
+  agregarDatoDinamicoAdicional(clave: string = "", valor: string | number | boolean = "", tipo: TipoControl) {
+    this.datosDinamicosAdicionales.push(this.crearDatoDinamicoAdicional(clave, valor, tipo));
+  }
+
   eliminarDatoDinamico(index: number) {
     this.datosDinamicos.removeAt(index);
   }
+
+  eliminarDatoDinamicoAdicional(index: number) {
+    this.datosDinamicosAdicionales.removeAt(index);
+  }
+
 
   enviarFormulario() {
     this.formularioHC.markAllAsTouched();
@@ -79,9 +112,12 @@ export class HistorialMedico {
       turnoRetorno.temperatura = this.formularioHC.get("temperatura")?.value;
       turnoRetorno.presion = this.formularioHC.get("presion")?.value;
       turnoRetorno.datos_dinamicos = [];
-      for (let control of this.datosDinamicos.controls){
-        turnoRetorno.datos_dinamicos?.push({clave: control.get('clave')?.value, valor: control.get('valor')?.value});
-      }
+      for (let control of this.datosDinamicos.controls) {
+        turnoRetorno.datos_dinamicos?.push({ clave: control.get('clave')?.value, valor: control.get('valor')?.value });
+      };
+      for (let control of this.datosDinamicosAdicionales.controls) {
+        turnoRetorno.datos_dinamicos_adicionales?.push({ clave: control.get('clave')?.value, valor: control.get('valor')?.value , tipo: control.get('tipo')?.value });
+      };
 
       this.modificarHCEvent.emit(turnoRetorno);
       console.log("this.formularioHC.value ", this.formularioHC.value);
@@ -89,6 +125,8 @@ export class HistorialMedico {
     } else {
       console.log("no es valido!");
     }
+
+    console.log("datos asicionales: ", this.datosDinamicosAdicionales.controls);
   }
 
   emitirTurnoModificado() {
