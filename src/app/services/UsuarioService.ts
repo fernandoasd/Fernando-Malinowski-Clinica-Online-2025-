@@ -229,6 +229,14 @@ export class UsuarioService {
     return { data, error };
   }
 
+    async traerTurnos() {
+    const { data, error } = await this.db.supabase.from("turnos").select("*, especialistas(*,...usuarios(*)), pacientes(*, ...usuarios(*))");
+    if (error) {
+      console.log(error)
+    }
+    return { data, error };
+  }
+
   async traerTurnosEspecialista(id_especialista: number) {
     const { data, error } = await this.db.supabase.from("turnos").select("*, especialistas(*,...usuarios(*)), pacientes(*, ...usuarios(*))").eq("id_especialista", id_especialista);
     if (error) {
@@ -237,10 +245,12 @@ export class UsuarioService {
     return { data, error };
   }
 
-  async actualizarTurno(Turno: Turno) {
-    const { data, error } = await this.db.supabase.from("turnos").update(Turno).eq("id", Turno.id);
+  async actualizarTurno(turno: Turno) {
+    const { data, error } = await this.db.supabase.from("turnos").update(turno).eq("id", turno.id);
     if (error) {
       console.log(error)
+    } else{
+      console.log("se intenta actualizar turno: ", turno);
     }
     return { data, error };
   }

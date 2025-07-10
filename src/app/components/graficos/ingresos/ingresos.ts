@@ -3,6 +3,9 @@ import { ChartConfiguration } from 'chart.js';
 import { UsuarioService } from '../../../services/UsuarioService';
 import { BaseChartDirective } from 'ng2-charts';
 import { CommonModule } from '@angular/common';
+import jsPDF from 'jspdf';
+
+
 
 @Component({
   selector: 'app-ingresos',
@@ -116,6 +119,64 @@ export class Ingresos {
     };
   }
 
+  descargarInformePdf() {
+    const doc = new jsPDF();
+    const pageHeight = doc.internal.pageSize.height;
+    type RGB = [number, number, number];
 
+    const verde: RGB = [30, 170, 70];
+    const negro: RGB = [0, 0, 0];
 
+    // Encabezado
+    doc.setFillColor(255, 255, 255);
+    doc.rect(0, 0, 210, 30, 'F');
+    // doc.setTextColor(...verde);
+    // doc.setFontSize(16);
+    // doc.text("HISTORIA CLÍNICA", 20, 20);
+    doc.addImage("logo.jpg", 'JPG', 160, 5, 40, 20);
+
+    // Título del documento
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...negro);
+    doc.setFontSize(20);
+    doc.text("Informe de Ingresos.", 105, 50, { align: "center" });
+    // Intentamos capturar el gráfico de Ingresos con un retraso para asegurarnos de que se haya renderizado
+    const canvas = document.getElementById('ingresosChart') as HTMLCanvasElement;
+
+    if (canvas) {
+      const imgData = canvas.toDataURL('image/png');
+      const imgWidth = 180;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      // Añadir el gráfico al PDF sin tapar el banner
+      doc.addImage(imgData, 'PNG', 10, 65, imgWidth, imgHeight);
+
+      // Posición de las estadísticas
+      const yPosition = 75 + imgHeight + 10;
+
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(0, 0, 0);
+      doc.text('ESTADISTICAS', 20, yPosition);
+
+      doc.setFontSize(15);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(0, 0, 0);
+
+      const stats = [
+        `Máximo de ingresos por día: ${this.ingresosStats.maxIngresosDay[0]} (${this.ingresosStats.maxIngresosDay[1]} ingresos)`,
+        `Mínimo de ingresos por día: ${this.ingresosStats.minIngresosDay[0]} (${this.ingresosStats.minIngresosDay[1]} ingresos)`,
+      ];
+
+      stats.forEach((stat, index) => {
+        doc.text(stat, 20, yPosition + (index + 1) * 10);
+      });
+
+      doc.save('informeIngresos.pdf');
+
+    } else {
+      console.error('No se encontró el canvas del gráfico de Ingresos');
+      doc.save('informeIngresos.pdf');
+    }
+  }
 }

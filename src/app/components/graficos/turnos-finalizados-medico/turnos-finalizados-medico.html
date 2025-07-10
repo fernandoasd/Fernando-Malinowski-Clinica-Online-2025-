@@ -1,1 +1,28 @@
-<p>turnos-finalizados-medico works!</p>
+<div class="d-flex">
+
+    <div *ngIf="!mostrarInforme && !chartData">
+        <h4>Seleccionar un periodo de tiempo</h4>
+        <div class="datepicker-container">
+            <input type="date" [(ngModel)]="startDate" />
+            <input type="date" [(ngModel)]="endDate" />
+            <button [disabled]="!startDate || !endDate || endDate < startDate"
+                (click)="verificarFechas()">Mostrar</button>
+        </div>
+    </div>
+
+    <div *ngIf="chartData" style="width: 50vw;">
+        <canvas baseChart id="turnosChart" [type]="chartData!.type" [data]="chartData!.data"
+            [options]="chartData!.options"></canvas>
+    </div>
+
+    <div *ngIf="chartData" class="text-dark mt-5 p-4 text-start">
+        <h4>Estadísticas de turnos (FINALIZADOS) por medicos del {{startDate}} al {{endDate}}:</h4>
+        <p>📅<strong>Medico con más turnos:</strong> {{ turnosStats.maxTurnos[0] }} ({{
+            turnosStats.maxTurnos[1] }} turnos)</p>
+        <p>📅<strong>Medico con menos turnos:</strong> {{ turnosStats.minTurnos[0] }} ({{
+            turnosStats.minTurnos[1] }} turnos)</p>
+        <div class="text-center">
+            <button class="btn btn-lg btn-primary mt-3" (click)="descargarInformePdf()">Descargar PDF</button>
+        </div>
+    </div>
+</div>

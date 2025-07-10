@@ -131,8 +131,10 @@ export class TurnosEspecialista {
   }
 
   modificarHC(turnoModif: any) {
+    console.log("turnoModif ", turnoModif);
     let index = this.turnosDisponibles.findIndex(t => t.id === turnoModif.id)
-    if (index) {
+    console.log("Index: ", index);
+    if (index != -1) {
       this.turnosDisponibles[index] = turnoModif;
       let turnoCopia = { ...turnoModif };
       delete turnoCopia.especialistas;
@@ -145,8 +147,10 @@ export class TurnosEspecialista {
           Swal.fire("", "No se pudo actualizar el turno, Error: " + error.message, 'error')
         }
       });
+    } else{
+      console.log("index -1");
     }
-    this. cerrarHC();
+    this.cerrarHC();
   }
 
   cerrarHC() {

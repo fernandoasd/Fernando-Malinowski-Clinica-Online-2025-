@@ -1,1 +1,15 @@
-<p>turnos-especialidad works!</p>
+<div class="d-flex">
+    <div *ngIf="chartData" style="width: 50vw;">
+        <canvas baseChart id="turnosChart" [type]="chartData!.type" [data]="chartData!.data" [options]="chartData!.options"></canvas>
+    </div>
+
+    <div *ngIf="chartData" class="text-dark mt-5 p-4 text-start">
+            <h4>Estadísticas de turnos por especialidad:</h4>
+            <p>📅<strong>Especialidad con más turnos:</strong> {{ turnosStats.maxTurnosDia[0] }} ({{ turnosStats.maxTurnosDia[1] }} turnos)</p>
+            <p>📅<strong>Especialidad con menos turnos:</strong> {{ turnosStats.minTurnosDia[0] }} ({{ turnosStats.minTurnosDia[1] }} turnos)</p>
+            <p>📅<strong>Promedio de turnos por especialidad:</strong> {{ turnosStats.avgTurnosDia }}  turnos</p>
+            <div class="text-center">
+                <button class="btn btn-lg btn-primary mt-3" (click)="descargarInformePdf()">Descargar PDF</button>
+            </div>
+        </div>
+</div>
